@@ -60,6 +60,28 @@ export let privilegeRouterMap = [
         },
         children: [
             {
+                path: 'exhibition',
+                component: () => import('@/views/expo/exhibition/index'),
+                name: 'MENU_EXPO_EXHIBITION',
+                meta: {
+                    title: '展会管理',
+                    operations: [
+                        {
+                            "code": "OP_EXPO_EXHIBITION_ADD",
+                            "name": "新增展会"
+                        },
+                        {
+                            "code": "OP_EXPO_EXHIBITION_DEL",
+                            "name": "删除展会"
+                        },
+                        {
+                            "code": "OP_EXPO_EXHIBITION_EDIT",
+                            "name": "编辑展会"
+                        }
+                    ]
+                }
+            },
+            {
                 path: 'audience',
                 component: () => import('@/views/expo/audience/index'),
                 name: 'MENU_EXPO_AUDIENCE',

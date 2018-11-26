@@ -96,7 +96,7 @@
                     beginTime: [{type: 'date', required: true, message: '开始时间不能为空', trigger: 'change'}],
                     endTime: [{type: 'date', required: true, message: '结束时间不能为空', trigger: 'change'}],
                 },
-                apiPrefix: '/api/expo/v1/admin/exhibition'
+                apiPrefix: '/expo/exhibition'
             },
 
         }

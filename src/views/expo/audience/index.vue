@@ -132,7 +132,7 @@
                     beginTime: [{ type: 'date', required: true, message: '开始时间不能为空', trigger: 'blur' }],
                     endTime: [{ type: 'date', required: true, message: '结束时间不能为空', trigger: 'blur' }],
                 },
-                apiPrefix: '/api/expo/v1/admin/audience'
+                apiPrefix: '/expo/audience'
             }
         }
     );
