@@ -27,14 +27,14 @@ npm run build:prod  # 构建项目
 ## 跨域配置(可选)
 
 * `hosts`
-```host
+```hosts
 ...
 127.0.0.1 995-admin.com
 ...
 ```
 
 * `nginx`
-```nginx
+```nginx.conf
 ...
 server {
     listen 80;
