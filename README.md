@@ -10,3 +10,42 @@
 * `打包`:webpack4.x
 
 调整主要基于 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) .
+
+## 安装
+
+``` bash
+npm install    # npm 安装
+```
+
+## 命令
+
+``` bash
+npm run dev         # 启动开发模式(dev)
+npm run build:prod  # 构建项目
+```
+
+## 跨域配置(可选)
+
+* `hosts`
+```host
+...
+127.0.0.1 995-admin.com
+...
+```
+
+* `nginx`
+```nginx
+...
+server {
+    listen 80;
+    server_name 995-admin.com;
+    location / {
+        proxy_pass http://127.0.0.1:8688;
+    }
+    location /api {
+        proxy_pass http://995-admin.com/api;
+    }
+}
+...
+```
+
