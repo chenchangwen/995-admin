@@ -15,16 +15,6 @@
                 'name',
                 'roles'
             ])
-        },
-        mounted() {
-            request({
-                url: '/expo/audience/queryList',
-                method: 'get',
-                data: {username: '123123', password: '123123'}
-            }).then(function (res) {
-                debugger;
-            })
-
         }
     }
 </script>
