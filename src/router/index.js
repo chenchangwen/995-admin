@@ -52,51 +52,26 @@ export let privilegeRouterMap = [
         path: '/expo',
         component: Layout,
         redirect: '/expo/exhibition',
-        name: 'MENU_EXPO',
+        name: 'GET_authorities/**',
         meta: {
-            title: '智慧会展',
-            code: 'MENU_EXPO',
+            title: '系统',
             icon: 'example'
         },
         children: [
             {
                 path: 'exhibition',
                 component: () => import('@/views/expo/exhibition/index'),
-                name: 'MENU_EXPO_EXHIBITION',
+                name: 'GET_authorities/**',
                 meta: {
-                    title: '展会管理',
-                    operations: [
-                        {
-                            "code": "OP_EXPO_EXHIBITION_ADD",
-                            "name": "新增展会"
-                        },
-                        {
-                            "code": "OP_EXPO_EXHIBITION_DEL",
-                            "name": "删除展会"
-                        },
-                        {
-                            "code": "OP_EXPO_EXHIBITION_EDIT",
-                            "name": "编辑展会"
-                        }
-                    ]
+                    title: '权限管理',
                 }
             },
             {
                 path: 'audience',
                 component: () => import('@/views/expo/audience/index'),
-                name: 'MENU_EXPO_AUDIENCE',
+                name: 'GET_resources/**',
                 meta: {
-                    title: '观众管理',
-                    operations: [
-                        {
-                            "code": "OP_EXPO_AUDIENCE_ADD",
-                            "name": "新增观众"
-                        },
-                        {
-                            "code": "OP_EXPO_AUDIENCE_DEL",
-                            "name": "删除观众"
-                        }
-                    ]
+                    title: '资源管理',
                 }
             }
         ]

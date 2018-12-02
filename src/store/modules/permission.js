@@ -1,5 +1,6 @@
 import {asyncRouterMap, constantRouterMap, privilegeRouterMap} from '@/router'
-import adminAPI from '../../api/admin';
+import homeAPI from '../../api/home';
+
 /**
  * 通过meta.role判断是否与当前用户权限匹配
  * @param roles
@@ -27,7 +28,7 @@ function filterAsyncRouter(asyncRouterMap, roles, menuCode) {
             return true
         }
         return false
-    })
+    });
     return accessedRouters
 }
 
@@ -43,33 +44,21 @@ const permission = {
         }
     },
     actions: {
-        GenerateRoutes({ commit }, data) {
-            return adminAPI.queryPrivilege().then(response => {
-                //所有菜单code
+        GenerateRoutes({commit}, data) {
+            return homeAPI.home().then(response => {
+                //菜单
+                let authorities = response.data.authorities;
                 let menuCode = [];
-                let menus = response.data.model.menus;
-                let roles = response.data.model.roles;
 
-                if (roles && roles.length > 0) { // 验证返回的roles是否是一个非空数组
-                    let roleCodes = roles.map((b)=>b.code);
-                    commit('SET_ROLES', roleCodes);
-                    data = roleCodes;
-                }
+                let roleCodes = 'user';
+                commit('SET_ROLES', roleCodes);
+                data = roleCodes;
 
-                menus.forEach(function (menuItem) {
-                    menuCode.push(menuItem.code);
-                    if (menuItem.subMenus) {
-                        menuItem.subMenus.forEach(function (subItem) {
-                            menuCode.push(subItem.code);
-                            if (subItem.subMenus) {
-                                subItem.subMenus.forEach(function (subItem1) {
-                                    menuCode.push(subItem1.code);
-                                })
-                            }
-                        });
+                authorities.forEach(function (item) {
+                    if (item.authority.indexOf('GET') >= 0) {
+                        menuCode.push(item.authority);
                     }
                 });
-                console.log(`menu code ${menuCode}`);
 
                 return new Promise(resolve => {
                     const {roles} = data;

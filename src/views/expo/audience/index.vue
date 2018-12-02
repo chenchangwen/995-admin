@@ -118,23 +118,23 @@
 </template>
 
 <script>
-    let andiencePage = new pageInit(
-        {
-            data: {
-                tempItem: {
-                    name: '',
-                    info: '',
-                    beginTime: '',
-                    endTime: ''
-                },
-                rules: {
-                    name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                    beginTime: [{ type: 'date', required: true, message: '开始时间不能为空', trigger: 'blur' }],
-                    endTime: [{ type: 'date', required: true, message: '结束时间不能为空', trigger: 'blur' }],
-                },
-                apiPrefix: '/expo/audience'
-            }
-        }
-    );
-    export default andiencePage;
+    // let andiencePage = new pageInit(
+    //     {
+    //         data: {
+    //             tempItem: {
+    //                 name: '',
+    //                 info: '',
+    //                 beginTime: '',
+    //                 endTime: ''
+    //             },
+    //             rules: {
+    //                 name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+    //                 beginTime: [{ type: 'date', required: true, message: '开始时间不能为空', trigger: 'blur' }],
+    //                 endTime: [{ type: 'date', required: true, message: '结束时间不能为空', trigger: 'blur' }],
+    //             },
+    //             apiPrefix: '/expo/audience'
+    //         }
+    //     }
+    // );
+    // export default andiencePage;
 </script>
