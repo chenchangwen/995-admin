@@ -8,7 +8,7 @@ import {getToken} from '@/utils/auth';
 NProgress.configure({showSpinner: false});
 
 router.beforeEach((to, from, next) => {
-    if(to.fullPath ==='/login'){
+    if (to.path === '/login') {
         next();
         NProgress.done();
     }
@@ -26,15 +26,14 @@ router.beforeEach((to, from, next) => {
                 }).catch((err) => {
                     store.dispatch('FedLogOut').then(() => {
                         Message.error(err || 'Verification failed, please login again');
-                        //redirectTo();
-                        next()
+                        next({path: '/'});
                     })
                 })
             } else {
                 next()
             }
         } else {
-            next(`/login`);
+            next(`/login?redirect=${to.path}`);
             NProgress.done()
         }
     }

@@ -1,3 +1,3 @@
-export let configOptions = {
+export let configOptions =  {
     isMockAPI: false
 };

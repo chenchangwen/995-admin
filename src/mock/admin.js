@@ -15,7 +15,7 @@ export default {
                 "roles": [
                     {
                         "id": 1,
-                        "code": "ROLE_OSS_ADMIN",
+                        "code": "ROLE_955_ADMIN",
                         "name": "管理员角色"
                     }
                 ],

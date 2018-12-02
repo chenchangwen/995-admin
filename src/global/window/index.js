@@ -10,7 +10,7 @@ import request from '@/utils/request';
 global.request = request;
 
 global.redirectTo = function () {
-    //location.href = `http://cas${window.config.domain}/#login/?form=${encodeURIComponent(location.href)}`;
+    location.href = `/#/login?form=${encodeURIComponent(location.href)}`;
 };
 
 require('./vendor');

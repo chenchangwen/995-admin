@@ -61,6 +61,14 @@
                 redirect: undefined
             }
         },
+        watch: {
+            $route: {
+                handler: function (route) {
+                    this.redirect = route.query && route.query.redirect
+                },
+                immediate: true
+            }
+        },
         methods: {
             showPwd() {
                 if (this.pwdType === 'password') {
@@ -75,7 +83,7 @@
                         this.loading = true;
                         this.$store.dispatch('Login', this.loginForm).then(() => {
                             this.loading = false;
-                            this.$router.push({ path: this.redirect || '/' })
+                            this.$router.push({path: this.redirect || '/'})
                         }).catch(() => {
                             this.$message.error('用户名或密码错误');
                             this.loading = false
