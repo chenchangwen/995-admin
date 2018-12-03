@@ -17,6 +17,7 @@
             ])
         },
         mounted() {
+            debugger;
             // request({
             //     url: '/expo/audience/queryList',
             //     method: 'get',

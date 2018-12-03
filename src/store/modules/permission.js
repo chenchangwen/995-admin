@@ -51,6 +51,8 @@ const permission = {
                 let menuCode = [];
 
                 let roleCodes = 'user';
+                let userName = 'user-name';
+                commit('SET_NAME', userName);
                 commit('SET_ROLES', roleCodes);
                 data = roleCodes;
 

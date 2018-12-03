@@ -1,7 +1,7 @@
 //home
 export function home() {
     return request({
-        url: '/api/home',
+        url: '/home',
         method: 'get'
     })
 }

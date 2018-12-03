@@ -67,6 +67,7 @@
                 this.$store.dispatch('toggleSideBar')
             },
             logout() {
+                debugger;
                 this.$store.dispatch('LogOut').then(() => {
                     location.reload();
                 })

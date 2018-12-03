@@ -1,7 +1,7 @@
 //登录
 export function login(username, password) {
     return request({
-        url: '/api/login',
+        url: '/login',
         method: 'post',
         data: {
             username,
@@ -15,7 +15,7 @@ export function login(username, password) {
 //登出
 export function logout() {
     return request({
-        url: '/user/logout',
+        url: '/logout',
         method: 'post'
     })
 }
