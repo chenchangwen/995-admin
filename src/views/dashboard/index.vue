@@ -15,7 +15,6 @@
                 'name',
                 'roles'
             ])
-<<<<<<< HEAD
         },
         mounted() {
             // request({
@@ -25,9 +24,6 @@
             // }).then(function (res) {
             //     debugger;
             // })
-
-=======
->>>>>>> d74f12175d37fc4ebee2044d9c1178ccfa4c80b1
         }
     }
 </script>
