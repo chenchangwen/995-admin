@@ -13,15 +13,9 @@ module.exports = {
     proxyTable: {
         '/api': {
             target: `http://beta.buchuju.net:8080`,
-            // secure: false,
-            // changeOrigin: true,
-            // headers: {
-            //   Referer: 'https://beta.buchuju.net:443'
-            // }
             pathRewrite: {
                 '^/api': '/'
             }
-
         }
     },
 

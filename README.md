@@ -33,19 +33,17 @@ npm run build:prod  # 构建项目
 ...
 ```
 
-* `nginx`
+* `porxy`
 ```nginx.conf
 ...
-server {
-    listen 80;
-    server_name 995-admin.com;
-    location / {
-        proxy_pass http://127.0.0.1:8688;
-    }
-    location /api {
-        proxy_pass http://995-admin.com/api;
-    }
-}
+proxyTable: {
+        '/api': {
+            target: `http://beta.buchuju.net:8080`,
+            pathRewrite: {
+                '^/api': '/'
+            }
+        }
+    },
 ...
 ```
 
