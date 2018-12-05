@@ -37,12 +37,12 @@ npm run build:prod  # 构建项目
 ```nginx.conf
 ...
 proxyTable: {
-        '/api': {
-            target: `http://beta.buchuju.net:8080`,
-            pathRewrite: {
-                '^/api': '/'
-            }
+    '/api': {
+        target: `http://beta.buchuju.net:8080`,
+        pathRewrite: {
+           '^/api': '/'
         }
+      }
     },
 ...
 ```
