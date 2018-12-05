@@ -2,11 +2,11 @@
  * 增删改查
  */
 window.curd = {};
-window.curd.queryList = function (query, apiPrefix) {
+window.curd.queryList = function (params, apiPrefix) {
     return request({
-        url: apiPrefix + '/queryList',
-        method: 'post',
-        data: query
+        url: apiPrefix + '/details',
+        method: 'get',
+        params: params
     })
 };
 
@@ -34,3 +34,11 @@ window.curd.remove = function (params, apiPrefix) {
     })
 };
 
+window.curd.count = function (params, apiPrefix) {
+    debugger;
+    return request({
+        url: apiPrefix + '/count',
+        method: 'get',
+        params: params
+    })
+};

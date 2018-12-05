@@ -1,7 +1,5 @@
 <template>
     <div class="dashboard-container">
-        <div class="dashboard-text">name:{{name}}</div>
-        <div class="dashboard-text">roles:<span v-for='role in roles' :key='role'>{{role}}</span></div>
     </div>
 </template>
 
@@ -15,16 +13,6 @@
                 'name',
                 'roles'
             ])
-        },
-        mounted() {
-            debugger;
-            // request({
-            //     url: '/expo/audience/queryList',
-            //     method: 'get',
-            //     data: {username: '123123', password: '123123'}
-            // }).then(function (res) {
-            //     debugger;
-            // })
         }
     }
 </script>

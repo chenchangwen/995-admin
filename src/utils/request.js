@@ -10,7 +10,9 @@ const service = axios.create({
 
 service.interceptors.request.use(function (config) {
     config.url = '/api' + config.url;
-    config.data = qs.stringify(config.data);
+    if (config.method === 'post') {
+        config.data = qs.stringify(config.data);
+    }
     return config;
 }, function (error) {
     return Promise.reject(error);

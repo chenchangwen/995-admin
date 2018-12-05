@@ -49,10 +49,10 @@ export let asyncRouterMap = [
 
 export let privilegeRouterMap = [
     {
-        path: '/expo',
+        path: '/system',
         component: Layout,
         redirect: '/expo/exhibition',
-        name: 'GET_authorities/**',
+        name: 'GET_/authorities/**',
         meta: {
             title: '系统',
             icon: 'example'
@@ -61,17 +61,25 @@ export let privilegeRouterMap = [
             {
                 path: 'exhibition',
                 component: () => import('@/views/expo/exhibition/index'),
-                name: 'GET_authorities/**',
+                name: 'GET_/authorities/**',
                 meta: {
-                    title: '权限管理',
+                    title: '权限管理(暂无)',
                 }
             },
+            // {
+            //     path: 'audience',
+            //     component: () => import('@/views/expo/audience/index'),
+            //     name: 'GET_/resources/**',
+            //     meta: {
+            //         title: '资源管理(暂无)',
+            //     }
+            // },
             {
-                path: 'audience',
-                component: () => import('@/views/expo/audience/index'),
-                name: 'GET_resources/**',
+                path: 'user',
+                component: () => import('@/views/user/index'),
+                name: 'GET_/users/**',
                 meta: {
-                    title: '资源管理',
+                    title: '用户管理',
                 }
             }
         ]

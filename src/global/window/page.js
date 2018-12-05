@@ -5,7 +5,7 @@
  */
 window.pageInit = function pageInit(options, api) {
     api = window.curd || api;
-    let apiPrefix = options.data.apiPrefix;
+    let apiPrefix = options.data.apiPrefix || '';
     let page = {
         data() {
             let defaults = {
@@ -13,10 +13,8 @@ window.pageInit = function pageInit(options, api) {
                 itemLoading: true,
                 total: null,
                 query: {
-                    pagingQuery: {
-                        pageIndex: 1,
-                        pageSize: 20
-                    }
+                    page: 0,
+                    size: 10
                 },
                 dialogFormVisible: false,
                 dialogStatus: '',
@@ -52,7 +50,7 @@ window.pageInit = function pageInit(options, api) {
 
     let methods = {
         handleFilter() {
-            this.query.page = 1;
+            this.query.page = 0;
             this.getList();
         },
         handleCreate() {
@@ -137,10 +135,13 @@ window.pageInit = function pageInit(options, api) {
         },
         getList() {
             this.itemLoading = true;
+            let that = this;
             api.queryList(this.query, apiPrefix).then(response => {
-                this.items = response.data.models;
-                this.total = response.data.paging.total || 0;
-                this.itemLoading = false
+                this.items = response.data;
+                this.itemLoading = false;
+                api.count({keyword: that.query.keyword}, apiPrefix).then(response => {
+                    that.total = response.data;
+                })
             });
         }
     };

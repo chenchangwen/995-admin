@@ -1,7 +1,8 @@
 <template>
     <div class="pagination-container">
         <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
-                       :current-page="$parent.$data.query.pagingQuery.pageNum" :page-sizes="[20,30,50]" :page-size="$parent.$data.query.pagingQuery.pageSize"
+                       :current-page="$parent.$data.query.page + 1" :page-sizes="[10,20,30,50]"
+                       :page-size="$parent.$data.query.size"
                        layout="total, sizes, prev, pager, next, jumper" :total="$parent.$data.total">
         </el-pagination>
     </div>
@@ -12,13 +13,19 @@
         name: 'page',
         methods: {
             handleSizeChange(val) {
-                this.$parent.query.pagingQuery.pageSize = val;
+                this.$parent.query.size = val;
                 this.$parent.getList()
             },
             handleCurrentChange(val) {
-                this.$parent.query.pagingQuery.pageIndex = val;
+                if (val > 0) {
+                    val = val - 1;
+                }
+                this.$parent.query.page = val;
                 this.$parent.getList();
             }
+        },
+        mounted(){
+
         }
     }
 </script>
