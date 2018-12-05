@@ -10,7 +10,20 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        '/api': {
+            target: `http://beta.buchuju.net:8080`,
+            // secure: false,
+            // changeOrigin: true,
+            // headers: {
+            //   Referer: 'https://beta.buchuju.net:443'
+            // }
+            pathRewrite: {
+                '^/api': '/'
+            }
+
+        }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
