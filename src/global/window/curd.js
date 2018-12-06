@@ -35,7 +35,6 @@ window.curd.remove = function (params, apiPrefix) {
 };
 
 window.curd.count = function (params, apiPrefix) {
-    debugger;
     return request({
         url: apiPrefix + '/count',
         method: 'get',

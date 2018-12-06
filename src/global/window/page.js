@@ -80,7 +80,8 @@ window.pageInit = function pageInit(options, api) {
             })
         },
         handleUpdate(row) {
-            this.form = Object.assign({}, row);
+            this.form = _.cloneDeep(row);
+            this.setRow(this.form);
             this.dialogStatus = 'update';
             this.dialogFormVisible = true;
             this.$nextTick(() => {
@@ -88,9 +89,10 @@ window.pageInit = function pageInit(options, api) {
             });
         },
         editData() {
+            let that = this;
             this.$refs['dataForm'].validate((valid) => {
                 if (valid) {
-                    const tempData = Object.assign({}, this.form);
+                    let tempData = Object.assign({}, this.form);
                     api.edit(tempData, apiPrefix).then(() => {
                         for (const v of this.items) {
                             if (v.id === this.form.id) {
@@ -143,10 +145,15 @@ window.pageInit = function pageInit(options, api) {
                     that.total = response.data;
                 })
             });
+        },
+        setRow(row) {
+            if (typeof this.beforeSetRow === 'function') {
+                this.beforeSetRow(row);
+                this.form = _.cloneDeep(this.form);
+            }
         }
     };
 
     page.methods = Object.assign({}, methods, options.methods || '');
-
     return page;
 };
