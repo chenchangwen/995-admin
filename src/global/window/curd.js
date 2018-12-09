@@ -26,11 +26,11 @@ window.curd.edit = function (query, apiPrefix) {
     })
 };
 
-window.curd.remove = function (params, apiPrefix) {
+window.curd.remove = function (query, apiPrefix) {
     return request({
         url: apiPrefix + '/delete',
         method: 'post',
-        params
+        data: query
     })
 };
 
