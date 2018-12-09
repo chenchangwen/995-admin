@@ -18,6 +18,8 @@ window.pageInit = function pageInit(options, api) {
                 },
                 dialogFormVisible: false,
                 dialogStatus: '',
+                dialogButtonLoading: false,
+                dialogButtonDisabled: false,
                 textMap: {
                     update: '编辑',
                     create: '新增'
@@ -54,9 +56,7 @@ window.pageInit = function pageInit(options, api) {
             this.getList();
         },
         handleCreate() {
-            this.resetForm();
-            this.dialogStatus = 'create';
-            this.dialogFormVisible = true;
+            this.resetForm('create');
             let that = this;
             this.$nextTick(() => {
                 that.$refs['dataForm'].clearValidate()
@@ -65,6 +65,7 @@ window.pageInit = function pageInit(options, api) {
         createData() {
             this.$refs['dataForm'].validate((valid) => {
                 if (valid) {
+                    delete this.form.id;
                     api.add(this.form, apiPrefix).then((response) => {
                         this.items.unshift(response.data.model);
                         this.total = this.items.length;
@@ -80,24 +81,27 @@ window.pageInit = function pageInit(options, api) {
             })
         },
         handleUpdate(row) {
-            this.form = _.cloneDeep(row);
-            this.setRow(this.form);
-            this.dialogStatus = 'update';
-            this.dialogFormVisible = true;
+            this.row = _.cloneDeep(row);
+            this.setRow(this.row);
+            this.resetForm('update');
             this.$nextTick(() => {
                 this.$refs['dataForm'].clearValidate()
             });
         },
         editData() {
-            let that = this;
             this.$refs['dataForm'].validate((valid) => {
                 if (valid) {
-                    let tempData = Object.assign({}, this.form);
-                    api.edit(tempData, apiPrefix).then(() => {
+                    this.dialogButtonLoading = true;
+                    this.dialogButtonDisabled = true;
+                    api.edit(this.form, apiPrefix).then(() => {
                         for (const v of this.items) {
-                            if (v.id === this.form.id) {
+                            if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
-                                this.items.splice(index, 1, this.form);
+                                //关闭编辑窗口之后
+                                if (typeof this.afterCloseDialog === 'function') {
+                                    this.afterCloseDialog(this.row);
+                                }
+                                this.items.splice(index, 1, this.row);
                                 break
                             }
                         }
@@ -115,8 +119,9 @@ window.pageInit = function pageInit(options, api) {
         handleDelete(row) {
             this.$confirm('确定删除?', '提示', {type: 'warning'})
                 .then(_ => {
+                    let that = this;
                     let query = {
-                        id: row.id
+                        id: row[that.idKey] || ''
                     };
                     api.remove(query, apiPrefix).then((response) => {
                         if (response.data.success) {
@@ -127,13 +132,19 @@ window.pageInit = function pageInit(options, api) {
                 .catch(_ => {
                 });
         },
-        resetForm() {
-            Object.keys(this.form).forEach(item => {
-                this.form[item] = '';
-            });
-            if (this[this.dateName]) {
-                this[this.dateName] = '';
+        resetForm(status) {
+            if (status === 'create') {
+                Object.keys(this.form).forEach(item => {
+                    this.form[item] = '';
+                });
+                if (this[this.dateName]) {
+                    this[this.dateName] = '';
+                }
             }
+            this.dialogStatus = status;
+            this.dialogFormVisible = true;
+            this.dialogButtonLoading = false;
+            this.dialogButtonDisabled = false;
         },
         getList() {
             this.itemLoading = true;
@@ -146,10 +157,17 @@ window.pageInit = function pageInit(options, api) {
                 })
             });
         },
+        /**
+         * 设置row
+         */
         setRow(row) {
-            if (typeof this.beforeSetRow === 'function') {
-                this.beforeSetRow(row);
-                this.form = _.cloneDeep(this.form);
+            //打开编辑窗口之前
+            if (typeof this.beforeOpenDialog === 'function') {
+                let tempRow = _.cloneDeep(this.row);
+                for (let item in this.form) {
+                    this.form[item] = tempRow[item] || '';
+                }
+                this.beforeOpenDialog(row);
             }
         }
     };
