@@ -9,6 +9,11 @@ window.pageInit = function pageInit(options, api) {
     let page = {
         data() {
             let defaults = {
+                //表单 -> 当前dialog
+                //新增,更新时实际操作的对象,所以缓存1层
+                form: {},
+                //更新,删除时的对象id键
+                idKey: 'id',
                 items: null,
                 itemLoading: true,
                 total: null,
@@ -43,7 +48,7 @@ window.pageInit = function pageInit(options, api) {
                     }
                 },
             };
-            return Object.assign({}, defaults, options.data || '');
+            return _.assign({}, defaults, options.data || '');
         },
         created() {
             this.getList();
@@ -55,15 +60,20 @@ window.pageInit = function pageInit(options, api) {
             this.query.page = 0;
             this.getList();
         },
-        handleCreate() {
-            this.resetForm('create');
-            let that = this;
-            this.$nextTick(() => {
-                that.$refs['dataForm'].clearValidate()
-            })
+        handleCreate(item) {
+            this.dialogStatus = 'create';
+            this.setItem(item);
+            this.resetForm();
+        },
+        handleUpdate(row, item) {
+            this.dialogStatus = 'update';
+            this.setItem(item);
+            this.row = _.cloneDeep(row);
+            this.setDialogItem(this.row);
+            this.resetForm();
         },
         createData() {
-            this.$refs['dataForm'].validate((valid) => {
+            this.$refs[this.item.formName].validate((valid) => {
                 if (valid) {
                     delete this.form.id;
                     api.add(this.form, apiPrefix).then((response) => {
@@ -80,16 +90,8 @@ window.pageInit = function pageInit(options, api) {
                 }
             })
         },
-        handleUpdate(row) {
-            this.row = _.cloneDeep(row);
-            this.setRow(this.row);
-            this.resetForm('update');
-            this.$nextTick(() => {
-                this.$refs['dataForm'].clearValidate()
-            });
-        },
         editData() {
-            this.$refs['dataForm'].validate((valid) => {
+            this.$refs[this.item.formName].validate((valid) => {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
@@ -100,6 +102,9 @@ window.pageInit = function pageInit(options, api) {
                                 //关闭编辑窗口之后
                                 if (typeof this.afterCloseDialog === 'function') {
                                     this.afterCloseDialog(this.row);
+                                }
+                                else {
+                                    this.row = _.assignIn(this.row, this.form);
                                 }
                                 this.items.splice(index, 1, this.row);
                                 break
@@ -132,19 +137,16 @@ window.pageInit = function pageInit(options, api) {
                 .catch(_ => {
                 });
         },
-        resetForm(status) {
-            if (status === 'create') {
+        resetForm() {
+            if (this.dialogStatus === 'create') {
                 Object.keys(this.form).forEach(item => {
                     this.form[item] = '';
                 });
-                if (this[this.dateName]) {
-                    this[this.dateName] = '';
-                }
             }
-            this.dialogStatus = status;
             this.dialogFormVisible = true;
             this.dialogButtonLoading = false;
             this.dialogButtonDisabled = false;
+            this.clearValidate();
         },
         getList() {
             this.itemLoading = true;
@@ -158,20 +160,42 @@ window.pageInit = function pageInit(options, api) {
             });
         },
         /**
-         * 设置row
+         * 设置窗口对象
          */
-        setRow(row) {
+        setDialogItem(row) {
+            for (let item in this.form) {
+                this.form[item] = row[item] || '';
+            }
+            if (!this.form['id']) {
+                this.form['id'] = row['id'] || '';
+            }
             //打开编辑窗口之前
             if (typeof this.beforeOpenDialog === 'function') {
-                let tempRow = _.cloneDeep(this.row);
-                for (let item in this.form) {
-                    this.form[item] = tempRow[item] || '';
-                }
                 this.beforeOpenDialog(row);
             }
+        },
+        /**
+         * 设置Item
+         */
+        setItem(item) {
+            if (item) {
+                this.item = item;
+            }
+            if (item && item.form) {
+                this.form = item.form;
+            }
+        },
+        /**
+         * 清除验证
+         */
+        clearValidate() {
+            this.$nextTick(() => {
+                this.$refs[this.item.formName].clearValidate()
+            });
         }
     };
 
-    page.methods = Object.assign({}, methods, options.methods || '');
+    page.methods = _.assign({}, methods, options.methods || '');
+    page.components = _.assign({}, options.components || '');
     return page;
 };
