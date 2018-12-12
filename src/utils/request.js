@@ -24,6 +24,7 @@ service.interceptors.response.use(
         return response
     },
     error => {
+        debugger;
         if (error.response) {
             switch (error.response.status) {
                 case 401:

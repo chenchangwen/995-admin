@@ -62,23 +62,29 @@
                     <el-input v-model="form.signature" placeholder="签名"></el-input>
                 </el-form-item>
             </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="editData" :loading="dialogButtonLoading"
-                           :disabled="dialogButtonDisabled">确认
-                </el-button>
-            </div>
             <el-form :rules="createItem.rules" ref="createForm" :model="createItem.form" label-position="left"
                      label-width="80px"
                      v-if="dialogStatus=='create'"
                      style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'名称'" prop="name">
-                    <el-input v-model="form.name" placeholder="名称"></el-input>
+                <el-form-item :label="'名称'" prop="username">
+                    <el-input v-model="form.username" placeholder="名称"></el-input>
                 </el-form-item>
-                <el-form-item :label="'角色'" prop="name">
-                    <select-role></select-role>
+                <el-form-item :label="'角色'" prop="authorityId">
+                    <select-role :value.sync="form.authorityId"></select-role>
+                </el-form-item>
+                <el-form-item :label="'密码'" prop="rawPassword">
+                    <el-input v-model="form.rawPassword" type="password" placeholder="密码"></el-input>
                 </el-form-item>
             </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="createData" v-if="dialogStatus=='create'" :loading="dialogButtonLoading"
+                           :disabled="dialogButtonDisabled">确认
+                </el-button>
+                <el-button type="primary" @click="editData" v-if="dialogStatus=='update'" :loading="dialogButtonLoading"
+                           :disabled="dialogButtonDisabled">确认
+                </el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -117,7 +123,9 @@
                         username: ''
                     },
                     rules: {
-                        name: [{required: true, message: '名称不能为空', trigger: 'blur'}]
+                        username: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                        authorityId: [{required: true, message: '请选择角色', trigger: 'blur'}],
+                        rawPassword: [{required: true, message: '密码不能为空', trigger: 'blur'}]
                     },
                     formName: 'createForm'
                 },

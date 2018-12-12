@@ -1,49 +1,55 @@
 <template>
-    <el-select v-model="value" placeholder="请选择">
-        <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+    <el-select v-model="selectedValue" placeholder="角色" @change="handleChange">
+        <el-option v-if="items"
+                   v-for="item in items"
+                   :key="item.id"
+                   :label="item.name"
+                   :value="item.id">
         </el-option>
+
     </el-select>
 </template>
 
 <script>
+    import authoritiesAPI from '../../api/authorities';
+
     export default {
         name: 'selectRole',
+        props: {
+            value: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
-                options: [{
-                    value: '选项1',
-                    label: '黄金糕'
-                }, {
-                    value: '选项2',
-                    label: '双皮奶'
-                }, {
-                    value: '选项3',
-                    label: '蚵仔煎'
-                }, {
-                    value: '选项4',
-                    label: '龙须面'
-                }, {
-                    value: '选项5',
-                    label: '北京烤鸭'
-                }],
-                value: ''
+                items: [],
+                selectedValue: ''
             }
         },
         methods: {
-
+            queryAuthorities() {
+                let that = this;
+                authoritiesAPI.authorities().then(function (response) {
+                    that.items = response.data;
+                    that.items.map(function (item) {
+                        if (item.id === that.value) {
+                            that.selectedValue = item.id;
+                        }
+                    });
+                })
+            },
+            handleChange(value) {
+                this.$emit('update:value', value)
+            }
         },
-        mounted() {
-
+        watch: {
+            value(newValue, oldValue) {
+                this.selectedValue = newValue;
+            }
+        },
+        created() {
+            this.queryAuthorities();
         }
     }
 </script>
-
-<style scoped>
-
-</style>
-
-

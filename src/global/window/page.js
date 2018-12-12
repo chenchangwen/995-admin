@@ -75,6 +75,7 @@ window.pageInit = function pageInit(options, api) {
         createData() {
             this.$refs[this.item.formName].validate((valid) => {
                 if (valid) {
+                    debugger;
                     delete this.form.id;
                     api.add(this.form, apiPrefix).then((response) => {
                         this.items.unshift(response.data.model);
