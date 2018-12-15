@@ -2,15 +2,15 @@
  * 增删改查
  */
 window.curd = {};
-window.curd.queryList = function (params, apiPrefix) {
+window.curd.queryList = function (params, pageData) {
     return request({
-        url: apiPrefix + '/details',
+        url: pageData.apiPrefix + pageData.apiQueryListName,
         method: 'get',
         params: params
     })
 };
 
-window.curd.add = function (query, apiPrefix) {
+window.curd.queryAdd = function (query, apiPrefix) {
     return request({
         url: apiPrefix + '/add',
         method: 'post',
@@ -18,7 +18,7 @@ window.curd.add = function (query, apiPrefix) {
     })
 };
 
-window.curd.edit = function (query, apiPrefix) {
+window.curd.queryEdit = function (query, apiPrefix) {
     return request({
         url: apiPrefix + '/edit',
         method: 'post',
@@ -26,7 +26,7 @@ window.curd.edit = function (query, apiPrefix) {
     })
 };
 
-window.curd.remove = function (query, apiPrefix) {
+window.curd.queryRemove = function (query, apiPrefix) {
     return request({
         url: apiPrefix + '/delete',
         method: 'post',
@@ -34,7 +34,7 @@ window.curd.remove = function (query, apiPrefix) {
     })
 };
 
-window.curd.count = function (params, apiPrefix) {
+window.curd.queryCount = function (params, apiPrefix) {
     return request({
         url: apiPrefix + '/count',
         method: 'get',

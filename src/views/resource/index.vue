@@ -11,29 +11,34 @@
             </el-button>
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="95">
+            <el-table-column align="center" label='ID' width="180">
                 <template slot-scope="scope">
-                    {{scope.row.userId}}
+                    {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="用户名称" width="110" align="center">
+            <el-table-column label="名称" width="110" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.user.name}}
+                    {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column label="是否可用" width="110" align="center">
+            <el-table-column label="url" width="110" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.user.enabled | parseEnabled()}}
+                    {{scope.row.url}}
                 </template>
             </el-table-column>
             <el-table-column label="创建时间" width="110" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.user.createTime | parseTime('{y}-{m}-{d}')}}
+                    {{scope.row.createTime | parseTime('{y}-{m}-{d}')}}
                 </template>
             </el-table-column>
-            <el-table-column label="性别" width="110" align="center">
+            <el-table-column label="方法" width="110" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.user.sex}}
+                    {{scope.row.method}}
+                </template>
+            </el-table-column>
+            <el-table-column label="描述" width="200" align="center">
+                <template slot-scope="scope">
+                    {{scope.row.description}}
                 </template>
             </el-table-column>
             <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
@@ -90,7 +95,6 @@
 </template>
 
 <script>
-    import selectRole from '@/components/SelectRole'
     //特殊view
     let page = new pageInit(
         {
@@ -130,29 +134,15 @@
                     formName: 'createForm'
                 },
                 idKey: 'userId',
-                apiPrefix: '/users',
-                apiQueryListName: '/details'
+                apiPrefix: '/resources'
             },
             methods: {
                 beforeOpenDialog(row) {
-                    if (this.dialogStatus === 'update') {
-                        this.form.name = row.user.name;
-                        this.form.id = row.userId;
-                        this.form.sex = row.user.sex;
-                        this.form.signature = row.user.signature;
-                    }
+
                 },
                 afterCloseDialog(row) {
-                    if (this.dialogStatus === 'update') {
-                        row.user.name = this.form.name;
-                        row.userId = this.form.id;
-                        row.user.sex = this.form.sex;
-                        row.user.signature = this.form.signature;
-                    }
+
                 }
-            },
-            components:{
-                selectRole
             }
         }
     );

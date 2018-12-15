@@ -66,14 +66,14 @@ export let privilegeRouterMap = [
                     title: '权限管理(暂无)',
                 }
             },
-            // {
-            //     path: 'audience',
-            //     component: () => import('@/views/expo/audience/index'),
-            //     name: 'GET_/resources/**',
-            //     meta: {
-            //         title: '资源管理(暂无)',
-            //     }
-            // },
+            {
+                path: 'resource',
+                component: () => import('@/views/resource/index'),
+                name: 'GET_/resources/**',
+                meta: {
+                    title: '资源管理',
+                }
+            },
             {
                 path: 'user',
                 component: () => import('@/views/user/index'),

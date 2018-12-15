@@ -31,6 +31,7 @@ window.pageInit = function pageInit(options, api) {
                 },
                 //api地址前缀
                 apiPrefix: '',
+                apiQueryListName: '',
                 //日期范围控制,需有form.beginTime,form.endTime, 如果有多个时间,需要另外定义
                 beginTimeOptions: {
                     disabledDate: (time) => {
@@ -55,6 +56,8 @@ window.pageInit = function pageInit(options, api) {
         }
     };
 
+    let pageData = page.data();
+
     let methods = {
         handleFilter() {
             this.query.page = 0;
@@ -77,7 +80,7 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     debugger;
                     delete this.form.id;
-                    api.add(this.form, apiPrefix).then((response) => {
+                    api.queryAdd(this.form, apiPrefix).then((response) => {
                         this.items.unshift(response.data.model);
                         this.total = this.items.length;
                         this.dialogFormVisible = false;
@@ -96,7 +99,7 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
-                    api.edit(this.form, apiPrefix).then(() => {
+                    api.queryEdit(this.form, apiPrefix).then(() => {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
@@ -129,7 +132,7 @@ window.pageInit = function pageInit(options, api) {
                     let query = {
                         id: row[that.idKey] || ''
                     };
-                    api.remove(query, apiPrefix).then((response) => {
+                    api.queryRemove(query, apiPrefix).then((response) => {
                         if (response.data.success) {
                             this.getList();
                         }
@@ -152,10 +155,10 @@ window.pageInit = function pageInit(options, api) {
         getList() {
             this.itemLoading = true;
             let that = this;
-            api.queryList(this.query, apiPrefix).then(response => {
+            api.queryList(this.query, pageData).then(response => {
                 this.items = response.data;
                 this.itemLoading = false;
-                api.count({keyword: that.query.keyword}, apiPrefix).then(response => {
+                api.queryCount({keyword: that.query.keyword}, apiPrefix).then(response => {
                     that.total = response.data;
                 })
             });
