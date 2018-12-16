@@ -78,11 +78,10 @@ window.pageInit = function pageInit(options, api) {
         createData() {
             this.$refs[this.item.formName].validate((valid) => {
                 if (valid) {
-                    debugger;
                     delete this.form.id;
-                    api.queryAdd(this.form, apiPrefix).then((response) => {
-                        this.items.unshift(response.data.model);
-                        this.total = this.items.length;
+                    api.queryAdd(this.form, pageData).then((response) => {
+                        this.items.splice(0, 1, response.data);
+                        this.total = this.total + 1;
                         this.dialogFormVisible = false;
                         this.$notify({
                             title: '成功',
@@ -99,7 +98,7 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
-                    api.queryEdit(this.form, apiPrefix).then(() => {
+                    api.queryEdit(this.form, pageData).then(() => {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
@@ -132,7 +131,7 @@ window.pageInit = function pageInit(options, api) {
                     let query = {
                         id: row[that.idKey] || ''
                     };
-                    api.queryRemove(query, apiPrefix).then((response) => {
+                    api.queryRemove(query, pageData).then((response) => {
                         if (response.data.success) {
                             this.getList();
                         }
@@ -158,7 +157,7 @@ window.pageInit = function pageInit(options, api) {
             api.queryList(this.query, pageData).then(response => {
                 this.items = response.data;
                 this.itemLoading = false;
-                api.queryCount({keyword: that.query.keyword}, apiPrefix).then(response => {
+                api.queryCount({keyword: that.query.keyword}, pageData).then(response => {
                     that.total = response.data;
                 })
             });

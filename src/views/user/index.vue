@@ -131,7 +131,8 @@
                 },
                 idKey: 'userId',
                 apiPrefix: '/users',
-                apiQueryListName: '/details'
+                apiQueryListName: '/details',
+                apiQueryAddName: '/details/add'
             },
             methods: {
                 beforeOpenDialog(row) {

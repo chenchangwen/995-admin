@@ -10,33 +10,33 @@ window.curd.queryList = function (params, pageData) {
     })
 };
 
-window.curd.queryAdd = function (query, apiPrefix) {
+window.curd.queryAdd = function (query, pageData) {
     return request({
-        url: apiPrefix + '/add',
+        url: pageData.apiPrefix + (pageData.apiQueryAddName || '/add'),
         method: 'post',
         data: query
     })
 };
 
-window.curd.queryEdit = function (query, apiPrefix) {
+window.curd.queryEdit = function (query, pageData) {
     return request({
-        url: apiPrefix + '/edit',
+        url: pageData.apiPrefix + (pageData.apiQueryEditName || '/edit'),
         method: 'post',
         data: query
     })
 };
 
-window.curd.queryRemove = function (query, apiPrefix) {
+window.curd.queryRemove = function (query, pageData) {
     return request({
-        url: apiPrefix + '/delete',
+        url: pageData.apiPrefix + (pageData.apiQueryDeleteName || '/delete'),
         method: 'post',
         data: query
     })
 };
 
-window.curd.queryCount = function (params, apiPrefix) {
+window.curd.queryCount = function (params, pageData) {
     return request({
-        url: apiPrefix + '/count',
+        url: pageData.apiPrefix + (pageData.apiQueryCountName || '/count'),
         method: 'get',
         params: params
     })
