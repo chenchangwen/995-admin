@@ -132,7 +132,7 @@
                 idKey: 'userId',
                 apiPrefix: '/users',
                 apiQueryListName: '/details',
-                apiQueryAddName: '/details/add'
+                apiQueryAddName: '/details/name/add'
             },
             methods: {
                 beforeOpenDialog(row) {
