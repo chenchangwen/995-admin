@@ -6,7 +6,7 @@
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"
                        icon="el-icon-edit">新增
             </el-button>
         </div>
@@ -43,47 +43,45 @@
             </el-table-column>
             <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,editItem)">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="editItem.rules" ref="editForm" :model="editItem.form" label-position="left"
+            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
                      label-width="80px"
-                     v-if="dialogStatus=='update'"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'名称'" prop="name">
                     <el-input v-model="form.name" placeholder="名称"></el-input>
                 </el-form-item>
-                <el-form-item label="性别" prop="sex">
-                    <el-select v-model="form.sex" placeholder="性别">
-                        <el-option label="男" value="男"></el-option>
-                        <el-option label="女" value="女"></el-option>
+                <el-form-item :label="'url'" prop="url">
+                    <el-input v-model="form.url" placeholder="url"></el-input>
+                </el-form-item>
+                <el-form-item :label="'方法'" prop="method">
+                    <el-select v-model="form.method" placeholder="请选择">
+                        <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="'签名'" prop="signature">
-                    <el-input v-model="form.signature" placeholder="签名"></el-input>
-                </el-form-item>
-            </el-form>
-            <el-form :rules="createItem.rules" ref="createForm" :model="createItem.form" label-position="left"
-                     label-width="80px"
-                     v-if="dialogStatus=='create'"
-                     style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'名称'" prop="username">
-                    <el-input v-model="form.username" placeholder="名称"></el-input>
-                </el-form-item>
-                <el-form-item :label="'角色'" prop="authorityId">
-                    <select-role :value.sync="form.authorityId"></select-role>
-                </el-form-item>
-                <el-form-item :label="'密码'" prop="rawPassword">
-                    <el-input v-model="form.rawPassword" type="password" placeholder="密码"></el-input>
+                <el-form-item :label="'描述'" prop="description">
+                    <el-input
+                            type="textarea"
+                            :rows="3"
+                            placeholder="描述"
+                            v-model="form.description">
+                    </el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="createData" v-if="dialogStatus=='create'" :loading="dialogButtonLoading"
+                <el-button type="primary" @click="createData" v-if="dialogStatus=='create'"
+                           :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
                 <el-button type="primary" @click="editData" v-if="dialogStatus=='update'" :loading="dialogButtonLoading"
@@ -95,43 +93,36 @@
 </template>
 
 <script>
-    //特殊view
     let page = new pageInit(
         {
             data: {
-                //编辑表单
-                editItem: {
+                options:[
+                    {
+                        value: 'GET',
+                        label: 'GET'
+                    },
+                    {
+                        value: 'POST',
+                        label: 'POST'
+                    }
+                ],
+                commonForm: {
                     form: {
-                        //性别
-                        sex: '',
-                        //签名
-                        signature: '',
-                        //用户名称
-                        name: ''
+                        //名称
+                        name: '',
+                        url: '',
+                        //方法
+                        method: '',
+                        //描述
+                        description: '',
                     },
                     rules: {
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                        sex: [{required: true, message: '请选择性别', trigger: 'blur'}],
-                        signature: [{required: true, message: '签名不能为空', trigger: 'blur'}],
+                        url: [{required: true, message: 'url不能为空', trigger: 'blur'}],
+                        method: [{required: true, message: '请选择方法', trigger: 'blur'}],
+                        description: [{required: true, message: '描述不能为空', trigger: 'blur'}],
                     },
-                    formName: 'editForm'
-                },
-                //创建表单
-                createItem: {
-                    form: {
-                        //角色Id
-                        authorityId: '',
-                        //明文密码
-                        rawPassword: '',
-                        //用户名称
-                        username: ''
-                    },
-                    rules: {
-                        username: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                        authorityId: [{required: true, message: '请选择角色', trigger: 'blur'}],
-                        rawPassword: [{required: true, message: '密码不能为空', trigger: 'blur'}]
-                    },
-                    formName: 'createForm'
+                    formName: 'commonForm'
                 },
                 idKey: 'userId',
                 apiPrefix: '/resources'
