@@ -1,13 +1,15 @@
+import qs from "qs";
+
 //登录
 export function login(username, password) {
     return request({
         url: '/login',
         method: 'post',
-        data: {
+        data: qs.stringify({
             username,
             password,
             submit: 'Login'
-        }
+        })
     })
 }
 
