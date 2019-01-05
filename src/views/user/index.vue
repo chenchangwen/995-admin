@@ -4,6 +4,16 @@
             <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户名称'"
                       v-model="queryItem.name.value">
             </el-input>
+
+            <el-select class="filter-item" style="width: 120px" clearable v-model="queryItem.sex.value" placeholder="性别">
+                <el-option
+                        v-for="item in sexOptions"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value" >
+                </el-option>
+            </el-select>
+
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
             <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
@@ -96,6 +106,16 @@
     let page = new pageInit(
         {
             data: {
+                sexOptions:[
+                    {
+                        value: '女',
+                        label: '女'
+                    },
+                    {
+                        value: '男',
+                        label: '男'
+                    }
+                ],
                 //编辑表单
                 editItem: {
                     form: {
@@ -137,6 +157,12 @@
                         operation: '==',
                         value: '',
                         predicate:";"
+                    },
+                    sex:{
+                        key: 'user.sex',
+                        operation: '==',
+                        value: '',
+                        predicate:""
                     }
                 },
                 idKey: 'userId',
