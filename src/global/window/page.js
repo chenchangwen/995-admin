@@ -213,11 +213,14 @@ window.pageInit = function pageInit(options, api) {
                     searchList.push(searchStr);
                 }
             }
-            if (searchList.length === 1) {
-                this.query.search = searchList[0].substr(0, searchList[0].length - 1);
-            }
-            if (searchList.length > 1) {
+
+            if (searchList.length > 0) {
                 this.query.search = searchList.join('');
+                let lastIndex = this.query.search.length - 1;
+                let lastChar = this.query.search.charAt(lastIndex);
+                if ([',', ';'].indexOf(lastChar) > -1) {
+                    this.query.search = this.query.search.substr(0, lastIndex);
+                }
             }
         },
     };
