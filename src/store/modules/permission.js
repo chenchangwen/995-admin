@@ -47,7 +47,7 @@ const permission = {
         GenerateRoutes({commit}, data) {
             return homeAPI.home().then(response => {
                 //菜单
-                let authorities = response.data.authorities;
+                let authorities = response.data.base.authorities;
                 let menuCode = [];
 
                 let roleCodes = 'user';
