@@ -21,6 +21,7 @@ window.pageInit = function pageInit(options, api) {
                     page: 0,
                     size: 10
                 },
+                queryItem: {},
                 dialogFormVisible: false,
                 dialogStatus: '',
                 dialogButtonLoading: false,
@@ -153,11 +154,12 @@ window.pageInit = function pageInit(options, api) {
         },
         getList() {
             this.itemLoading = true;
+            this.setQueryItem();
             let that = this;
             api.queryList(this.query, pageData).then(response => {
                 this.items = response.data;
                 this.itemLoading = false;
-                api.queryCount({keyword: that.query.keyword}, pageData).then(response => {
+                api.queryCount(this.query, pageData).then(response => {
                     that.total = response.data;
                 })
             });
@@ -195,7 +197,29 @@ window.pageInit = function pageInit(options, api) {
             this.$nextTick(() => {
                 this.$refs[this.item.formName].clearValidate()
             });
-        }
+        },
+        /**
+         * 设置查询对象
+         */
+        setQueryItem() {
+            let searchList = [];
+            this.query.search = '';
+            let queryItem = this.queryItem;
+            for (let item in queryItem) {
+                let searchStr = '';
+                let thisItem = queryItem[item];
+                if (thisItem.value) {
+                    searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate;
+                    searchList.push(searchStr);
+                }
+            }
+            if (searchList.length === 1) {
+                this.query.search = searchList[0].substr(0, searchList[0].length - 1);
+            }
+            if (searchList.length > 1) {
+                this.query.search = searchList.join('');
+            }
+        },
     };
 
     page.methods = _.assign({}, methods, options.methods || '');

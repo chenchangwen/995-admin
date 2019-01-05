@@ -1,8 +1,8 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'关键字'"
-                      v-model="query.keyword">
+            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户名称'"
+                      v-model="queryItem.name.value">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
@@ -78,7 +78,8 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="createData" v-if="dialogStatus=='create'" :loading="dialogButtonLoading"
+                <el-button type="primary" @click="createData" v-if="dialogStatus=='create'"
+                           :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
                 <el-button type="primary" @click="editData" v-if="dialogStatus=='update'" :loading="dialogButtonLoading"
@@ -129,10 +130,20 @@
                     },
                     formName: 'createForm'
                 },
+                //查询对象
+                queryItem: {
+                    name: {
+                        key: 'user.name',
+                        operation: '==',
+                        value: '',
+                        predicate:";"
+                    }
+                },
                 idKey: 'userId',
                 apiPrefix: '/users',
                 apiQueryListName: '/details',
-                apiQueryAddName: '/details/name/add'
+                apiQueryAddName: '/details/name/add',
+                apiQueryCountName: '/details/count'
             },
             methods: {
                 beforeOpenDialog(row) {
@@ -152,7 +163,7 @@
                     }
                 }
             },
-            components:{
+            components: {
                 selectRole
             }
         }

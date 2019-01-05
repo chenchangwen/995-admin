@@ -1,8 +1,8 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'关键字'"
-                      v-model="query.keyword">
+            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'名称'"
+                      v-model="queryItem.name.value">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
@@ -123,6 +123,15 @@
                         description: [{required: true, message: '描述不能为空', trigger: 'blur'}],
                     },
                     formName: 'commonForm'
+                },
+                //查询对象
+                queryItem: {
+                    name: {
+                        key: 'name',
+                        operation: '==',
+                        value: '',
+                        predicate:";"
+                    }
                 },
                 idKey: 'userId',
                 apiPrefix: '/resources'
