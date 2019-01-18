@@ -1,10 +1,11 @@
 <template>
-    <el-select v-model="selectedValue" placeholder="角色" @change="handleChange">
+    <el-select v-model="selectedValue" value-key="id" multiple placeholder="角色" @change="handleChange"
+               style="width: 100%">
         <el-option v-if="items"
                    v-for="item in items"
                    :key="item.id"
                    :label="item.name"
-                   :value="item.id">
+                   :value="item">
         </el-option>
 
     </el-select>
@@ -17,24 +18,34 @@
         name: 'selectRole',
         props: {
             value: {
-                type: String,
-                default: ''
+                type: [Array],
+                default: function () {
+                    return []
+                }
             }
         },
         data() {
             return {
                 items: [],
-                selectedValue: ''
+                selectedValue: []
             }
         },
         methods: {
             queryAuthorities() {
                 let that = this;
+                let ids = [];
+                if (that.value.length > 0) {
+                    ids = that.value.map(function (item) {
+                        return item.id;
+                    });
+                }
                 authoritiesAPI.authorities().then(function (response) {
                     that.items = response.data;
                     that.items.map(function (item) {
-                        if (item.id === that.value) {
-                            that.selectedValue = item.id;
+                        if (ids.length > 0) {
+                            if (item.id.indexOf(ids) > -1) {
+                                that.selectedValue.push(item);
+                            }
                         }
                     });
                 })

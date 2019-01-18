@@ -12,6 +12,10 @@ window.pageInit = function pageInit(options, api) {
                 //表单 -> 当前dialog
                 //新增,更新时实际操作的对象,所以缓存1层
                 form: {},
+                //form最原始的模型,不能更改
+                originForm: {},
+                //表格的当行数据对象
+                row: {},
                 //更新,删除时的对象id键
                 idKey: 'id',
                 items: null,
@@ -23,7 +27,7 @@ window.pageInit = function pageInit(options, api) {
                 },
                 queryItem: {},
                 dialogFormVisible: false,
-                dialogStatus: '',
+                dialogStatus: undefined,
                 dialogButtonLoading: false,
                 dialogButtonDisabled: false,
                 textMap: {
@@ -76,12 +80,33 @@ window.pageInit = function pageInit(options, api) {
             this.setDialogItem(this.row);
             this.resetForm();
         },
+        handleDelete(row) {
+            this.$confirm('确定删除?', '提示', {type: 'warning'})
+                .then(_ => {
+                    let that = this;
+                    let query = {
+                        id: row[that.idKey] || ''
+                    };
+                    api.queryRemove(query, pageData).then((response) => {
+                        if (response.data.success) {
+                            this.getList();
+                        }
+                    });
+                })
+                .catch(_ => {
+                });
+        },
         createData() {
             this.$refs[this.item.formName].validate((valid) => {
                 if (valid) {
                     delete this.form.id;
                     api.queryAdd(this.form, pageData).then((response) => {
-                        this.items.splice(0, 1, response.data);
+                        if (this.total < this.query.size) {
+                            this.items.splice(0, 0, response.data)
+                        }
+                        else {
+                            this.items.unshift(response.data);
+                        }
                         this.total = this.total + 1;
                         this.dialogFormVisible = false;
                         this.$notify({
@@ -103,15 +128,13 @@ window.pageInit = function pageInit(options, api) {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
-                                //关闭编辑窗口之后
+                                //关闭编辑窗口之后执行
                                 if (typeof this.afterCloseDialog === 'function') {
                                     this.afterCloseDialog(this.row);
                                 }
-                                else {
-                                    this.row = _.assignIn(this.row, this.form);
-                                }
+                                this.row = _.assignIn(this.row, this.form);
                                 this.items.splice(index, 1, this.row);
-                                break
+                                break;
                             }
                         }
                         this.dialogFormVisible = false;
@@ -125,26 +148,10 @@ window.pageInit = function pageInit(options, api) {
                 }
             })
         },
-        handleDelete(row) {
-            this.$confirm('确定删除?', '提示', {type: 'warning'})
-                .then(_ => {
-                    let that = this;
-                    let query = {
-                        id: row[that.idKey] || ''
-                    };
-                    api.queryRemove(query, pageData).then((response) => {
-                        if (response.data.success) {
-                            this.getList();
-                        }
-                    });
-                })
-                .catch(_ => {
-                });
-        },
         resetForm() {
             if (this.dialogStatus === 'create') {
                 Object.keys(this.form).forEach(item => {
-                    this.form[item] = '';
+                    this.form[item] = this.originForm[item];
                 });
             }
             this.dialogFormVisible = true;
@@ -174,7 +181,7 @@ window.pageInit = function pageInit(options, api) {
             if (!this.form['id']) {
                 this.form['id'] = row['id'] || '';
             }
-            //打开编辑窗口之前
+            //打开编辑窗口之前执行
             if (typeof this.beforeOpenDialog === 'function') {
                 this.beforeOpenDialog(row);
             }
@@ -188,6 +195,9 @@ window.pageInit = function pageInit(options, api) {
             }
             if (item && item.form) {
                 this.form = item.form;
+                if (!item.originForm) {
+                   item.originForm = _.extend(item.form);
+                }
             }
         },
         /**

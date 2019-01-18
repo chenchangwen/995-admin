@@ -59,14 +59,6 @@ export let privilegeRouterMap = [
         },
         children: [
             {
-                path: 'exhibition',
-                component: () => import('@/views/expo/exhibition/index'),
-                name: 'GET_/authorities/**',
-                meta: {
-                    title: '权限管理(暂无)',
-                }
-            },
-            {
                 path: 'resource',
                 component: () => import('@/views/resource/index'),
                 name: 'GET_/resources/**',
