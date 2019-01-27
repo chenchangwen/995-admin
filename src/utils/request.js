@@ -25,7 +25,11 @@ service.interceptors.response.use(
             switch (error.response.status) {
                 case 401:
                     router.replace({
-                        path: `/login`
+                        path: `/#/login`
+                    });
+                case 404:
+                    router.replace({
+                        path: `/#/login`
                     });
             }
         }

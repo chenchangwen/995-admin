@@ -1,3 +1,3 @@
-require('./window/index');
+require('./windows/index');
 require('./components/index');
 require('./directive/index');

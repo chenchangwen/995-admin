@@ -3,7 +3,11 @@
  */
 import Vue from 'vue'
 
+Vue.prototype.global = {};
+
 global.Vue = Vue;
+
+window.admin995 ={};
 
 import request from '@/utils/request';
 
@@ -17,3 +21,4 @@ require('./vendor');
 require('./page');
 require('./curd');
 require('./url-parse');
+require('./config');

@@ -29,4 +29,4 @@ function urlParse(param1) {
         segments: anchor.pathname.replace(/^\//, '').split('/')
     };
 };
-window.urlParse = Vue.prototype.urlParse = urlParse(document.URL);
+Vue.prototype.$urlParse = urlParse(document.URL);

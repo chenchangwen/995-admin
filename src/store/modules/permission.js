@@ -54,12 +54,11 @@ const permission = {
                 let userName = 'user-name';
                 commit('SET_NAME', userName);
                 commit('SET_ROLES', roleCodes);
+                commit('SET_HOME', response.data.base);
                 data = roleCodes;
 
                 authorities.forEach(function (item) {
-                    if (item.authority.indexOf('GET') >= 0) {
-                        menuCode.push(item.authority);
-                    }
+                    menuCode.push(item.authority);
                 });
 
                 return new Promise(resolve => {

@@ -1,5 +1,6 @@
 <template>
     <div class="dashboard-container">
+
     </div>
 </template>
 
@@ -8,6 +9,11 @@
 
     export default {
         name: 'dashboard',
+        data() {
+            return {
+                key : this.name
+            }
+        },
         computed: {
             ...mapGetters([
                 'name',

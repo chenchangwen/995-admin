@@ -5,7 +5,6 @@
  */
 window.pageInit = function pageInit(options, api) {
     api = window.curd || api;
-    let apiPrefix = options.data.apiPrefix || '';
     let page = {
         data() {
             let defaults = {
@@ -34,6 +33,8 @@ window.pageInit = function pageInit(options, api) {
                     update: '编辑',
                     create: '新增'
                 },
+                //是否查询count接口
+                isQueryCount: true,
                 //api地址前缀
                 apiPrefix: '',
                 apiQueryListName: '',
@@ -56,13 +57,15 @@ window.pageInit = function pageInit(options, api) {
             };
             return _.assign({}, defaults, options.data || '');
         },
-        created() {
+        mounted() {
             this.getList();
         }
     };
 
+    //页面基础数据
     let pageData = page.data();
 
+    //页面基础方法
     let methods = {
         handleFilter() {
             this.query.page = 0;
@@ -166,9 +169,11 @@ window.pageInit = function pageInit(options, api) {
             api.queryList(this.query, pageData).then(response => {
                 this.items = response.data;
                 this.itemLoading = false;
-                api.queryCount(this.query, pageData).then(response => {
-                    that.total = response.data;
-                })
+                if (that.isQueryCount) {
+                    api.queryCount(this.query, pageData).then(response => {
+                        that.total = response.data;
+                    })
+                }
             });
         },
         /**
@@ -196,7 +201,7 @@ window.pageInit = function pageInit(options, api) {
             if (item && item.form) {
                 this.form = item.form;
                 if (!item.originForm) {
-                   item.originForm = _.extend(item.form);
+                    item.originForm = _.extend(item.form);
                 }
             }
         },
@@ -235,7 +240,13 @@ window.pageInit = function pageInit(options, api) {
         },
     };
 
+    //合并基础方法
     page.methods = _.assign({}, methods, options.methods || '');
-    page.components = _.assign({}, options.components || '');
+    //合并页面自定义属性
+    Object.keys(options).forEach(item => {
+        if (item !== 'methods' && item !== 'data') {
+            page[item] = options[item];
+        }
+    });
     return page;
 };

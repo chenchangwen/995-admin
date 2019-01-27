@@ -51,7 +51,7 @@ export let privilegeRouterMap = [
     {
         path: '/system',
         component: Layout,
-        redirect: '/expo/exhibition',
+        redirect: 'dashboard',
         name: 'GET_/authorities/**',
         meta: {
             title: '系统',
@@ -73,6 +73,43 @@ export let privilegeRouterMap = [
                 meta: {
                     title: '用户管理',
                 }
+            }
+        ]
+    },
+    {
+        path: '/document',
+        component: Layout,
+        redirect: 'dashboard',
+        name: 'GET_/classifies/**',
+        meta: {
+            title: '文档',
+            icon: 'documentation'
+        },
+        children: [
+            {
+                path: 'classifies',
+                component: () => import('@/views/classifies/index'),
+                name: 'GET_/classifies/**',
+                meta: {
+                    title: '分类管理',
+                }
+            },
+            {
+                path: 'articles',
+                component: () => import('@/views/articles/index'),
+                name: 'GET_/articles/**',
+                meta: {
+                    title: '文章管理',
+                }
+            },
+            {
+                path: 'articles/edit/:id?',
+                component: () => import('@/views/articles/edit'),
+                name: 'POST_/articles/**',
+                meta: {
+                    title: '文章编辑',
+                },
+                hidden: true
             }
         ]
     }
