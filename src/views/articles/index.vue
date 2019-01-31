@@ -16,7 +16,7 @@
 
             <el-table-column label="标题" width="110" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.name}}
+                    {{scope.row.title}}
                 </template>
             </el-table-column>
 

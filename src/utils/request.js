@@ -2,7 +2,6 @@ import axios from 'axios'
 import {getToken} from '@/utils/auth'
 import router from '../router/index'
 
-var qs = require('qs');
 const service = axios.create({
     baseURL: '/',
     timeout: 10000
@@ -25,11 +24,11 @@ service.interceptors.response.use(
             switch (error.response.status) {
                 case 401:
                     router.replace({
-                        path: `/#/login`
+                        path: `/login`
                     });
                 case 404:
                     router.replace({
-                        path: `/#/login`
+                        path: `/login`
                     });
             }
         }

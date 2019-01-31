@@ -1,9 +1,6 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户名称'"
-                      v-model="queryItem.name.value" clearable>
-            </el-input>
             <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
                        icon="el-icon-edit">新增
             </el-button>
@@ -14,8 +11,8 @@
                      v-if="dialogStatus ==='create'"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'名称'" prop="name">
-                    <el-input v-model="form.name" placeholder="名称"></el-input>
+                <el-form-item :label="'名称'" prop="classifies.name">
+                    <el-input v-model="form.classifies.name" placeholder="名称"></el-input>
                 </el-form-item>
                 <el-form-item :label="'主题'" prop="subject">
                     <el-input v-model="form.subject" placeholder="主题"></el-input>
@@ -46,24 +43,18 @@
             data: {
                 createItem: {
                     form: {
-                        name: '',
                         subject: '',
-                        userId: 1,
-                        index: 0
+                        classifies: {
+                            name: ''
+                        }
                     },
                     rules: {
-                        name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                        'classifies.name': [{required: true, message: '名称不能为空', trigger: 'blur'}],
                         subject: [{required: true, message: '主题不能为空', trigger: 'blur'}],
                     },
                     formName: 'createForm'
                 },
                 queryItem: {
-                    name: {
-                        key: 'name',
-                        operation: '==',
-                        value: '',
-                        predicate: ";"
-                    },
                     userId: {
                         key: 'userId',
                         operation: '==',
@@ -72,25 +63,22 @@
                     },
                 },
                 isQueryCount: false,
-                apiPrefix: '/classifies',
+                apiPrefix: '/classifies/subjects',
                 apiQueryAddName: '/edit',
             },
             methods: {
-                customCreateData(){
-                    //提交前编辑
-                    let form = this.form;
+                customCreateData() {
                     let that = this;
+                    let form = _.cloneDeep(this.form);
+                    form.classifies = [form.classifies];
                     form.userId = this.queryItem.userId.value;
-                    form.floor = 0;
-                    form.index= 0;
-                    form.parentId = '';
                     this.$refs[this.item.formName].validate((valid) => {
                         if (valid) {
                             request({
-                                url: '/classifies/edit',
+                                url: '/classifies/subjects/add',
                                 method: 'post',
-                                data: [form]
-                            }).then(function(response){
+                                data: form
+                            }).then(function (response) {
                                 that.dialogFormVisible = false;
                                 that.$notify({
                                     title: '成功',

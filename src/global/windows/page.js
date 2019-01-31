@@ -153,9 +153,9 @@ window.pageInit = function pageInit(options, api) {
         },
         resetForm() {
             if (this.dialogStatus === 'create') {
-                Object.keys(this.form).forEach(item => {
-                    this.form[item] = this.originForm[item];
-                });
+                this.$nextTick(() => {
+                    this.$refs[this.item.formName].resetFields();
+                })
             }
             this.dialogFormVisible = true;
             this.dialogButtonLoading = false;
@@ -210,7 +210,7 @@ window.pageInit = function pageInit(options, api) {
          */
         clearValidate() {
             this.$nextTick(() => {
-                this.$refs[this.item.formName].clearValidate()
+                this.$refs[this.item.formName].clearValidate();
             });
         },
         /**
