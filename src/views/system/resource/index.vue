@@ -11,17 +11,17 @@
             </el-button>
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="180">
+            <el-table-column align="center" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="名称" width="110" align="center">
+            <el-table-column label="名称" width="150" align="center">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column label="url" width="110" align="center">
+            <el-table-column label="url" width="300" align="center">
                 <template slot-scope="scope">
                     {{scope.row.url}}
                 </template>
@@ -53,6 +53,9 @@
             <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
+                <el-form-item :label="'Id'" v-if="dialogStatus === 'update'">
+                   {{form.id}}
+                </el-form-item>
                 <el-form-item :label="'名称'" prop="name">
                     <el-input v-model="form.name" placeholder="名称"></el-input>
                 </el-form-item>

@@ -59,7 +59,6 @@
             },
             methods: {
                 handleEdit(id){
-
                     let articleId =  id ? ('/'+ id) : '';
                     this.$router.push("/document/articles/edit" + articleId);
                 }

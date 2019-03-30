@@ -11,6 +11,8 @@ window.pageInit = function pageInit(options, api) {
                 //表单 -> 当前dialog
                 //新增,更新时实际操作的对象,所以缓存1层
                 form: {},
+                //如果存,则使用postForm替换掉form,但不影响form
+                postForm: {},
                 //form最原始的模型,不能更改
                 originForm: {},
                 //表格的当行数据对象
@@ -127,7 +129,7 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
-                    api.queryEdit(this.form, pageData).then(() => {
+                    api.queryEdit(this.postForm || this.form, pageData).then(() => {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);

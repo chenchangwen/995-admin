@@ -54,13 +54,13 @@ export let privilegeRouterMap = [
         redirect: 'dashboard',
         name: 'GET_/authorities/**',
         meta: {
-            title: '系统',
+            title: '系统管理',
             icon: 'example'
         },
         children: [
             {
                 path: 'resource',
-                component: () => import('@/views/resource/index'),
+                component: () => import('@/views/system/resource/index'),
                 name: 'GET_/resources/**',
                 meta: {
                     title: '资源管理',
@@ -73,6 +73,14 @@ export let privilegeRouterMap = [
                 meta: {
                     title: '用户管理',
                 }
+            },
+            {
+                path: 'wechat',
+                component: () => import('@/views/system/wechats/index'),
+                name: 'GET_/wechats/**',
+                meta: {
+                    title: '微信管理',
+                }
             }
         ]
     },
@@ -82,7 +90,7 @@ export let privilegeRouterMap = [
         redirect: 'dashboard',
         name: 'GET_/classifies/**',
         meta: {
-            title: '文档',
+            title: '文档管理',
             icon: 'documentation'
         },
         children: [

@@ -136,7 +136,6 @@
 
 <script>
     import selectRole from '@/components/SelectRole'
-    //特殊view
     let page = new pageInit(
         {
             data: {

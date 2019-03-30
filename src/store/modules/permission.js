@@ -47,19 +47,22 @@ const permission = {
         GenerateRoutes({commit}, data) {
             return homeAPI.home().then(response => {
                 //菜单
-                let authorities = response.data.base.authorities;
+                let authorities = response.data.principal.authorities;
                 let menuCode = [];
 
                 let roleCodes = 'user';
                 let userName = 'user-name';
                 commit('SET_NAME', userName);
                 commit('SET_ROLES', roleCodes);
-                commit('SET_HOME', response.data.base);
+                commit('SET_HOME', response.data.principal);
                 data = roleCodes;
 
                 authorities.forEach(function (item) {
                     menuCode.push(item.authority);
                 });
+
+                console.log('menuCode');
+                console.dir(menuCode);
 
                 return new Promise(resolve => {
                     const {roles} = data;

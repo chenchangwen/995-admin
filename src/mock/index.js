@@ -18,9 +18,4 @@ Mock.mock(/\/user\/info\.*/, 'get', loginAPI.getUserInfo);
 Mock.mock(/\/user\/logout/, 'post', loginAPI.logout);
 
 
-//展会
-import expoAPI from './expo';
-Mock.mock(/\/expo\/audience\/details/, 'post', expoAPI.queryAudienceList);
-Mock.mock(/\/expo\/exhibition\/details/, 'post', expoAPI.queryExhibitionList);
-
 export default Mock;
