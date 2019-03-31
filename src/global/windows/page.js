@@ -78,8 +78,8 @@ window.pageInit = function pageInit(options, api) {
             this.setItem(item);
             this.resetForm();
         },
-        handleUpdate(row, item) {
-            this.dialogStatus = 'update';
+        handleUpdate(row, item, options) {
+            this.dialogStatus = (options && options.dialogStatus) || 'update';
             this.setItem(item);
             this.row = _.cloneDeep(row);
             this.setDialogItem(this.row);
@@ -129,7 +129,12 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
-                    api.queryEdit(this.postForm || this.form, pageData).then(() => {
+                    //关闭编辑窗口之后执行
+                    if (typeof this.beforeEdit === 'function') {
+                        this.beforeEdit(this.row);
+                    }
+                    let pgData = _.assign({}, pageData, this.item.pageData);
+                    api.queryEdit(this.postForm || this.form, pgData).then(() => {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
@@ -182,6 +187,7 @@ window.pageInit = function pageInit(options, api) {
          * 设置窗口对象
          */
         setDialogItem(row) {
+            this.postForm = '';
             for (let item in this.form) {
                 this.form[item] = row[item] || '';
             }
@@ -225,9 +231,22 @@ window.pageInit = function pageInit(options, api) {
             for (let item in queryItem) {
                 let searchStr = '';
                 let thisItem = queryItem[item];
-                if (thisItem.value) {
-                    searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate;
-                    searchList.push(searchStr);
+                if (_.isArrayLike(thisItem)) {
+                    if (thisItem.value) {
+                        for (let qItem in thisItem) {
+                            let q = thisItem[qItem];
+                            if (q.key) {
+                                searchStr = q.key + q.operation + thisItem.value + q.predicate;
+                                searchList.push(searchStr);
+                            }
+                        }
+                    }
+                }
+                else {
+                    if (thisItem.value) {
+                        searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate;
+                        searchList.push(searchStr);
+                    }
                 }
             }
 

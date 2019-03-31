@@ -67,14 +67,6 @@ export let privilegeRouterMap = [
                 }
             },
             {
-                path: 'user',
-                component: () => import('@/views/user/index'),
-                name: 'GET_/users/**',
-                meta: {
-                    title: '用户管理',
-                }
-            },
-            {
                 path: 'wechat',
                 component: () => import('@/views/system/wechats/index'),
                 name: 'GET_/wechats/**',
@@ -82,6 +74,34 @@ export let privilegeRouterMap = [
                     title: '微信管理',
                 }
             }
+        ]
+    },
+    {
+        path: '/user',
+        component: Layout,
+        redirect: 'dashboard',
+        name: 'GET_/users/**',
+        meta: {
+            title: '用户管理',
+            icon: 'user'
+        },
+        children: [
+            {
+                path: 'list',
+                component: () => import('@/views/user/list/index'),
+                name: 'GET_/users/**',
+                meta: {
+                    title: '用户列表',
+                }
+            },
+            {
+                path: 'account',
+                component: () => import('@/views/user/account/index'),
+                name: 'GET_/users/accounts/**',
+                meta: {
+                    title: '用户账号',
+                }
+            },
         ]
     },
     {
