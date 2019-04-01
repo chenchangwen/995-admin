@@ -1,63 +1,40 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
+            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户ID'"
+                      v-model="queryItem.id.value" clearable >
+            </el-input>
             <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户名称'"
                       v-model="queryItem.name.value" clearable >
             </el-input>
 
-            <el-select class="filter-item" style="width: 120px" clearable v-model="queryItem.sex.value"
-                       placeholder="性别">
-                <el-option
-                        v-for="item in sexOptions"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                </el-option>
-            </el-select>
-
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
-                       icon="el-icon-edit">新增
-            </el-button>
+
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="95">
+            <el-table-column align="center" label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="用户名称" width="110" align="center">
+            <el-table-column label="名称" width="110" align="center">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间" width="110" align="center">
+            <el-table-column label="系统账号" width="200" align="center">
                 <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime('{y}-{m}-{d}')}}
-                </template>
-            </el-table-column>
-            <el-table-column label="是否可用" width="110" align="center">
-                <template slot-scope="scope">
-                    <i :class="scope.row.userDetail.enabled ? 'el-icon-success' : 'el-icon-error'"></i>
+                    <div v-for="item of scope.row.userAccounts">
+                        <p>{{item.subject}}:{{item.subjectId}}</p>
+                    </div>
                 </template>
             </el-table-column>
 
-            <el-table-column label="手机" width="120" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.mobile}}
-                </template>
-            </el-table-column>
-
-            <el-table-column label="性别" width="110" align="center">
-                <template slot-scope="scope">
-                    {{scope.row.sex}}
-                </template>
-            </el-table-column>
             <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,editItem)">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleChangeId(scope.row,editItem)" style="width: 80px">交换账号</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -98,27 +75,6 @@
                 </el-form-item>
             </el-form>
 
-            <el-form :rules="createItem.rules" ref="createForm" :model="createItem.form" label-position="left"
-                     v-if="dialogStatus ==='create'"
-                     label-width="80px"
-                     style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'名称'" prop="username">
-                    <el-input v-model="form.username" placeholder="名称"></el-input>
-                </el-form-item>
-                <el-form-item :label="'角色'" prop="authorities">
-                    <select-role :value.sync="form.authorities"></select-role>
-                </el-form-item>
-
-                <el-form-item :label="'密码'" prop="rawPassword">
-                    <el-input v-model="form.rawPassword" type="password" placeholder="密码"></el-input>
-                </el-form-item>
-
-                <el-form-item :label="'手机'" prop="mobile">
-                    <el-input v-model="form.mobile" placeholder="手机"></el-input>
-                </el-form-item>
-
-            </el-form>
-
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
                 <el-button type="primary" @click="createData" v-if="dialogStatus==='create'"
@@ -139,16 +95,6 @@
     let page = new pageInit(
         {
             data: {
-                sexOptions: [
-                    {
-                        value: '女',
-                        label: '女'
-                    },
-                    {
-                        value: '男',
-                        label: '男'
-                    }
-                ],
                 //创建表单
                 createItem: {
                     form: {
@@ -183,28 +129,25 @@
                     },
                     rules: {
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                        sex: [{required: true, message: '请选择性别', trigger: 'blur'}],
-                        authorities: [{required: true, message: '请选择角色', trigger: 'blur'}],
                     },
                     formName: 'editForm'
                 },
                 //查询对象
                 queryItem: {
-                    name: {
-                        key: 'name',
+                    id: {
+                        key: 'id',
                         operation: '==',
                         value: '',
                         predicate: ";"
                     },
-                    sex: {
-                        key: 'sex',
+                    name: {
+                        key: 'name',
                         operation: '==',
                         value: '',
                         predicate: ""
                     }
                 },
                 apiPrefix: '/users',
-                apiQueryAddName: '/name/add',
             },
             methods: {
                 beforeOpenDialog(row) {
@@ -214,6 +157,9 @@
                     }
                 },
                 afterCloseDialog(row) {
+
+                },
+                handleChangeId(){
 
                 }
             },

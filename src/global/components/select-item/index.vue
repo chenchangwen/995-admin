@@ -1,5 +1,5 @@
 <template>
-    <el-select v-model="selectedValue" value-key="id" placeholder="标签" @change="handleChange">
+    <el-select v-model="selectedValue" value-key="id" :placeholder="placeholder" @change="handleChange">
         <el-option v-if="items"
                    v-for="item in items"
                    :key="item.id"
@@ -14,19 +14,19 @@
     export default {
         name: 'selectItem',
         props: {
-            valueOptions: {
-                type: [Object],
-                default: function () {
-                    return {}
-                }
-            },
             value: {
-                type: [Object, String],
-                default: ''
+                type: [Array],
+                default: function () {
+                    return []
+                }
             },
             url: {
                 type: String,
                 default: ''
+            },
+            placeholder: {
+                type: String,
+                default: '标签'
             }
         },
         data() {
@@ -39,7 +39,7 @@
             setItems() {
                 let that = this;
                 let ids = [];
-                if(this.url) {
+                if (this.url) {
                     if (that.value.length > 0) {
                         ids = that.value.map(function (item) {
                             return item.id;
@@ -59,18 +59,6 @@
                             }
                         });
                     })
-                }
-                else{
-                    if(!_.isEmpty(this.valueOptions)) {
-                        that.items = this.valueOptions;
-                        that.items.map(function (item) {
-                            if (ids.length > 0) {
-                                if (item.id.indexOf(ids) > -1) {
-                                    that.selectedValue.push(item);
-                                }
-                            }
-                        });
-                    }
                 }
             },
             handleChange(value) {

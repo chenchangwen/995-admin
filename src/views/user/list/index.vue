@@ -315,7 +315,6 @@
             },
             created() {
                 pageVue = this;
-
             }
         }
     );

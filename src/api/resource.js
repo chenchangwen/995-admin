@@ -1,19 +1,19 @@
 /**
  * 查询基本权限信息
  */
-export function authorities(params) {
+export function resource(params) {
     let defaults = {
         page: 0,
         size: 500
     };
     let options = Object.assign({}, defaults ,params);
     return request({
-        url: '/authorities',
+        url: '/resources',
         method: 'get',
         params: options
     })
 }
 
 export default {
-    authorities
+    resources: resource
 }
