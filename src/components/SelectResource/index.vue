@@ -2,10 +2,9 @@
     <div class="select-more-box">
         <el-input placeholder="搜索名称"></el-input>
         <div class="content">
-            <el-checkbox-group v-model="selectedValue" @change="handleChange">
-                <el-checkbox  v-for="(item , index) in items" :label="item.name + index"
-                             :key="item.id"></el-checkbox>
-            </el-checkbox-group>
+            <span  v-for="(item , index) in items" >
+                {{item.name}}
+            </span>
         </div>
     </div>
 </template>
@@ -68,22 +67,22 @@
 <style lang="scss" scoped>
     .select-more-box {
         width: 100%;
-
         .content {
             height: 200px;
-            overflow: auto;
+            scroll: auto;
+            overflow-x: hidden;
             margin-top: 22px;
+            span{
+                margin-right: 10px;
+                padding: 5px 10px;
+                background: #fff;
+                border: 1px solid #dcdfe6;
+                color: #606266;
+                border-radius: 4px;
+                font-size: 12px;
+                display: inline-block;
+                line-height: 1;
+            }
         }
-    }
-
-    .el-checkbox {
-        &:first-child {
-            margin-right: 20px;
-        }
-    }
-
-    .el-checkbox + .el-checkbox {
-        margin-left: 0px;
-        margin-right: 20px;
     }
 </style>
