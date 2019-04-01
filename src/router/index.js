@@ -105,7 +105,7 @@ export let privilegeRouterMap = [
             {
                 path: 'role',
                 component: () => import('@/views/user/role/index'),
-                name: 'GET_/users/accounts/**',
+                name: 'POST_/authorities/roles/**',
                 meta: {
                     title: '用户角色',
                 }

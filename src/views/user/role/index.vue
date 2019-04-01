@@ -6,7 +6,7 @@
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
                        icon="el-icon-edit">新增
             </el-button>
         </div>
@@ -31,34 +31,52 @@
             </el-table-column>
             <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row, commonForm)" style="width: 80px">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row, editItem)"
+                               style="width: 80px">编辑
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
 
-        <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
-                     label-width="80px"
+        <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" @open="handleOpen">
+
+            <el-form :rules="createItem.rules" ref="createForm" :model="createItem.form" label-position="left"
+                     label-width="80px" v-if="dialogStatus ==='create'"
                      style='margin-left:50px;'>
-                <el-form-item :label="'Id'" v-if="dialogStatus === 'update'">
+                <el-form-item :label="'ID'" prop="id">
+                    <el-input v-model="form.id" placeholder="ID"></el-input>
+                </el-form-item>
+                <el-form-item :label="'名称'" prop="name">
+                    <el-input v-model="form.name" placeholder="名称"></el-input>
+                </el-form-item>
+                <el-form-item :label="'拥有资源'">
+                    <select-resource :value.sync="form.resources"></select-resource>
+                </el-form-item>
+            </el-form>
+
+            <el-form :rules="editItem.rules" ref="editForm" :model="editItem.form" label-position="left"
+                     label-width="80px" v-if="dialogStatus ==='update'"
+                     style='margin-left:50px;'>
+                <el-form-item :label="'Id'">
                     {{form.id}}
                 </el-form-item>
                 <el-form-item :label="'名称'" prop="name">
                     <el-input v-model="form.name" placeholder="名称"></el-input>
                 </el-form-item>
-                <el-form-item :label="'拥有资源'" prop="name">
-                    <select-resource :value.sync="form.resources"></select-resource>
+                <el-form-item :label="'拥有资源'">
+                    <select-resource :value.sync="form.resources" :key="editItem.key"></select-resource>
                 </el-form-item>
-
             </el-form>
+
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
                 <el-button type="primary" @click="createData" v-if="dialogStatus==='create'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="editData" v-if="dialogStatus==='update'" :loading="dialogButtonLoading"
+                <el-button type="primary" @click="editData" v-if="dialogStatus==='update'"
+                           :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
             </div>
@@ -68,20 +86,32 @@
 
 <script>
     import selectResource from '@/components/SelectResource'
-    import {mapGetters} from 'vuex';
+
     let page = new pageInit(
         {
             data: {
-                commonForm: {
+                createItem: {
                     form: {
-                        //名称
+                        id: '',
                         name: '',
-                        resources: ''
+                        resources: []
                     },
                     rules: {
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     },
-                    formName: 'commonForm'
+                    key: 1,
+                    formName: 'createForm'
+                },
+                editItem: {
+                    form: {
+                        name: '',
+                        resources: []
+                    },
+                    rules: {
+                        name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                    },
+                    key: 1,
+                    formName: 'editForm'
                 },
                 //查询对象
                 queryItem: {
@@ -89,13 +119,13 @@
                         key: 'name',
                         operation: '==',
                         value: '',
-                        predicate:";"
+                        predicate: ";"
                     },
                     id: {
                         key: 'id',
                         operation: '==',
                         value: 'ROLE_*',
-                        predicate:";"
+                        predicate: ";"
                     },
                 },
                 idKey: 'id',
@@ -107,16 +137,16 @@
                 },
                 afterCloseDialog(row) {
 
+                },
+                handleOpen() {
+                    this.createItem.form.resources = [];
+                    this.createItem.key += 1;
+                    this.editItem.key += 1;
                 }
             },
             components: {
                 selectResource
-            },
-            computed: {
-                ...mapGetters([
-                    'home',
-                ])
-            },
+            }
         }
     );
     export default page;

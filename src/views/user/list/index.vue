@@ -193,7 +193,8 @@
                         rawPassword: '',
                         //用户名称
                         username: '',
-                        password: ''
+                        password: '',
+                        mobile:''
                     },
                     rules: {
                         username: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],

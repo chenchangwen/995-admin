@@ -1,8 +1,9 @@
 <template>
     <div class="select-more-box">
-        <el-input placeholder="搜索名称"></el-input>
+        <el-input placeholder="搜索名称" v-model="searchValue"></el-input>
         <div class="content">
-            <span  v-for="(item , index) in items" >
+            <span v-for="(item , index) in items" :key="item.id" :class="{'active':item.isActive}"
+                  @click="handleClick(item)">
                 {{item.name}}
             </span>
         </div>
@@ -20,10 +21,15 @@
                 default: function () {
                     return []
                 }
+            },
+            isRefresh: {
+                type: Boolean,
+                default: false
             }
         },
         data() {
             return {
+                searchValue: '',
                 items: [],
                 selectedValue: []
             }
@@ -42,23 +48,38 @@
                     that.items.map(function (item) {
                         if (ids.length > 0) {
                             if (ids.indexOf(item.id) > -1) {
+                                item.isActive = true;
                                 that.selectedValue.push(item);
                             }
+                        }
+                        else {
+                            item.isActive = false;
                         }
                         return item;
                     });
                 })
             },
-            handleChange(value) {
-                this.$emit('update:value', value)
+
+            handleClick(item) {
+                item.isActive = !item.isActive;
+                this.items = Object.assign([], this.items, item);
+                let selectedValue = _.cloneDeep(this.items);
+                selectedValue = selectedValue.filter(function (item) {
+                    if (item.isActive) {
+                        delete item.isActive;
+                        return item;
+                    }
+                });
+                this.$emit('update:value', selectedValue)
             }
         },
         watch: {
             value(newValue, oldValue) {
                 this.selectedValue = newValue;
+
             }
         },
-        created() {
+        mounted() {
             this.queryResourcesAPI();
         }
     }
@@ -72,7 +93,8 @@
             scroll: auto;
             overflow-x: hidden;
             margin-top: 22px;
-            span{
+            span {
+                cursor: pointer;
                 margin-right: 10px;
                 padding: 5px 10px;
                 background: #fff;
@@ -82,6 +104,11 @@
                 font-size: 12px;
                 display: inline-block;
                 line-height: 1;
+                &.active {
+                    color: #f56c6c;
+                    background: #fef0f0;
+                    border-color: #fbc4c4;
+                }
             }
         }
     }
