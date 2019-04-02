@@ -59,6 +59,14 @@ export let privilegeRouterMap = [
         },
         children: [
             {
+                path: 'menu',
+                component: () => import('@/views/system/menu/index'),
+                name: 'GET_/menus/**',
+                meta: {
+                    title: '系统菜单',
+                }
+            },
+            {
                 path: 'resource',
                 component: () => import('@/views/system/resource/index'),
                 name: 'GET_/resources/**',
@@ -105,11 +113,55 @@ export let privilegeRouterMap = [
             {
                 path: 'role',
                 component: () => import('@/views/user/role/index'),
-                name: 'POST_/authorities/roles/**',
+                name: 'GET_/authorities/roles/**',
                 meta: {
                     title: '用户角色',
                 }
             },
+        ]
+    },
+    {
+        path: '/sms',
+        component: Layout,
+        redirect: 'dashboard',
+        name: 'GET_/sms/**',
+        meta: {
+            title: '消息中心',
+            icon: 'message'
+        },
+        children: [
+            {
+                path: 'user',
+                component: () => import('@/views/message/user/index'),
+                name: 'GET_/users/messages/**',
+                meta: {
+                    title: '用户消息',
+                }
+            },
+            {
+                path: 'wechat-text',
+                component: () => import('@/views/message/wechat-text/index'),
+                name: 'GET_/wechats/users/messages/texts/**',
+                meta: {
+                    title: '微信文本消息',
+                }
+            },
+            {
+                path: 'wechat-template',
+                component: () => import('@/views/message/wechat-template/index'),
+                name: 'GET_/wechats/users/messages/templates/**',
+                meta: {
+                    title: '微信模板消息',
+                }
+            },
+            {
+                path: 'wechat',
+                component: () => import('@/views/message/wechat-format/index'),
+                name: 'GET_/wechats/users/messages/templates/formats/**',
+                meta: {
+                    title: '微信消息模板',
+                }
+            }
         ]
     },
     {
