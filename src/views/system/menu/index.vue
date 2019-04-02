@@ -1,134 +1,107 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-button class="filter-item" type="primary" v-waves icon="el-icon-plus">添加一级菜单</el-button>
-            <el-button class="filter-item" type="primary" v-waves icon="el-icon-edit">保存菜单</el-button>
+            <el-button class="filter-item" type="primary" v-waves icon="el-icon-plus" @click="handleAddRoot">添加一级菜单
+            </el-button>
+            <el-button class="filter-item" type="primary" v-waves icon="el-icon-edit" @click="handleSave">保存菜单
+            </el-button>
         </div>
-        <vue-tree-list
-                @click="onClick"
-                @change-name="onChangeName"
-                @delete-node="onDel"
-                @add-node="onAddNode"
-                :model="data"
-                default-tree-node-name="new node"
-                default-leaf-node-name="new leaf"
-                v-bind:default-expanded="false">
-            <!--<span class="icon" slot="addTreeNode">addTreeNode</span>-->
-            <!--<span class="icon" slot="addLeafNode">addLeafNode</span>-->
-            <!--<span class="icon" slot="editNode">editNode</span>-->
-            <!--<span class="icon" slot="delNode">delNode</span>-->
-        </vue-tree-list>
+        <sl-vue-tree v-model="nodes" ref="tree">
+            <template slot="title" slot-scope="{node}">
+              <span class="item-icon">
+                <i class="fa fa-file" v-if="node.isLeaf"></i>
+              </span>
+                {{node.title}}
+            </template>
+            <template slot="sidebar" slot-scope="{node}">
+                <i class="el-icon-edit"></i>
+                <i class="el-icon-circle-plus-outline" @click="handleClick(node)"></i>
+                <i class="el-icon-remove-outline" @click="handleRemove(node)"></i>
+            </template>
+        </sl-vue-tree>
+
+        <el-dialog :title="dialogText" :visible.sync="dialogFormVisible">
+            <el-form :rules="rules" ref="form" :model="form"
+                     label-position="left"
+                     label-width="80px"
+                     style='width: 400px; margin-left:50px;'>
+                <el-form-item :label="'名称'" prop="title">
+                    <el-input v-model="form.title" placeholder="名称"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialogFormVisible = false">取消</el-button>
+                <el-button type="primary" @click="handleTempSave">确认</el-button>
+            </div>
+        </el-dialog>
 
     </div>
 </template>
 
 <script>
-    import { VueTreeList, Tree, TreeNode } from 'vue-tree-list'
+    import SlVueTree from 'sl-vue-tree';
+
     export default {
         components: {
-            VueTreeList
+            SlVueTree
         },
-        data () {
+        data() {
             return {
-                newTree: {},
-                data: new Tree([
+                dialogButtonLoading: false,
+                dialogButtonDisabled: false,
+                dialogText: '新增',
+                dialogFormVisible: false,
+                dialogStatus: '',
+                form: {
+                    title: ''
+                },
+                rules: {
+                    title: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                },
+                nodes: [
                     {
-                        name: 'Node 1',
-                        id: 1,
-                        pid: 0,
-                        children: [
-                            {
-                                name: 'Node 1-2',
-                                id: 2,
-                                isLeaf: true,
-                                pid: 1
-                            }
-                        ]
-                    },
-                    {
-                        name: 'Node 2',
-                        id: 3,
-                        pid: 0,
-                    },
-                    {
-                        name: 'Node 3',
-                        id: 4,
-                        pid: 0
-                    }
-                ])
+                        "title": "Item1",
+                    }]
             }
         },
+
         methods: {
-            onDel (node) {
-                console.log(node)
-                node.remove()
+            handleClick(node) {
+                this.$refs.tree.updateNode(
+                    node.path,
+                    {children: [...this.$refs.tree.getNode(node.path).children, {title: '新菜单'}]}
+                )
             },
-
-            onChangeName (params) {
-                console.log(params)
+            handleRemove(node) {
+                let that = this;
+                let $tree = this.$refs.tree;
+                this.$confirm('此操作将删除该菜单, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    const paths = that.$tree.getSelected().map(node => node.path);
+                    that.$tree.remove(paths);
+                })
             },
+            handleSave() {
 
-            onAddNode (params) {
-                console.log(params)
             },
-
-            onClick (params) {
-                console.log(params)
+            handleAddRoot() {
+                this.dialogFormVisible = true;
             },
-
-            addNode () {
-                var node = new TreeNode({ name: 'new node', isLeaf: false })
-                if (!this.data.children) this.data.children = []
-                this.data.addChildren(node)
-            },
-
-            getNewTree () {
-                var vm = this
-                function _dfs (oldNode) {
-                    var newNode = {}
-
-                    for (var k in oldNode) {
-                        if (k !== 'children' && k !== 'parent') {
-                            newNode[k] = oldNode[k]
-                        }
+            handleTempSave() {
+                //this.nodes.push({title: '新菜单'});
+                this.$refs['form'].validate((valid) => {
+                    if (valid) {
+                        alert(123)
                     }
-
-                    if (oldNode.children && oldNode.children.length > 0) {
-                        newNode.children = []
-                        for (var i = 0, len = oldNode.children.length; i < len; i++) {
-                            newNode.children.push(_dfs(oldNode.children[i]))
-                        }
-                    }
-                    return newNode
-                }
-
-                vm.newTree = _dfs(vm.data)
-            },
-
-            onClick(model) {
-                console.log(model)
+                })
             }
+        },
+        mounted() {
+            this.$tree = this.$refs.tree;
         }
     }
-</script>
-<style lang="scss" rel="stylesheet/less">
-    .vtl {
-        .vtl-drag-disabled {
-            background-color: #d0cfcf;
-            &:hover {
-                background-color: #d0cfcf;
-            }
-        }
-        .vtl-disabled {
-            background-color: #d0cfcf;
-        }
-    }
-</style>
+</script>glo
 
-<style lang="scss" rel="stylesheet/less" scoped>
-    .icon {
-        &:hover {
-            cursor: pointer;
-        }
-    }
-</style>
