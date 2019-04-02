@@ -24,8 +24,7 @@
             <el-table-column align="center" label='拥有资源'>
                 <template slot-scope="scope">
                     <span v-for="item of scope.row.resources">
-                        <el-tag type="success" v-if="item.method==='GET'">{{item.name}}</el-tag>
-                        <el-tag v-if="item.method==='POST'">{{item.name}}</el-tag>
+                        <el-tag :class="{'el-tag--success':item.method==='GET'}">{{item.name}}</el-tag>
                     </span>
                 </template>
             </el-table-column>

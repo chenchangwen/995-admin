@@ -1,6 +1,6 @@
 <template>
     <div class="select-more-box">
-        <el-input placeholder="搜索名称" v-model="searchValue"></el-input>
+        <input type="text" @keyup="handleKeyUp" v-model.trim="searchValue" placeholder="搜索名称">
         <div class="content">
             <span v-for="(item , index) in items" :key="item.id" :class="{'active':item.isActive}"
                   @click="handleClick(item)">
@@ -43,7 +43,9 @@
                         return item.id;
                     });
                 }
-                resourceAPI.resources().then(function (response) {
+
+                let options = this.searchValue ? {search: 'name==' + this.searchValue} : '';
+                resourceAPI.resources(options).then(function (response) {
                     that.items = response.data;
                     that.items.map(function (item) {
                         if (ids.length > 0) {
@@ -51,15 +53,13 @@
                                 item.isActive = true;
                                 that.selectedValue.push(item);
                             }
-                        }
-                        else {
+                        } else {
                             item.isActive = false;
                         }
                         return item;
                     });
                 })
             },
-
             handleClick(item) {
                 item.isActive = !item.isActive;
                 this.items = Object.assign([], this.items, item);
@@ -71,7 +71,10 @@
                     }
                 });
                 this.$emit('update:value', selectedValue)
-            }
+            },
+            handleKeyUp: _.debounce(function () {
+                this.queryResourcesAPI();
+            }, 200)
         },
         watch: {
             value(newValue, oldValue) {
@@ -88,11 +91,15 @@
 <style lang="scss" scoped>
     .select-more-box {
         width: 100%;
+        input{
+            padding: 5px 17px;
+        }
         .content {
             height: 200px;
             scroll: auto;
             overflow-x: hidden;
-            margin-top: 22px;
+            margin-top: 5px;
+
             span {
                 cursor: pointer;
                 margin-right: 10px;
@@ -104,12 +111,14 @@
                 font-size: 12px;
                 display: inline-block;
                 line-height: 1;
+
                 &.active {
                     color: #f56c6c;
                     background: #fef0f0;
                     border-color: #fbc4c4;
                 }
             }
+
         }
     }
 </style>
