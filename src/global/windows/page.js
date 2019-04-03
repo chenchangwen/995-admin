@@ -73,8 +73,8 @@ window.pageInit = function pageInit(options, api) {
             this.query.page = 0;
             this.getList();
         },
-        handleCreate(item) {
-            this.dialogStatus = 'create';
+        handleCreate(item ,options) {
+            this.dialogStatus = (options && options.dialogStatus) || 'create';
             this.setItem(item);
             this.resetForm();
         },
@@ -170,6 +170,8 @@ window.pageInit = function pageInit(options, api) {
             this.clearValidate();
         },
         getList() {
+            if(!this.apiPrefix)
+                return false;
             this.itemLoading = true;
             this.setQueryItem();
             let that = this;
