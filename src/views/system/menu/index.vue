@@ -10,11 +10,11 @@
         </div>
         <sl-vue-tree v-model="nodes" ref="tree" v-if="nodes.length > 0">
             <template slot="title" slot-scope="{node}">
-                {{node.title}}
+                <i class="el-icon-document" v-if="node.isLeaf"></i> {{node.title}}
             </template>
             <template slot="sidebar" slot-scope="{node}">
                 <i class="el-icon-edit" @click="handleIconEdit(node, commonItem)"></i>
-                <i class="el-icon-circle-plus-outline" @click="handleIconAdd(node,commonItem)"></i>
+                <i class="el-icon-circle-plus-outline" @click="handleIconAdd(node,commonItem)" v-if="!node.isLeaf"></i>
                 <i class="el-icon-remove-outline" @click="handleIconRemove(node)"></i>
             </template>
         </sl-vue-tree>
@@ -27,10 +27,10 @@
                 <el-form-item :label="'名称'" prop="title">
                     <el-input v-model="form.title" placeholder="名称"></el-input>
                 </el-form-item>
-                <el-form-item :label="'前端链接'" prop="link">
+                <el-form-item :label="'前端链接'" prop="link" v-if="!isRootLevel">
                     <el-input v-model="form.link" placeholder="前端链接"></el-input>
                 </el-form-item>
-                <el-form-item :label="'拥有资源'" prop="resource" v-if="isShowResource">
+                <el-form-item :label="'拥有资源'" prop="resource" v-if="!isRootLevel">
                     <select-resource-one :value.sync="form.resource" :key="commonItem.key"></select-resource-one>
                 </el-form-item>
             </el-form>
@@ -48,8 +48,7 @@
     import selectResourceOne from '@/components/selectResourceOne';
 
     let validateResources = (rule, value, callback) => {
-        let resource = pageVue.dialogStatus === 'create' ? pageVue.form.resource : pageVue.form.resource;
-        if (resource.length === 0) {
+        if (!pageVue.isRootLevel && _.isEmpty(pageVue.form.resource)) {
             callback(new Error('请选择资源'));
         } else {
             callback();
@@ -63,14 +62,14 @@
                 selectResourceOne
             },
             data: {
-                isShowResource: false,
+                isRootLevel: false,
                 selectedNode: '',
                 nodeFilterField: ['children', 'floor', 'id', 'index', 'link', 'parentId', 'resource', 'title'],
                 commonItem: {
                     form: {
                         title: '',
                         link: '',
-                        resource: {},
+                        resource: '',
                     },
                     key: '',
                     formName: 'commonForm'
@@ -88,8 +87,10 @@
                 handleAdd() {
                     this.dialogStatus = 'create';
                     this.formReset();
+                    this.isRootLevel = true;
                 },
                 handleIconAdd(node) {
+                    this.isRootLevel = false;
                     this.dialogStatus = 'create';
                     this.formReset(node);
                 },
@@ -100,6 +101,7 @@
                         title: node.title
                     };
                     item = _.assign({}, item, node.data);
+                    this.isRootLevel = _.isEmpty(item.resource);
                     this.setDialogItem(item);
                 },
                 handleIconRemove(node) {
@@ -116,13 +118,11 @@
                 handleSave() {
                     let items = _.cloneDeep(this.nodes);
                     this.clearNodes(items);
-
                     let options = {
                         url: '/menus/edit',
                         method: 'post',
                         data: items
                     };
-
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
                     request(options).then(() => {
@@ -131,7 +131,7 @@
                             message: '更新成功',
                             type: 'success',
                             duration: 2000
-                        })
+                        });
                         this.dialogButtonLoading = false;
                         this.dialogButtonDisabled = false;
                     });
@@ -143,10 +143,13 @@
                             let node = _.cloneDeep(that.form);
                             let selectedNode = that.selectedNode;
                             let $tree = that.$refs.tree;
-                            node.data = {
-                                link: node.link,
-                                resource: node.resource
-                            };
+                            node.data = {};
+                            if (node.link) {
+                                node.data.link = node.link;
+                            }
+                            if (node.resource) {
+                                node.data.resource = node.resource;
+                            }
                             if (that.dialogStatus === 'create') {
                                 //一级节点
                                 if (!selectedNode) {
@@ -154,6 +157,7 @@
                                 }
                                 //其他节点
                                 else {
+                                    node.isLeaf = true;
                                     $tree.updateNode(
                                         selectedNode.path,
                                         {children: [...$tree.getNode(selectedNode.path).children, node]}
@@ -171,7 +175,10 @@
                     })
                 },
                 handleOpen() {
-                    this.commonItem.form.resource = [];
+                    if (this.dialogStatus === 'create') {
+                        this.commonItem.form.link = '';
+                        this.commonItem.form.resource = {};
+                    }
                     this.commonItem.key += 1;
                 },
                 formReset(node) {
@@ -182,12 +189,50 @@
                 clearNodes(node) {
                     let that = this;
                     node.map(function (itemNode) {
+                        delete itemNode['isLeaf'];
+                        //data有值
+                        if (itemNode.data && _.isEmpty(itemNode.data.resource)) {
+                            delete itemNode.data;
+                        } else {
+                            for (let item in itemNode.data) {
+                                itemNode[item] = itemNode.data[item];
+                            }
+                        }
                         for (let item in itemNode) {
                             if (that.nodeFilterField.indexOf(item) === -1) {
                                 delete itemNode[item];
                             }
-                            if (itemNode['children']) {
-                                that.clearNodes(itemNode['children']);
+                        }
+                        if (_.isEmpty(itemNode.resource)) {
+                            delete itemNode.link;
+                            delete itemNode.resource;
+                        }
+                        if (!_.isEmpty(itemNode.children)) {
+                            that.clearNodes(itemNode['children']);
+                        }
+                    })
+                },
+                clearNodesOnLoad(node) {
+                    let that = this;
+                    node.map(function (itemNode) {
+                        for (let item in itemNode) {
+                            if (that.nodeFilterField.indexOf(item) === -1) {
+                                delete itemNode[item];
+                            }
+                            if (_.isEmpty(itemNode['resource'])) {
+                                delete itemNode.link;
+                                delete itemNode.link;
+                            } else {
+                                itemNode.isLeaf = true;
+                                itemNode.data = {
+                                    link: itemNode.link,
+                                    resource: itemNode.resource
+                                }
+                            }
+                            if (!_.isEmpty(itemNode['children'])) {
+                                that.clearNodesOnLoad(itemNode.children);
+                            } else {
+                                delete itemNode.children;
                             }
                         }
                     })
@@ -200,12 +245,11 @@
                     let that = this;
                     request(options).then((response) => {
                         let data = response.data;
-                        that.clearNodes(data);
+                        that.clearNodesOnLoad(data);
                         that.nodes = data;
                     });
                 }
             },
-
             created() {
                 pageVue = this;
                 this.queryMenus();
