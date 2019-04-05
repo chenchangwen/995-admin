@@ -55,7 +55,7 @@
 <script>
     import Tinymce from '@/components/Tinymce'
     import {mapGetters} from 'vuex';
-    import articlesAPI from '../../api/articles';
+    import articlesAPI from '../../../api/articles';
 
     export default {
         components: {Tinymce},

@@ -6,6 +6,14 @@ export function home() {
     })
 }
 
+export function menus() {
+    return request({
+        url: '/home/user/menus',
+        method: 'get'
+    })
+}
+
 export default {
-    home
+    home,
+    menus
 }

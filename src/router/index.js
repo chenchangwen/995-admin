@@ -44,162 +44,67 @@ export default new Router({
 })
 
 export let asyncRouterMap = [
-    {path: '*', redirect: '/404', hidden: true}
-];
-
-export let privilegeRouterMap = [
+    {path: '*', redirect: '/404', hidden: true},
     {
-        path: '/system',
-        component: Layout,
-        redirect: 'dashboard',
-        name: 'GET_/authorities/**',
+        path: 'articles/edit/:id?',
+        component: () => import('@/views/resources/articles/edit'),
         meta: {
-            title: '系统管理',
-            icon: 'example'
+            title: '文章编辑',
         },
-        children: [
-            {
-                path: 'menu',
-                component: () => import('@/views/system/menu/index'),
-                name: 'GET_/menus/**',
-                meta: {
-                    title: '系统菜单',
-                }
-            },
-            {
-                path: 'resource',
-                component: () => import('@/views/system/resource/index'),
-                name: 'GET_/resources/**',
-                meta: {
-                    title: '资源管理',
-                }
-            },
-            {
-                path: 'wechat',
-                component: () => import('@/views/system/wechats/index'),
-                name: 'GET_/wechats/**',
-                meta: {
-                    title: '微信管理',
-                }
-            }
-        ]
-    },
-    {
-        path: '/user',
-        component: Layout,
-        redirect: 'dashboard',
-        name: 'GET_/users/**',
-        meta: {
-            title: '用户管理',
-            icon: 'user'
-        },
-        children: [
-            {
-                path: 'list',
-                component: () => import('@/views/user/list/index'),
-                name: 'GET_/users/**',
-                meta: {
-                    title: '用户列表',
-                }
-            },
-            {
-                path: 'account',
-                component: () => import('@/views/user/account/index'),
-                name: 'GET_/users/accounts/**',
-                meta: {
-                    title: '用户账号',
-                }
-            },
-            {
-                path: 'role',
-                component: () => import('@/views/user/role/index'),
-                name: 'GET_/authorities/roles/**',
-                meta: {
-                    title: '用户角色',
-                }
-            },
-        ]
-    },
-    {
-        path: '/sms',
-        component: Layout,
-        redirect: 'dashboard',
-        name: 'GET_/sms/**',
-        meta: {
-            title: '消息中心',
-            icon: 'message'
-        },
-        children: [
-            {
-                path: 'user',
-                component: () => import('@/views/message/user/index'),
-                name: 'GET_/users/messages/**',
-                meta: {
-                    title: '用户消息',
-                }
-            },
-            {
-                path: 'wechat-text',
-                component: () => import('@/views/message/wechat-text/index'),
-                name: 'GET_/wechats/users/messages/texts/**',
-                meta: {
-                    title: '微信文本消息',
-                }
-            },
-            {
-                path: 'wechat-template',
-                component: () => import('@/views/message/wechat-template/index'),
-                name: 'GET_/wechats/users/messages/templates/**',
-                meta: {
-                    title: '微信模板消息',
-                }
-            },
-            {
-                path: 'wechat',
-                component: () => import('@/views/message/wechat-format/index'),
-                name: 'GET_/wechats/users/messages/templates/formats/**',
-                meta: {
-                    title: '微信消息模板',
-                }
-            }
-        ]
-    },
-    {
-        path: '/document',
-        component: Layout,
-        redirect: 'dashboard',
-        name: 'GET_/classifies/**',
-        meta: {
-            title: '文档管理',
-            icon: 'documentation'
-        },
-        children: [
-            {
-                path: 'classifies',
-                component: () => import('@/views/classifies/index'),
-                name: 'GET_/classifies/**',
-                meta: {
-                    title: '分类管理',
-                }
-            },
-            {
-                path: 'articles',
-                component: () => import('@/views/articles/index'),
-                name: 'GET_/articles/**',
-                meta: {
-                    title: '文章管理',
-                }
-            },
-            {
-                path: 'articles/edit/:id?',
-                component: () => import('@/views/articles/edit'),
-                name: 'POST_/articles/**',
-                meta: {
-                    title: '文章编辑',
-                },
-                hidden: true
-            }
-        ]
+        hidden: true
     }
 ];
+
+
+export let resourcesMap = {
+    '/menus/**': {
+        path: 'menu',
+        component: () => import('@/views/resources/menu/index'),
+    },
+    '/resources/**': {
+        path: 'resource',
+        component: () => import('@/views/resources/resource/index'),
+    },
+    '/wechats/**':{
+        path: 'wechat',
+        component: () => import('@/views/resources/wechats/index'),
+    },
+    '/users/**':{
+        path: 'user',
+        component: () => import('@/views/resources/user/list/index'),
+    },
+    '/authorities/roles/**':{
+        path: 'role',
+        component: () => import('@/views/resources/user/role/index'),
+    },
+    '/users/accounts/**':{
+        path: 'account',
+        component: () => import('@/views/resources/user/account/index'),
+    },
+    //微信文本消息
+    '/wechats/users/messages/texts/**':{
+        path: 'wechat-text',
+        component: () => import('@/views/resources/message/wechat-text/index'),
+    },
+    //微信消息模版
+    '/wechats/users/messages/templates/formats/**':{
+        path: 'wechat-format',
+        component: () => import('@/views/resources/message/wechat-format/index'),
+    },
+    //微信消息
+    '/wechats/users/messages/templates/**':{
+        path: 'wechat-template',
+        component: () => import('@/views/resources/message/wechat-template/index'),
+    },
+    //文章
+    '/articles/**':{
+        path: 'articles',
+        component: () => import('@/views/resources/articles/index'),
+    },
+    //自定义分类
+    '/classifies/**':{
+        path: 'classifies',
+        component: () => import('@/views/resources/classifies/index'),
+    }
+};
 

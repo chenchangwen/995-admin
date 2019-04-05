@@ -1,5 +1,6 @@
-import {asyncRouterMap, constantRouterMap, privilegeRouterMap} from '@/router'
+import {asyncRouterMap, constantRouterMap, resourcesMap} from '../../router/index'
 import homeAPI from '../../api/home';
+import Layout from '../../views/layout/Layout'
 
 /**
  * 通过meta.role判断是否与当前用户权限匹配
@@ -32,6 +33,52 @@ function filterAsyncRouter(asyncRouterMap, roles, menuCode) {
     return accessedRouters
 }
 
+/**
+ * 获取菜单
+ */
+function getMenus(menus) {
+    menus = menus.filter(function (menu) {
+        //一级菜单包上$router属性
+        if (!menu.resource) {
+            menu.redirect = 'dashboard';
+            menu.component = Layout;
+            //$router.path 必须存在值,这里使用随机字符串
+            let randomStr = '/' + _.sampleSize(['a', 'c', 'd', 'e', 'f', 'g',
+                'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 's', 'y', 'z'], 10).join('');
+            menu.path = randomStr;
+            menu.meta = {
+                title: menu.title
+            }
+        }
+        let sum = 0;
+        let tempMenu = [];
+        //二级菜单包上$router属性
+        if (!_.isEmpty(menu.children)) {
+            for (let i = 0; i < menu.children.length; i++) {
+                let item = menu.children[i];
+                let resource = resourcesMap[item.resource.url];
+                //存在资源
+                if (resource) {
+                    //合并映射资源
+                    item = _.assign({}, item, resource);
+                    item.meta = {
+                        title: item.title
+                    };
+                    sum += 1;
+                    menu.children[i] = item;
+                    tempMenu.push(menu.children[i]);
+                }
+            }
+        }
+        //二级菜单存在资源的数量>0返回该一级菜单(包括二级菜单)
+        if (sum > 0) {
+            menu.children = tempMenu;
+            return menu;
+        }
+    });
+    return menus;
+}
+
 const permission = {
     state: {
         routers: constantRouterMap,
@@ -41,32 +88,24 @@ const permission = {
         SET_ROUTERS: (state, routers) => {
             state.addRouters = routers;
             state.routers = constantRouterMap.concat(routers)
+
         }
     },
     actions: {
         GenerateRoutes({commit}, data) {
-            return homeAPI.home().then(response => {
-                //菜单
-                let authorities = response.data.principal.authorities;
-                let menuCode = [];
-
+            return Promise.all([homeAPI.home(), homeAPI.menus()]).then(function (response) {
+                let homeResponse = response[0];
+                let menusResponse = response[1];
                 let roleCodes = 'user';
                 let userName = 'user-name';
                 commit('SET_NAME', userName);
                 commit('SET_ROLES', roleCodes);
-                commit('SET_HOME', response.data.principal);
+                commit('SET_HOME', homeResponse.data.principal);
                 data = roleCodes;
-
-                authorities.forEach(function (item) {
-                    menuCode.push(item.authority);
-                });
-
-                console.log('menuCode');
-                console.dir(menuCode);
-
                 return new Promise(resolve => {
                     const {roles} = data;
-                    let accessedRouters = filterAsyncRouter(privilegeRouterMap, roles, menuCode);
+                    // let accessedRouters = filterAsyncRouter(privilegeRouterMap, roles, menuCode);
+                    let accessedRouters = getMenus(menusResponse.data);
                     accessedRouters = asyncRouterMap.concat(accessedRouters);
                     console.log(accessedRouters);
                     commit('SET_ROUTERS', accessedRouters);
