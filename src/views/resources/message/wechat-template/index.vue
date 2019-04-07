@@ -48,7 +48,7 @@
                 },
                 idKey: 'id',
                 apiPrefix: '/wechats',
-                apiQueryListName: '/users/messages/templates/formats'
+                apiQueryListName: '/users/messages/templates'
             },
             methods: {
                 beforeOpenDialog(row) {

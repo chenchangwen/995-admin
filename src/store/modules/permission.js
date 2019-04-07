@@ -52,6 +52,7 @@ function getMenus(menus) {
         }
         let sum = 0;
         let tempMenu = [];
+        let tempChildren = '';
         //二级菜单包上$router属性
         if (!_.isEmpty(menu.children)) {
             for (let i = 0; i < menu.children.length; i++) {
@@ -59,6 +60,10 @@ function getMenus(menus) {
                 let resource = resourcesMap[item.resource.url];
                 //存在资源
                 if (resource) {
+                    if (resource.children) {
+                        tempChildren = _.assign([], resource.children);
+                        delete resource.children;
+                    }
                     //合并映射资源
                     item = _.assign({}, item, resource);
                     item.meta = {
@@ -69,6 +74,9 @@ function getMenus(menus) {
                     tempMenu.push(menu.children[i]);
                 }
             }
+        }
+        if (tempChildren) {
+            tempMenu = tempMenu.concat(tempChildren);
         }
         //二级菜单存在资源的数量>0返回该一级菜单(包括二级菜单)
         if (sum > 0) {

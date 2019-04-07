@@ -60,7 +60,7 @@
             methods: {
                 handleEdit(id){
                     let articleId =  id ? ('/'+ id) : '';
-                    this.$router.push("/document/articles/edit" + articleId);
+                    this.$router.push(this.$route.matched[0].path + "/articles/edit" + articleId);
                 }
             },
             components: {

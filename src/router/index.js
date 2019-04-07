@@ -33,7 +33,7 @@ export const constantRouterMap = [
             component: () => import('@/views/dashboard/index'),
             name: 'dashboard',
             meta: {title: '主页', icon: 'dashboard', noCache: true}
-        }]
+        }],
     },
 ];
 
@@ -45,14 +45,6 @@ export default new Router({
 
 export let asyncRouterMap = [
     {path: '*', redirect: '/404', hidden: true},
-    {
-        path: 'articles/edit/:id?',
-        component: () => import('@/views/resources/articles/edit'),
-        meta: {
-            title: '文章编辑',
-        },
-        hidden: true
-    }
 ];
 
 
@@ -65,44 +57,55 @@ export let resourcesMap = {
         path: 'resource',
         component: () => import('@/views/resources/resource/index'),
     },
-    '/wechats/**':{
+    '/wechats/**': {
         path: 'wechat',
         component: () => import('@/views/resources/wechats/index'),
     },
-    '/users/**':{
+    '/users/**': {
         path: 'user',
         component: () => import('@/views/resources/user/list/index'),
     },
-    '/authorities/roles/**':{
+    '/authorities/roles/**': {
         path: 'role',
         component: () => import('@/views/resources/user/role/index'),
     },
-    '/users/accounts/**':{
+    '/users/accounts/**': {
         path: 'account',
         component: () => import('@/views/resources/user/account/index'),
     },
     //微信文本消息
-    '/wechats/users/messages/texts/**':{
+    '/wechats/users/messages/texts/**': {
         path: 'wechat-text',
         component: () => import('@/views/resources/message/wechat-text/index'),
     },
     //微信消息模版
-    '/wechats/users/messages/templates/formats/**':{
+    '/wechats/users/messages/templates/formats/**': {
         path: 'wechat-format',
         component: () => import('@/views/resources/message/wechat-format/index'),
     },
     //微信消息
-    '/wechats/users/messages/templates/**':{
+    '/wechats/users/messages/templates/**': {
         path: 'wechat-template',
         component: () => import('@/views/resources/message/wechat-template/index'),
     },
     //文章
-    '/articles/**':{
+    '/articles/**': {
         path: 'articles',
         component: () => import('@/views/resources/articles/index'),
+        children: [
+            {
+                path: 'articles/edit/:id?',
+                component: () => import('@/views/resources/articles/edit'),
+                meta: {
+                    title: '文章编辑',
+                },
+                hidden: true,
+                children: []
+            }
+        ]
     },
     //自定义分类
-    '/classifies/**':{
+    '/classifies/**': {
         path: 'classifies',
         component: () => import('@/views/resources/classifies/index'),
     }

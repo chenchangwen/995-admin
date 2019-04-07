@@ -95,7 +95,7 @@
         },
         methods: {
             backToList() {
-                this.$router.push("/document/articles");
+                this.$router.push(this.$route.matched[0].path + "/articles");
             },
             httpRequest(options) {
                 let that = this;
