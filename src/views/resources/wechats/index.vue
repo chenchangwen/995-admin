@@ -11,52 +11,52 @@
             <!--</el-button>-->
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='开发者ID' width="200">
+            <el-table-column align="left" label='开发者ID' width="200">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='名称'>
+            <el-table-column align="left" label='名称'>
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='类别'>
+            <el-table-column align="left" label='类别'>
                 <template slot-scope="scope">
                    {{getTypeText(scope.row.type)}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='秘钥'>
+            <el-table-column align="left" label='秘钥'>
                 <template slot-scope="scope">
                     {{scope.row.secret}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='令牌'>
+            <el-table-column align="left" label='令牌'>
                 <template slot-scope="scope">
                     {{scope.row.token}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='原始ID'>
+            <el-table-column align="left" label='原始ID'>
                 <template slot-scope="scope">
                     {{scope.row.originalId}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='消息加密秘钥'>
+            <el-table-column align="left" label='消息加密秘钥'>
                 <template slot-scope="scope">
                     {{scope.row.encodingAesKey}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='角色'>
+            <el-table-column align="left" label='角色'>
                 <template slot-scope="scope">
                     {{scope.row.role}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='主主机'>
+            <el-table-column align="left" label='主主机'>
                 <template slot-scope="scope">
                     {{scope.row.masterAccessTokenUrl}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
                 </template>

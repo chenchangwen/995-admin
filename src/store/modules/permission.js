@@ -43,9 +43,9 @@ function getMenus(menus) {
             menu.redirect = 'dashboard';
             menu.component = Layout;
             //$router.path 必须存在值,这里使用随机字符串
-            let randomStr = '/' + _.sampleSize(['a', 'c', 'd', 'e', 'f', 'g',
-                'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 's', 'y', 'z'], 10).join('');
-            menu.path = randomStr;
+            //let randomStr = '/' + _.sampleSize(['a', 'c', 'd', 'e', 'f', 'g',
+            //    'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 's', 'y', 'z'], 10).join('');
+            menu.path = '/' + menu.title;
             menu.meta = {
                 title: menu.title
             }

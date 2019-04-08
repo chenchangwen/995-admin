@@ -11,37 +11,37 @@
             </el-button>
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="300">
+            <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="名称" width="150" align="center">
+            <el-table-column label="名称" width="150" align="left">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column label="url" width="300" align="center">
+            <el-table-column label="url" width="300" align="left">
                 <template slot-scope="scope">
                     {{scope.row.url}}
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" width="110" align="center">
+            <el-table-column label="创建时间" width="155" align="left">
                 <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime('{y}-{m}-{d}')}}
+                    {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column label="方法" width="110" align="center">
+            <el-table-column label="方法" width="110" align="left">
                 <template slot-scope="scope">
                     {{scope.row.method}}
                 </template>
             </el-table-column>
-            <el-table-column label="描述" width="200" align="center">
+            <el-table-column label="描述" width="200" align="left">
                 <template slot-scope="scope">
                     {{scope.row.description}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
                 </template>

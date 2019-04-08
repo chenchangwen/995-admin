@@ -11,24 +11,24 @@
             </el-button>
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='ID' width="150">
+            <el-table-column align="left" label='ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='名称' width="150">
+            <el-table-column align="left" label='名称' width="150">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" label='拥有资源'>
+            <el-table-column align="left" label='拥有资源'>
                 <template slot-scope="scope">
                     <span v-for="item of scope.row.resources">
                         <el-tag :class="{'el-tag--success':item.method==='GET'}">{{item.name}}</el-tag>
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row, editItem)"
                                style="width: 80px">编辑

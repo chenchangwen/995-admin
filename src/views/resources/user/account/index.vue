@@ -13,18 +13,18 @@
 
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="center" label='用户ID' width="95">
+            <el-table-column align="left" label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="名称" width="110" align="center">
+            <el-table-column label="名称" width="110" align="left">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="系统账号" width="200" align="center">
+            <el-table-column label="系统账号" width="200" align="left">
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.userAccounts">
                         <p>{{item.subject}}:{{item.subjectId}}</p>
@@ -32,7 +32,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleChangeId(scope.row,editItem)" style="width: 80px">交换账号</el-button>
                 </template>

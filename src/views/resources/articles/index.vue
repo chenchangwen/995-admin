@@ -14,25 +14,25 @@
         </div>
         <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
 
-            <el-table-column label="标题" width="110" align="center">
+            <el-table-column label="标题" width="110" align="left">
                 <template slot-scope="scope">
                     {{scope.row.title}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间" width="110" align="center">
+            <el-table-column label="创建时间" width="155" align="left">
                 <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime('{y}-{m}-{d}')}}
+                    {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column label="作者" width="110" align="center">
+            <el-table-column label="作者" width="110" align="left">
                 <template slot-scope="scope">
                     {{scope.row.author}}
                 </template>
             </el-table-column>
 
 
-            <el-table-column align="center" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
                     <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
