@@ -59,5 +59,10 @@ export let resourcesRouter = {
   '/classifies/**': {
     path: 'classifies',
     component: () => import('../views/resources/classifies/index'),
+  },
+  //短信
+  '/sms/**': {
+    path: 'sms',
+    component: () => import('../views/resources/message/sms/index'),
   }
 };
