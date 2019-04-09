@@ -1,113 +1,88 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// in development-env not use lazy-loading, because lazy-loading too many pages will cause webpack hot update too slow. so only in production use lazy-loading;
-// detail: https://panjiachen.github.io/vue-element-admin-site/#/lazy-loading
-
 Vue.use(Router)
 
 /* Layout */
-import Layout from '../views/layout/Layout'
+import Layout from '@/layout'
+
+/** note: sub-menu only appear when children.length>=1
+ *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
+ **/
 
 /**
  * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
  *                                if not set alwaysShow, only more than one route under the children
  *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noredirect           if `redirect:noredirect` will no redirct in the breadcrumb
+ * redirect: noredirect           if `redirect:noredirect` will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    title: 'title'               the name show in submenu and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar,
+    roles: ['admin','editor']    will control the page roles (you can set multiple roles)
+    title: 'title'               the name show in sub-menu and breadcrumb (recommend set)
+    icon: 'svg-name'             the icon show in the sidebar
+    noCache: true                if true, the page will no be cached(default is false)
+    breadcrumb: false            if false, the item will hidden in breadcrumb(default is true)
+    affix: true                  if true, the tag will affix in the tags-view
   }
  **/
-export const constantRouterMap = [
-    {path: '/login', component: () => import('@/views/login/index'), hidden: true},
-    {path: '/404', component: () => import('@/views/404'), hidden: true},
-    {
-        path: '',
-        component: Layout,
-        redirect: 'dashboard',
-        children: [{
-            path: 'dashboard',
-            component: () => import('@/views/dashboard/index'),
-            name: 'dashboard',
-            meta: {title: '主页', icon: 'dashboard', noCache: true}
-        }],
-    },
-];
 
-export default new Router({
-    // mode: 'history', //后端支持可开
-    scrollBehavior: () => ({y: 0}),
-    routes: constantRouterMap
+/**
+ * constantRoutes
+ * a base page that does not have permission requirements
+ * all roles can be accessed
+ * */
+export const constantRoutes = [
+  {
+    path: '/login',
+    component: () => import('../../custom/views/login/index'),
+    hidden: true
+  },
+  {
+    path: '',
+    component: Layout,
+    redirect: 'dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('../../custom/views/dashboard/index'),
+        name: 'Dashboard',
+        meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
+      }
+    ]
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/errorPage/404'),
+    hidden: true
+  },
+  {
+    path: '/401',
+    component: () => import('@/views/errorPage/401'),
+    hidden: true
+  },
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
+  { path: '*', redirect: '/404', hidden: true }
+]
+
+const createRouter = () => new Router({
+  // mode: 'history', // require service support
+  scrollBehavior: () => ({ y: 0 }),
+  routes: constantRoutes
 })
 
-export let asyncRouterMap = [
-    {path: '*', redirect: '/404', hidden: true},
-];
+const router = createRouter()
 
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter() {
+  const newRouter = createRouter()
+  router.matcher = newRouter.matcher // reset router
+}
 
-export let resourcesMap = {
-    '/menus/**': {
-        path: 'menu',
-        component: () => import('@/views/resources/menu/index'),
-    },
-    '/resources/**': {
-        path: 'resource',
-        component: () => import('@/views/resources/resource/index'),
-    },
-    '/wechats/**': {
-        path: 'wechat',
-        component: () => import('@/views/resources/wechats/index'),
-    },
-    '/users/**': {
-        path: 'user',
-        component: () => import('@/views/resources/user/list/index'),
-    },
-    '/authorities/roles/**': {
-        path: 'role',
-        component: () => import('@/views/resources/user/role/index'),
-    },
-    '/users/accounts/**': {
-        path: 'account',
-        component: () => import('@/views/resources/user/account/index'),
-    },
-    //微信文本消息
-    '/wechats/users/messages/texts/**': {
-        path: 'wechat-text',
-        component: () => import('@/views/resources/message/wechat-text/index'),
-    },
-    //微信消息模版
-    '/wechats/users/messages/templates/formats/**': {
-        path: 'wechat-format',
-        component: () => import('@/views/resources/message/wechat-format/index'),
-    },
-    //微信消息
-    '/wechats/users/messages/templates/**': {
-        path: 'wechat-template',
-        component: () => import('@/views/resources/message/wechat-template/index'),
-    },
-    //文章
-    '/articles/**': {
-        path: 'articles',
-        component: () => import('@/views/resources/articles/index'),
-        children: [
-            {
-                path: 'articles/edit/:id?',
-                component: () => import('@/views/resources/articles/edit'),
-                meta: {
-                    title: '文章编辑',
-                },
-                hidden: true,
-                children: []
-            }
-        ]
-    },
-    //自定义分类
-    '/classifies/**': {
-        path: 'classifies',
-        component: () => import('@/views/resources/classifies/index'),
-    }
-};
-
+export default router

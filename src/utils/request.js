@@ -1,39 +1,40 @@
 import axios from 'axios'
-import {getToken} from '@/utils/auth'
-import router from '../router/index'
+import { getToken } from '@/utils/auth'
 
+// create an axios instance
 const service = axios.create({
-    baseURL: '/',
-    timeout: 10000
-});
+  baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
+  withCredentials: true, // 跨域请求时发送 cookies
+  timeout: 5000 // request timeout
+})
 
+// request interceptor
 service.interceptors.request.use(function (config) {
-    config.url = '/api' + config.url;
-    return config;
+  return config;
 }, function (error) {
-    return Promise.reject(error);
+  return Promise.reject(error);
 });
 
-
+// response interceptor
 service.interceptors.response.use(
-    response => {
-        return response
-    },
-    error => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    router.replace({
-                        path: `/login`
-                    });
-                case 404:
-                    router.replace({
-                        path: `/login`
-                    });
-            }
-        }
-        return Promise.reject(error);
+  response => {
+    return response
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          router.replace({
+            path: `/login`
+          });
+        case 404:
+          router.replace({
+            path: `/login`
+          });
+      }
     }
-);
+    return Promise.reject(error);
+  }
+)
 
-export default service;
+export default service
