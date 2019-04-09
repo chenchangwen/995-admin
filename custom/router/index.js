@@ -64,5 +64,10 @@ export let resourcesRouter = {
   '/sms/**': {
     path: 'sms',
     component: () => import('../views/resources/message/sms/index'),
+  },
+  //用户消息
+  '/users/messages/**': {
+    path: 'user',
+    component: () => import('../views/resources/message/user/index'),
   }
 };
