@@ -23,7 +23,9 @@
 * `./src/router/index.js` : 删除无用路由.
 * `./src/layout/components/Navbar.vue` : 调整所使用的组件.
 #### 目录
-* `./src/views` : 删除没有使用的页面, 将`./src/view/login/index.vue` 移到 `./custom/views/login/index.vue`
+* `./src/views` : 删除没有使用的页面.    
+* `./src/views/login/index.vue` 移到 `./custom/views/login/index.vue`    
+* `./src/views/dashboard/index.vue` 移到 `./custom/views/dashboard/index.vue`
 
 ## 安装
 
