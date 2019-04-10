@@ -3,27 +3,27 @@
 
 ## Architecture
 
-* `样式`:scss.
-* `库管理`:npm
-* `基础`:vue-element-admin.
-* `框架`:vue2.x.
-* `打包`:webpack4.x
-
-调整主要基于 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) .
+主要基于 [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin) .
 
 ## 调整方法
 
 尽可能不入侵基础框架`vue-element-admin`.      
-业务全部写在`./custom`文件夹.对应相关的文件路径,    
-以下文件,目录直接调整
-* `./src/main.js`: 调整相关引用
-* `./src/styles/index.scss`: 引入自定义样式
-* `./src/store/getters.js`: 新增store属性
-* `./src/store/permission.js`: 用户权限,调整通过接口返回权限
-* `./src/utils/request.js` : HTTP请求,处理相关逻辑
-* `./src/permission.js` : 定义路由权限
-* `./src/views` : 页面,删除没有使用的页面
-* `./src/vue.config.js` : 修正开发端口,代理等
+业务全部写在`./custom`文件夹.对应相关的文件路径.    
+
+**以下直接调整**
+
+#### 文件
+* `./src/main.js`: 调整相关引用.
+* `./src/styles/index.scss`: 引入自定义样式.
+* `./src/store/getters.js`: 新增store属性.
+* `./src/store/permission.js`: 用户权限,调整通过接口返回权限.
+* `./src/utils/request.js` : HTTP请求,处理相关逻辑.
+* `./src/permission.js` : 定义路由权限.
+* `./src/vue.config.js` : 修正开发端口,代理等.
+* `./src/router/index.js` : 删除无用路由.
+* `./src/layout/components/Navbar.vue` : 调整所使用的组件.
+#### 目录
+* `./src/views` : 删除没有使用的页面, 将`./src/view/login.vue` 移到 `./custom/views/login/index.vue`
 
 ## 安装
 
