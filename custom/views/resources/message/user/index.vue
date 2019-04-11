@@ -11,17 +11,17 @@
       </el-button>
     </div>
     <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
-      <el-table-column align="center" label='消息ID' width="300">
+      <el-table-column align="left" label='消息ID' width="300">
         <template slot-scope="scope">
           {{scope.row.id}}
         </template>
       </el-table-column>
-      <el-table-column align="center" label='用户ID' width="150">
+      <el-table-column align="left" label='用户ID' width="150">
         <template slot-scope="scope">
           {{scope.row.userId}}
         </template>
       </el-table-column>
-      <el-table-column align="center" label='内容' width="150">
+      <el-table-column align="left" label='内容' width="150">
         <template slot-scope="scope">
           {{scope.row.content}}
         </template>
@@ -40,7 +40,7 @@
           <p>主体描述:{{scope.row.fromSubjectSummary}}</p>
         </template>
       </el-table-column>
-      <el-table-column align="center" label='创建时间' width="155">
+      <el-table-column align="left" label='创建时间' width="155">
         <template slot-scope="scope">
           {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
         </template>

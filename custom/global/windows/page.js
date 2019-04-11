@@ -73,7 +73,7 @@ window.pageInit = function pageInit(options, api) {
             this.query.page = 0;
             this.getList();
         },
-        handleCreate(item ,options) {
+        handleCreate(item, options) {
             this.dialogStatus = (options && options.dialogStatus) || 'create';
             this.setItem(item);
             this.resetForm();
@@ -86,16 +86,17 @@ window.pageInit = function pageInit(options, api) {
             this.resetForm();
         },
         handleDelete(row) {
+            if (!row[that.idKey]) {
+                return false
+            }
             this.$confirm('确定删除?', '提示', {type: 'warning'})
                 .then(_ => {
                     let that = this;
                     let query = {
-                        id: row[that.idKey] || ''
+                        id: row[that.idKey]
                     };
                     api.queryRemove(query, pageData).then((response) => {
-                        if (response.data.success) {
-                            this.getList();
-                        }
+                        this.getList();
                     });
                 })
                 .catch(_ => {
@@ -170,7 +171,7 @@ window.pageInit = function pageInit(options, api) {
             this.clearValidate();
         },
         getList() {
-            if(!this.apiPrefix)
+            if (!this.apiPrefix)
                 return false;
             this.itemLoading = true;
             this.setQueryItem();

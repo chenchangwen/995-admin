@@ -69,5 +69,10 @@ export let resourcesRouter = {
   '/users/messages/**': {
     path: 'user',
     component: () => import('../views/resources/message/user/index'),
+  },
+  //用户消息模版
+  '/users/messages/formats/**': {
+    path: 'user-format',
+    component: () => import('../views/resources/message/user-format/index'),
   }
 };
