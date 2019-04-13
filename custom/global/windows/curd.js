@@ -41,3 +41,11 @@ window.curd.queryCount = function (params, pageData) {
         params: params
     })
 };
+
+window.curd.queryConfirm = function (query, pageData) {
+    return request({
+        url: pageData.apiPrefix + (pageData.apiQueryConfirmName),
+        method: 'post',
+        data: query
+    })
+};

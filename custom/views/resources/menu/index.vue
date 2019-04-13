@@ -68,6 +68,7 @@
                 commonItem: {
                     form: {
                         title: '',
+                        name: '',
                         link: '',
                         resource: '',
                     },
@@ -75,7 +76,7 @@
                     formName: 'commonForm'
                 },
                 rules: {
-                    title: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                    name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     link: [{required: true, message: '前端链接不能为空', trigger: 'blur'}],
                     resource: [
                         {validator: validateResources, trigger: 'blur'}
@@ -189,7 +190,14 @@
                 clearNodes(node) {
                     let that = this;
                     node.map(function (itemNode) {
+                        for (let item in itemNode) {
+                            if (that.nodeFilterField.indexOf(item) === -1) {
+                                delete itemNode[item];
+                            }
+                        }
                         delete itemNode['isLeaf'];
+                        itemNode.name = itemNode.title;
+                        delete itemNode['title'];
                         //data有值
                         if (itemNode.data && _.isEmpty(itemNode.data.resource)) {
                             delete itemNode.data;
@@ -198,11 +206,7 @@
                                 itemNode[item] = itemNode.data[item];
                             }
                         }
-                        for (let item in itemNode) {
-                            if (that.nodeFilterField.indexOf(item) === -1) {
-                                delete itemNode[item];
-                            }
-                        }
+
                         if (_.isEmpty(itemNode.resource)) {
                             delete itemNode.link;
                             delete itemNode.resource;
@@ -215,25 +219,26 @@
                 clearNodesOnLoad(node) {
                     let that = this;
                     node.map(function (itemNode) {
+                        itemNode.title = itemNode.name;
                         for (let item in itemNode) {
                             if (that.nodeFilterField.indexOf(item) === -1) {
                                 delete itemNode[item];
                             }
-                            if (_.isEmpty(itemNode['resource'])) {
-                                delete itemNode.link;
-                                delete itemNode.link;
-                            } else {
-                                itemNode.isLeaf = true;
-                                itemNode.data = {
-                                    link: itemNode.link,
-                                    resource: itemNode.resource
-                                }
+                        }
+                        if (_.isEmpty(itemNode['resource'])) {
+                            delete itemNode.link;
+                            delete itemNode.link;
+                        } else {
+                            itemNode.isLeaf = true;
+                            itemNode.data = {
+                                link: itemNode.link,
+                                resource: itemNode.resource
                             }
-                            if (!_.isEmpty(itemNode['children'])) {
-                                that.clearNodesOnLoad(itemNode.children);
-                            } else {
-                                delete itemNode.children;
-                            }
+                        }
+                        if (!_.isEmpty(itemNode['children'])) {
+                            that.clearNodesOnLoad(itemNode.children);
+                        } else {
+                            delete itemNode.children;
                         }
                     })
                 },

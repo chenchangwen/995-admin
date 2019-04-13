@@ -40,6 +40,11 @@ window.pageInit = function pageInit(options, api) {
                 //api地址前缀
                 apiPrefix: '',
                 apiQueryListName: '',
+                apiQueryAddName: '',
+                apiQueryEditName: '',
+                apiQueryDeleteName: '',
+                apiQueryCountName: '',
+                apiQueryConfirmName: '',
                 //日期范围控制,需有form.beginTime,form.endTime, 如果有多个时间,需要另外定义
                 beginTimeOptions: {
                     disabledDate: (time) => {
@@ -56,6 +61,11 @@ window.pageInit = function pageInit(options, api) {
                         return time.getTime() < this.form.beginTime;
                     }
                 },
+                //是否编辑成功后合并row
+                //默认:false , 用最小的差去合并
+                //true:  合并 response.data 到 this.row
+                //false: 合并 this.form 到 this.row
+                isEditedAssignRow: false,
             };
             return _.assign({}, defaults, options.data || '');
         },
@@ -85,22 +95,40 @@ window.pageInit = function pageInit(options, api) {
             this.setDialogItem(this.row);
             this.resetForm();
         },
-        handleDelete(row) {
+        handleDelete(row, item, options) {
+            let that = this;
             if (!row[that.idKey]) {
                 return false
             }
-            this.$confirm('确定删除?', '提示', {type: 'warning'})
-                .then(_ => {
-                    let that = this;
-                    let query = {
-                        id: row[that.idKey]
-                    };
-                    api.queryRemove(query, pageData).then((response) => {
-                        this.getList();
-                    });
-                })
-                .catch(_ => {
+            this.dialogStatus = (options && options.dialogStatus) || 'delete';
+            this.setItem(item || row);
+            this.row = _.cloneDeep(row);
+            let pgData = this.getBeforeEditPageData();
+            let defaults = {
+                title: '提示',
+                text: '确定删除',
+                options: {
+                    type: 'warning'
+                }
+            };
+            let confirm = _.assignIn(defaults, (options && options.confirmOptions));
+            this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
+                let that = this;
+                let query = {
+                    id: row[that.idKey]
+                };
+                api.queryConfirm(query, pgData).then((response) => {
+                    this.getList();
                 });
+            }).catch(_ => {
+
+            });
+        },
+        /**
+         * 与handleDelete逻辑一样,但更具体的处理需要confirm确认类api.
+         */
+        handleConfirm(row, item, options) {
+            this.handleDelete(row, item, options);
         },
         createData() {
             this.$refs[this.item.formName].validate((valid) => {
@@ -130,20 +158,23 @@ window.pageInit = function pageInit(options, api) {
                 if (valid) {
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
-                    //关闭编辑窗口之后执行
-                    if (typeof this.beforeEdit === 'function') {
-                        this.beforeEdit(this.row);
-                    }
-                    let pgData = _.assign({}, pageData, this.item.pageData);
-                    api.queryEdit(this.postForm || this.form, pgData).then(() => {
+                    let pgData = this.getBeforeEditPageData();
+
+                    api.queryEdit(this.postForm || this.form, pgData).then((response) => {
                         for (const v of this.items) {
                             if (v[this.idKey || 'id'] === this.form.id) {
                                 const index = this.items.indexOf(v);
+                                if (pgData.isEditedAssignRow) {
+                                    this.row = _.assignIn(this.row, response.data);
+                                }
+                                else {
+                                    this.row = _.assignIn(this.row, this.form);
+                                }
                                 //关闭编辑窗口之后执行
                                 if (typeof this.afterCloseDialog === 'function') {
                                     this.afterCloseDialog(this.row);
                                 }
-                                this.row = _.assignIn(this.row, this.form);
+
                                 this.items.splice(index, 1, this.row);
                                 break;
                             }
@@ -158,6 +189,13 @@ window.pageInit = function pageInit(options, api) {
                     })
                 }
             })
+        },
+        getBeforeEditPageData() {
+            if (typeof this.beforeEdit === 'function') {
+                this.beforeEdit(this.row);
+            }
+            let pgData = _.assign({}, pageData, this.item.pageData);
+            return pgData;
         },
         resetForm() {
             if (this.dialogStatus === 'create') {
@@ -214,6 +252,9 @@ window.pageInit = function pageInit(options, api) {
                 if (!item.originForm) {
                     item.originForm = _.extend(item.form);
                 }
+            }
+            if (!item.pageData) {
+                item.pageData = {};
             }
         },
         /**

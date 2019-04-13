@@ -79,5 +79,14 @@ export let resourcesRouter = {
     '/sms/templates/**': {
         path: 'sms-template',
         component: () => import('../views/resources/message/sms-template/index'),
+    },
+    //订单
+    '/orders/**': {
+        path: 'order',
+        component: () => import('../views/resources/order/list/index'),
+    },
+    '/orders/refunds/**':{
+        path: 'order-refund',
+        component: () => import('../views/resources/order/refund/index'),
     }
 };

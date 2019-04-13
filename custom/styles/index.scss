@@ -1,13 +1,21 @@
 @import '~sl-vue-tree/dist/sl-vue-tree-dark.css';
-.sl-vue-tree-sidebar{
-  margin-left: 10px;
+
+.sl-vue-tree-sidebar {
+    margin-left: 10px;
 }
 
-.el-dialog__wrapper{
-  .el-dialog {
+.el-dialog__wrapper {
+    .el-dialog {
 
-  }
+    }
 }
-.el-icon-success{
-  color: #67C23A;
+
+.el-icon-success {
+    color: #67C23A;
+}
+
+.filter-container {
+    .el-select {
+        vertical-align: top;
+    }
 }

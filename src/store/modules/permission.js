@@ -59,37 +59,36 @@ function getMenus(menus) {
   menus = menus.filter(function(menu) {
     //一级菜单包上$router属性
     if (!menu.resource) {
-      menu.redirect = 'dashboard'
-      menu.component = Layout
-      menu.path = '/' + menu.title;
-      menu.name = menu.title
+      menu.redirect = 'dashboard';
+      menu.component = Layout;
+      menu.path = '/' + menu.name;
+      // menu.name = menu.title;
       menu.meta = {
-        title: menu.title
+        title: menu.name
       }
     }
-    let sum = 0
-    let tempMenu = []
-    let tempChildren = ''
+    let sum = 0;
+    let tempMenu = [];
+    let tempChildren = '';
     //二级菜单包上$router属性
     if (!_.isEmpty(menu.children)) {
       for (let i = 0; i < menu.children.length; i++) {
-        let item = menu.children[i]
-        let resource = resourcesRouter[item.resource.url]
+        let item = menu.children[i];
+        let resource = resourcesRouter[item.resource.url];
         //存在资源
         if (resource) {
           if (resource.children) {
-            tempChildren = _.assign([], resource.children)
+            tempChildren = _.assign([], resource.children);
             delete resource.children
           }
           //合并映射资源
-          item = _.assign({}, item, resource)
+          item = _.assign({}, item, resource);
           item.meta = {
-            title: item.title
-          }
-          item.name = item.title;
-          sum += 1
-          menu.children[i] = item
-          tempMenu.push(menu.children[i])
+            title: item.name
+          };
+          sum += 1;
+          menu.children[i] = item;
+          tempMenu.push(menu.children[i]);
         }
       }
     }
@@ -98,7 +97,7 @@ function getMenus(menus) {
     }
     //二级菜单存在资源的数量>0返回该一级菜单(包括二级菜单)
     if (sum > 0) {
-      menu.children = tempMenu
+      menu.children = tempMenu;
       return menu
     }
   });
@@ -108,15 +107,15 @@ function getMenus(menus) {
 const actions = {
   generateRoutes({ commit }, roles) {
     return Promise.all([homeAPI.home(), homeAPI.menus()]).then(function(response) {
-      let homeResponse = response[0]
-      let menusResponse = response[1]
+      let homeResponse = response[0];
+      let menusResponse = response[1];
       commit('SET_HOME', homeResponse.data.principal);
-      commit('user/SET_ROLES', 1, { root: true })
+      commit('user/SET_ROLES', 1, { root: true });
       return new Promise(resolve => {
         let accessedRouters = getMenus(menusResponse.data);
         accessedRouters = asyncRoutes.concat(accessedRouters);
-        console.log(accessedRouters)
-        commit('SET_ROUTES', accessedRouters)
+        console.log(accessedRouters);
+        commit('SET_ROUTES', accessedRouters);
         resolve(accessedRouters)
       })
     })
