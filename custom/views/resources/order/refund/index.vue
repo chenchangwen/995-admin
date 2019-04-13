@@ -61,45 +61,49 @@
             </el-table-column>
             <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                    <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
+                    <el-button type="primary" size="mini"
                                @click="handleConfirm(scope.row,commonForm, commonForm.agreeOptions)">同意
                     </el-button>
-                    <el-button v-if="scope.row.status==='NEW'" type="danger" size="mini"
-                               @click="handleConfirm(scope.row,commonForm, commonForm.refuseOptions)">拒绝
+                    <el-button type="danger" size="mini"
+                               @click="handleUpdate(scope.row,commonForm)">拒绝
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'模版名称'" prop="name">
-                    {{form.name}}
+                <el-form-item :label="'订单号'">
+                    {{form.id}}
                 </el-form-item>
-
-                <el-form-item :label="'是否可用'">
-                    <el-switch
-                        v-model="form.enable"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949">
-                    </el-switch>
+                <el-form-item :label="'名称'">
+                    {{form.summary}}
+                </el-form-item>
+                <el-form-item :label="'退款金额'">
+                    {{form.total || 0}}
+                </el-form-item>
+                <el-form-item :label="'拒绝原因'" prop="operatorSummary">
+                    <el-input v-model="form.operatorSummary"></el-input>
                 </el-form-item>
             </el-form>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="editData" v-if="dialogStatus!=='create'"
+                <el-button type="primary" @click="editData"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
+
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
+
     let page = new pageInit(
         {
             data: {
@@ -109,41 +113,27 @@
                         label: 'NEW'
                     },
                     {
-                        value: 'PENDING',
-                        label: 'PENDING'
+                        value: 'CONFIRM',
+                        label: 'CONFIRM'
                     },
                     {
-                        value: 'SHIPPING',
-                        label: 'SHIPPING'
-                    },
-                    {
-                        value: 'SUCCESS',
-                        label: 'SUCCESS'
-                    },
-                    {
-                        value: 'EXPIRED',
-                        label: 'EXPIRED'
-                    },
-                    {
-                        value: 'REFUND',
-                        label: 'REFUND'
+                        value: 'REFUSE',
+                        label: 'REFUSE'
                     }
                 ],
                 //创建表单
                 commonForm: {
                     form: {
-                        enable: true,
-                        name: '',
+                        total: '',
+                        operatorSummary: '',
+                        operatorUserId: '',
+                    },
+                    rules: {
+                        operatorSummary: [{required: true, message: '拒绝原因不能为空', trigger: 'blur'}]
                     },
                     formName: 'commonForm',
                     agreeOptions: {
                         dialogStatus: 'agree',
-                        confirmOptions: {
-                            text: '确定同意退款'
-                        }
-                    },
-                    refuseOptions: {
-                        dialogStatus: 'refuse',
                         confirmOptions: {
                             text: '确定同意退款'
                         }
@@ -173,13 +163,25 @@
                 idKey: 'id',
                 apiPrefix: '/orders/refunds',
             },
+            computed: {
+                ...mapGetters([
+                    'home',
+                ])
+            },
             methods: {
                 beforeEdit(row) {
                     if (this.dialogStatus === 'agree') {
+                        this.postForm = {
+                            id: row.id,
+                            operatorSummary: '',
+                            operatorUserId: this.home.username
+                        };
                         this.commonForm.pageData.apiQueryConfirmName = '/confirm';
                     }
-                    if (this.dialogStatus === 'refuse') {
-                        this.commonForm.pageData.apiQueryConfirmName = '/refuse';
+                    if (this.dialogStatus === 'update') {
+                        this.postForm = _.cloneDeep(this.commonForm.form);
+                        delete this.postForm.total;
+                        this.commonForm.pageData.apiQueryEditName = '/refuse';
                     }
                 }
             }

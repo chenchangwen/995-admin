@@ -117,7 +117,7 @@ window.pageInit = function pageInit(options, api) {
                 let query = {
                     id: row[that.idKey]
                 };
-                api.queryConfirm(query, pgData).then((response) => {
+                api.queryConfirm(this.postForm || query, pgData).then((response) => {
                     this.getList();
                 });
             }).catch(_ => {
