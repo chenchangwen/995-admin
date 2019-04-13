@@ -2,10 +2,10 @@
     <div class="app-container">
         <div class="filter-container">
             <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'模版ID'"
-                      v-model="queryItem.smsTemplateId.value">
+                      v-model="queryItem.id.value">
             </el-input>
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'手机号'"
-                      v-model="queryItem.phoneNumbers.value">
+            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'模版名称'"
+                      v-model="queryItem.name.value">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
@@ -95,14 +95,14 @@
                 },
                 //查询对象
                 queryItem: {
-                    smsTemplateId: {
-                        key: 'smsTemplate.id',
+                    id: {
+                        key: 'id',
                         operation: '==',
                         value: '',
                         predicate: ";"
                     },
-                    phoneNumbers: {
-                        key: 'phoneNumbers',
+                    name: {
+                        key: 'name',
                         operation: '==',
                         value: '',
                         predicate: ""
@@ -112,7 +112,7 @@
                 apiPrefix: '/sms/templates',
             },
             methods: {
-                beforeOpenDialog(row){
+                beforeOpenDialog(row) {
                     if (this.dialogStatus === 'update') {
                         this.commonForm.form.enable = row.enable;
                     }
