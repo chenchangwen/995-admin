@@ -32,6 +32,7 @@ router.beforeEach((to, from, next) => {
           NProgress.done()
         })
       } else {
+          setRouterTile(to);
         next()
       }
     } else {
@@ -44,3 +45,15 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
   NProgress.done();
 });
+
+
+function setRouterTile(to) {
+    to.meta.title = to.meta.title.replace(/新增/, '').replace(/编辑/, '')
+    if (to.path.indexOf('edit') > -1) {
+        if (to.params.id) {
+            to.meta.title = ('编辑' + to.meta.title)
+        } else {
+            to.meta.title = ('新增' + to.meta.title)
+        }
+    }
+}
