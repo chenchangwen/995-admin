@@ -59,14 +59,25 @@
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
+
+            <el-table-column align="left" label='退款详情' width="155">
+                <template slot-scope="scope">
+                    <p>退款状态:{{scope.row.x}}</p>
+                    <p>退款账号:{{scope.row.refundSubjectId}}</p>
+                    <p>退款账号类型:{{scope.row.refundSubjectClass}}</p>
+                    <p>操作人:{{scope.row.operatorUserId}}</p>
+                </template>
+            </el-table-column>
+
             <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini"
+                    <el-button  v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleConfirm(scope.row,commonForm, commonForm.agreeOptions)">同意
                     </el-button>
-                    <el-button type="danger" size="mini"
+                    <el-button  v-if="scope.row.status==='NEW'" type="danger" size="mini"
                                @click="handleUpdate(scope.row,commonForm)">拒绝
                     </el-button>
+
                 </template>
             </el-table-column>
         </el-table>
