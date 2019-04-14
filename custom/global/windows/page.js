@@ -63,6 +63,7 @@ window.pageInit = function pageInit(options, api) {
                 },
                 //是否编辑成功后合并row
                 //默认:false , 用最小的差去合并
+                //因为后端接口返回成功不一定返回一个row,所以根据情况去使用
                 //true:  合并 response.data 到 this.row
                 //false: 合并 this.form 到 this.row
                 isEditedAssignRow: false,

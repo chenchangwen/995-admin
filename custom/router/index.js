@@ -85,8 +85,29 @@ export let resourcesRouter = {
         path: 'order',
         component: () => import('../views/resources/order/list/index'),
     },
+    //订单退款
     '/orders/refunds/**':{
         path: 'order-refund',
         component: () => import('../views/resources/order/refund/index'),
+    },
+    //积分
+    '/cents/**':{
+        path: 'cent',
+        component: () => import('../views/resources/cent/list/index'),
+    },
+    //积分提现
+    '/cents/cashes/**':{
+        path: 'cent-cash',
+        component: () => import('../views/resources/cent/cash/index'),
+    },
+    //积分变更
+    '/cents/changes/**':{
+        path: 'cent-change',
+        component: () => import('../views/resources/cent/change/index'),
+    },
+    //积分转账
+    '/cents/transfers/**':{
+        path: 'cent-transfer',
+        component: () => import('../views/resources/cent/transfer/index'),
     }
 };

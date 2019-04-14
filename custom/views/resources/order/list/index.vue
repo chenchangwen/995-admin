@@ -117,7 +117,6 @@
         {
             data: {
                 statusOptions: [
-
                     {
                         value: 'NEW',
                         label: 'NEW'
