@@ -4,7 +4,6 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import './btn.scss';
-@import '../../custom/styles/index.scss';
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
@@ -199,3 +198,5 @@ code {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+@import '../../custom/styles/index.scss';
