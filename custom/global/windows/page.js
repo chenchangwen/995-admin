@@ -210,8 +210,10 @@ window.pageInit = function pageInit(options, api) {
             this.clearValidate();
         },
         getList() {
-            if (!this.apiPrefix)
+            if (!this.apiPrefix) {
+                this.itemLoading = false;
                 return false;
+            }
             this.itemLoading = true;
             this.setQueryItem();
             let that = this;
@@ -262,9 +264,12 @@ window.pageInit = function pageInit(options, api) {
          * 清除验证
          */
         clearValidate() {
-            this.$nextTick(() => {
-                this.$refs[this.item.formName].clearValidate();
-            });
+            let formName = this.item.formName;
+            if(formName) {
+                this.$nextTick(() => {
+                    this.$refs[formName].clearValidate()
+                })
+            }
         },
         /**
          * 设置查询对象
