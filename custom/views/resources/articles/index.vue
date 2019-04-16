@@ -32,7 +32,7 @@
             </el-table-column>
 
 
-            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
                     <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>

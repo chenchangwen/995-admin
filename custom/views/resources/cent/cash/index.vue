@@ -69,7 +69,7 @@
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleUpdate(scope.row,commonForm, commonForm.agreeOptions)">通过

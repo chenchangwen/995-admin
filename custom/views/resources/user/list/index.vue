@@ -59,7 +59,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" style="width: 110px"
                                @click="handleUpdate(scope.row,editItem)">登录用户后台

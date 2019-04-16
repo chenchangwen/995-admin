@@ -32,7 +32,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleChangeId(scope.row,editItem)" style="width: 80px">交换账号</el-button>
                 </template>

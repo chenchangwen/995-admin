@@ -69,7 +69,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button  v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleConfirm(scope.row,commonForm, commonForm.agreeOptions)">同意

@@ -56,7 +56,7 @@
                     {{scope.row.masterAccessTokenUrl}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
                 </template>

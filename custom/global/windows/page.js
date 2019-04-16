@@ -233,7 +233,7 @@ window.pageInit = function pageInit(options, api) {
         setDialogItem(row) {
             this.postForm = '';
             for (let item in this.form) {
-                this.form[item] = row[item] || '';
+                this.form[item] = _.isBoolean(row[item]) ? row[item] : (row[item] || '');
             }
             if (!this.form['id']) {
                 this.form['id'] = row['id'] || '';
@@ -265,7 +265,7 @@ window.pageInit = function pageInit(options, api) {
          */
         clearValidate() {
             let formName = this.item.formName;
-            if(formName) {
+            if (formName) {
                 this.$nextTick(() => {
                     this.$refs[formName].clearValidate()
                 })

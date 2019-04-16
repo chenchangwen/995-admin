@@ -73,7 +73,7 @@
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" width="230" class-name="small-padding fixed-width">
+            <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" style="width: 80px" size="mini"
                                @click="handleUpdate(scope.row,commonForm,commonForm.payOptions)">现金支付
