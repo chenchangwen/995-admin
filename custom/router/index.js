@@ -109,5 +109,20 @@ export let resourcesRouter = {
     '/cents/transfers/**':{
         path: 'cent-transfer',
         component: () => import('../views/resources/cent/transfer/index'),
+    },
+    //关系返点定义
+    '/relations/kickbacks/**':{
+        path: 'relations-kickbacks',
+        component: () => import('../views/resources/relations/kickback/index'),
+    },
+    //返点日志
+    '/relations/kickbacks/logs/**':{
+        path: 'relations-logs',
+        component: () => import('../views/resources/relations/log/index'),
+    },
+    //关系用户
+    '/relations/users/**':{
+        path: 'relations-users',
+        component: () => import('../views/resources/relations/user/index'),
     }
 };
