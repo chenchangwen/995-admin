@@ -1,18 +1,45 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(createItem)" type="primary"
-                       icon="el-icon-edit">新增
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"
+                       icon="el-icon-edit">新增主题
             </el-button>
         </div>
+        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+            <el-table-column align="left" label='ID' width="300">
+                <template slot-scope="scope">
+                    {{scope.row.id}}
+                </template>
+            </el-table-column>
+            <el-table-column align="left" label='主题' width="300">
+                <template slot-scope="scope">
+                    {{scope.row.subject}}
+                </template>
+            </el-table-column>
+            <el-table-column align="left" label='用户ID' width="150">
+                <template slot-scope="scope">
+                    {{scope.row.userId}}
+                </template>
+            </el-table-column>
+            <el-table-column align="left" label='创建时间' width="155">
+                <template slot-scope="scope">
+                    {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
+                </template>
+            </el-table-column>
+            <el-table-column align="left" :label="'操作'" width="230">
+                <template slot-scope="scope">
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
 
-            <el-form :rules="createItem.rules" ref="createForm" :model="createItem.form" label-position="left"
-                     v-if="dialogStatus ==='create'"
+            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'名称'" prop="classifies.name">
-                    <el-input v-model="form.classifies.name" placeholder="名称"></el-input>
+                <el-form-item :label="'用户ID'">
+                    {{form.userId}}
                 </el-form-item>
                 <el-form-item :label="'主题'" prop="subject">
                     <el-input v-model="form.subject" placeholder="主题"></el-input>
@@ -41,18 +68,15 @@
     let page = new pageInit(
         {
             data: {
-                createItem: {
+                commonForm: {
                     form: {
                         subject: '',
-                        classifies: {
-                            name: ''
-                        }
+                        userId: ''
                     },
                     rules: {
-                        'classifies.name': [{required: true, message: '名称不能为空', trigger: 'blur'}],
                         subject: [{required: true, message: '主题不能为空', trigger: 'blur'}],
                     },
-                    formName: 'createForm'
+                    formName: 'commonForm'
                 },
                 queryItem: {
                     userId: {
@@ -70,7 +94,7 @@
                 customCreateData() {
                     let that = this;
                     let form = _.cloneDeep(this.form);
-                    form.classifies = [form.classifies];
+                    form.classifies = [];
                     form.userId = this.queryItem.userId.value;
                     this.$refs[this.item.formName].validate((valid) => {
                         if (valid) {
@@ -89,6 +113,9 @@
                             });
                         }
                     })
+                },
+                handleUpdate(row){
+                    this.$router.push(this.$route.path + "/edit/" +  row.id);
                 }
             },
             computed: {
@@ -97,6 +124,7 @@
                 ])
             },
             created() {
+                this.commonForm.form.userId = this.home.username;
                 this.queryItem.userId.value = this.home.username;
             }
         }

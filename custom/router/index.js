@@ -59,6 +59,18 @@ export let resourcesRouter = {
     '/classifies/**': {
         path: 'classifies',
         component: () => import('../views/resources/classifies/index'),
+        children: [
+            {
+                name: 'classifies-edit',
+                path: 'classifies/edit/:id',
+                component: () => import('../views/resources/classifies/edit'),
+                meta: {
+                    title: '编辑分类',
+                },
+                hidden: true,
+                children: []
+            }
+        ]
     },
     //用户消息
     '/users/messages/**': {
