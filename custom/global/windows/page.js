@@ -3,6 +3,8 @@
  * @param options vue 实例参数
  * @param api 如果有,则覆盖window.curd
  */
+import { mergeSameRow, setSameRowSign } from '../../utils';
+
 window.pageInit = function pageInit(options, api) {
     api = window.curd || api;
     let page = {
@@ -67,6 +69,8 @@ window.pageInit = function pageInit(options, api) {
                 //true:  合并 response.data 到 this.row
                 //false: 合并 this.form 到 this.row
                 isEditedAssignRow: false,
+                //是否设置相同行标记
+                isSetSameRowSign: false
             };
             return _.assign({}, defaults, options.data || '');
         },
@@ -310,6 +314,11 @@ window.pageInit = function pageInit(options, api) {
             }
         },
     };
+
+    //增加mergeSameRow方法
+    if (pageData.isSetSameRowSign) {
+        methods.mergeSameRow = mergeSameRow;
+    }
 
     //合并基础方法
     page.methods = _.assign({}, methods, options.methods || '');
