@@ -77,11 +77,11 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="createData" v-if="dialogStatus==='create'"
+                <el-button type="primary" @click="saveData(createItem)" v-if="dialogStatus==='create'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="editData" v-if="dialogStatus==='update'"
+                <el-button type="primary" @click="saveData(editItem)" v-if="dialogStatus==='update'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>

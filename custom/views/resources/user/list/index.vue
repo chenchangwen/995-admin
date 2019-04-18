@@ -122,7 +122,7 @@
                      v-if="dialogStatus ==='create'"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
-                <el-form-item :label="'用户账号'" prop="name">
+                <el-form-item :label="'用户名称'" prop="username">
                     <el-input v-model="form.username" placeholder="用户账号"></el-input>
                 </el-form-item>
                 <el-form-item :label="'用户角色'" prop="authorities">
@@ -145,11 +145,11 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="createData" v-if="dialogStatus==='create'"
+                <el-button type="primary" @click="saveData(createItem)" v-if="dialogStatus==='create'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="editData" v-if="dialogStatus!=='create'"
+                <el-button type="primary" @click="saveData(editItem)" v-if="dialogStatus!=='create'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -230,7 +230,7 @@
                     },
                     formName: 'editForm',
                     pageData: {
-                        apiQueryEditName: ''
+                        apiQueryEditUrl: ''
                     }
                 },
                 //更改密码表单
@@ -248,7 +248,7 @@
                         dialogStatus: 'change'
                     },
                     pageData: {
-                        apiQueryEditName: '/password/reset'
+                        apiQueryEditUrl: '/password/reset'
                     }
                 },
                 //查询对象
@@ -275,7 +275,7 @@
                     ]
                 },
                 apiPrefix: '/users',
-                apiQueryAddName: '/name/add',
+                apiQueryAddUrl: '/name/add',
             },
             methods: {
                 beforeOpenDialog(row) {
@@ -285,7 +285,9 @@
                     }
                     if (this.dialogStatus === 'change') {
                         this.textMap.change = '修改密码';
+                        this.changePasswordItem.form.newRawPassword = '';
                     }
+
 
                 },
                 beforeEdit(row) {
@@ -298,11 +300,6 @@
                         delete this.postForm.name;
                         delete this.postForm.id;
                         this.postForm.userId = this.home.username;
-                    }
-                },
-                afterCloseDialog(row) {
-                    if (this.dialogStatus === 'change') {
-                        this.changePasswordItem.form.newRawPassword = '';
                     }
                 }
             },

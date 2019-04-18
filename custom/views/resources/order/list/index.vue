@@ -102,7 +102,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="editData"
+                <el-button type="primary" @click="saveData(commonForm)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -190,10 +190,10 @@
                     delete this.postForm.summary;
                     delete this.postForm.total;
                     if (this.dialogStatus === 'pay') {
-                        this.commonForm.pageData.apiQueryEditName = '/pay/cash';
+                        this.commonForm.pageData.apiQueryEditUrl = '/pay/cash';
                     }
                     if (this.dialogStatus === 'cancel') {
-                        this.commonForm.pageData.apiQueryEditName = '/cancel';
+                        this.commonForm.pageData.apiQueryEditUrl = '/cancel';
                         delete this.postForm.userId;
                     }
                 }

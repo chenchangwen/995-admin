@@ -53,7 +53,7 @@
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="editData" v-if="dialogStatus==='update'"
+                <el-button type="primary" @click="saveData(commonForm)" v-if="dialogStatus==='update'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -88,7 +88,7 @@
                 },
                 isQueryCount: false,
                 apiPrefix: '/classifies/subjects',
-                apiQueryAddName: '/edit',
+                apiQueryAddUrl: '/edit',
             },
             methods: {
                 customCreateData() {

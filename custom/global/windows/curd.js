@@ -4,7 +4,7 @@
 window.curd = {};
 window.curd.queryList = function (params, pageData) {
     return request({
-        url: pageData.apiPrefix + pageData.apiQueryListName,
+        url: pageData.apiPrefix + pageData.apiQueryListUrl,
         method: 'get',
         params: params
     })
@@ -12,7 +12,7 @@ window.curd.queryList = function (params, pageData) {
 
 window.curd.queryAdd = function (query, pageData) {
     return request({
-        url: pageData.apiPrefix + (pageData.apiQueryAddName || '/add'),
+        url: pageData.apiPrefix + (pageData.apiQueryAddUrl || '/add'),
         method: 'post',
         data: query
     })
@@ -20,7 +20,7 @@ window.curd.queryAdd = function (query, pageData) {
 
 window.curd.queryEdit = function (query, pageData) {
     return request({
-        url: pageData.apiPrefix + (pageData.apiQueryEditName || '/edit'),
+        url: pageData.apiPrefix + (pageData.apiQueryEditUrl || '/edit'),
         method: 'post',
         data: query
     })
@@ -28,7 +28,7 @@ window.curd.queryEdit = function (query, pageData) {
 
 window.curd.queryRemove = function (query, pageData) {
     return request({
-        url: pageData.apiPrefix + (pageData.apiQueryDeleteName || '/delete'),
+        url: pageData.apiPrefix + (pageData.apiQueryDeleteUrl || '/delete'),
         method: 'post',
         data: query
     })
@@ -36,7 +36,7 @@ window.curd.queryRemove = function (query, pageData) {
 
 window.curd.queryCount = function (params, pageData) {
     return request({
-        url: pageData.apiPrefix + (pageData.apiQueryCountName || '/count'),
+        url: pageData.apiPrefix + (pageData.apiQueryCountUrl || '/count'),
         method: 'get',
         params: params
     })
@@ -44,8 +44,16 @@ window.curd.queryCount = function (params, pageData) {
 
 window.curd.queryConfirm = function (query, pageData) {
     return request({
-        url: pageData.apiPrefix + (pageData.apiQueryConfirmName),
+        url: pageData.apiPrefix + (pageData.apiQueryConfirmUrl || '/delete'),
         method: 'post',
         data: query
+    })
+};
+
+window.curd.queryDetail = function (query, pageData) {
+    return request({
+        url: pageData.apiPrefix + (pageData.apiQueryDetailUrl),
+        method: 'get',
+        params: query
     })
 };

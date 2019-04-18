@@ -72,8 +72,8 @@
                 },
                 idKey: 'id',
                 apiPrefix: '/wechats',
-                apiQueryListName: '/users/messages/templates/formats',
-                apiQueryCountName: '/users/messages/templates/formats/count'
+                apiQueryListUrl: '/users/messages/templates/formats',
+                apiQueryCountUrl: '/users/messages/templates/formats/count'
 
             },
             methods: {

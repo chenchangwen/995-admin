@@ -3,10 +3,10 @@
  * @param options vue 实例参数
  * @param api 如果有,则覆盖window.curd
  */
-import { mergeSameRow, setSameRowSign } from '../../utils';
+import {mergeSameRow, setSameRowSign} from '../../utils';
 
-window.pageInit = function pageInit(options, api) {
-    api = window.curd || api;
+window.pageInit = function pageInit(options) {
+    let api = window.curd;
     let page = {
         data() {
             let defaults = {
@@ -14,7 +14,7 @@ window.pageInit = function pageInit(options, api) {
                 //新增,更新时实际操作的对象,所以缓存1层
                 form: {},
                 //如果存,则使用postForm替换掉form,但不影响form
-                postForm: {},
+                //postForm: {},
                 //form最原始的模型,不能更改
                 originForm: {},
                 //表格的当行数据对象
@@ -41,12 +41,12 @@ window.pageInit = function pageInit(options, api) {
                 isQueryCount: true,
                 //api地址前缀
                 apiPrefix: '',
-                apiQueryListName: '',
-                apiQueryAddName: '',
-                apiQueryEditName: '',
-                apiQueryDeleteName: '',
-                apiQueryCountName: '',
-                apiQueryConfirmName: '',
+                apiQueryListUrl: '',
+                apiQueryAddUrl: '',
+                apiQueryEditUrl: '',
+                apiQueryDeleteUrl: '',
+                apiQueryCountUrl: '',
+                apiQueryConfirmUrl: '',
                 //日期范围控制,需有form.beginTime,form.endTime, 如果有多个时间,需要另外定义
                 beginTimeOptions: {
                     disabledDate: (time) => {
@@ -75,7 +75,11 @@ window.pageInit = function pageInit(options, api) {
             return _.assign({}, defaults, options.data || '');
         },
         mounted() {
-            this.getList();
+            if (this.apiPrefix || this.apiQueryListUrl) {
+                this._getList()
+            } else if (this.apiQueryDetailUrl && this.$route.params.id) {
+                this._getDetail()
+            }
         }
     };
 
@@ -84,9 +88,132 @@ window.pageInit = function pageInit(options, api) {
 
     //页面基础方法
     let methods = {
+        _notify(options) {
+            let defaults = {
+                title: '成功',
+                message: '创建成功',
+                type: 'success',
+                duration: 2000
+            };
+            let option = _.assignIn(defaults, options);
+            this.$notify(option)
+        },
+        /**
+         * 请求列表数据
+         */
+        _getList() {
+            this.itemLoading = true;
+            this.setQueryItem();
+            let that = this;
+            api.queryList(this.query, pageData).then(response => {
+                this.items = response.data;
+                this.itemLoading = false;
+                if (that.isQueryCount) {
+                    api.queryCount(this.query, pageData).then(response => {
+                        that.total = response.data;
+                    })
+                }
+            })
+        },
+        /**
+         * 请求详情数据
+         */
+        _getDetail() {
+            let that = this
+            api.queryDetail({id: this.$route.params.id}, pageData).then(response => {
+                if (typeof that.onDetailLoaded === 'function') {
+                    that.onDetailLoaded(response)
+                }
+            })
+        },
+        _createData() {
+            let that = this
+            delete this.form.id;
+            this._queryData(api.queryAdd, true, function (pgData, response) {
+                if (that.items) {
+                    if (that.total < that.query.size) {
+                        that.items.splice(0, 0, response.data)
+                    }
+                    else {
+                        that.items.unshift(response.data);
+                    }
+                }
+                that.total = that.total + 1;
+                that._notify({message: '创建成功'})
+            })
+        },
+        _editData() {
+            let that = this
+            this._queryData(api.queryEdit, true, function (pgData, response) {
+                if (that.items) {
+                    for (const v of that.items) {
+                        if (v[that.idKey || 'id'] === that.form.id) {
+                            const index = that.items.indexOf(v)
+                            if (pgData.isEditedAssignRow) {
+                                that.row = _.assignIn(that.row, response.data)
+                            } else {
+                                that.row = _.assignIn(that.row, that.form)
+                            }
+
+                            //关闭编辑窗口之后
+                            if (typeof that.afterCloseDialog === 'function') {
+                                that.afterCloseDialog(that.row)
+                            }
+
+                            that.items.splice(index, 1, that.row)
+                            break
+                        }
+                    }
+                }
+                that._notify({message: '更新成功'})
+            })
+        },
+        _getBeforeEditPageData() {
+            if (typeof this.beforeEdit === 'function') {
+                this.beforeEdit(this.row)
+            }
+            let pgData = _.assign({}, pageData, this.item.pageData)
+            return pgData
+        },
+        _checkItem(item) {
+            if (item && !this.item) {
+                this.setItem(item)
+            }
+        },
+        /**
+         * 请求接口数据
+         */
+        _queryData(queryFn, isValidate, onSuccess) {
+            let that = this
+
+            function apiQuery() {
+                that.dialogButtonLoading = true
+                that.dialogButtonDisabled = true
+                let pgData = that._getBeforeEditPageData()
+
+                queryFn(that.postForm || that.form, pgData).then((response) => {
+                    if (typeof onSuccess === 'function') {
+                        onSuccess(pgData, response)
+                    }
+                    that.dialogFormVisible = false
+                    that.dialogButtonLoading = false
+                    that.dialogButtonDisabled = false
+                })
+            }
+
+            if (isValidate) {
+                this.$refs[this.item.formName].validate((valid) => {
+                    if (valid) {
+                        apiQuery()
+                    }
+                })
+            } else {
+                apiQuery()
+            }
+        },
         handleFilter() {
             this.query.page = 0;
-            this.getList();
+            this._getList();
         },
         handleCreate(item, options) {
             this.dialogStatus = (options && options.dialogStatus) || 'create';
@@ -108,7 +235,7 @@ window.pageInit = function pageInit(options, api) {
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
             this.setItem(item || row);
             this.row = _.cloneDeep(row);
-            let pgData = this.getBeforeEditPageData();
+            let pgData = this._getBeforeEditPageData();
             let defaults = {
                 title: '提示',
                 text: '确定删除',
@@ -123,7 +250,7 @@ window.pageInit = function pageInit(options, api) {
                     id: row[that.idKey]
                 };
                 api.queryConfirm(this.postForm || query, pgData).then((response) => {
-                    this.getList();
+                    that._getList();
                 });
             }).catch(_ => {
 
@@ -135,77 +262,59 @@ window.pageInit = function pageInit(options, api) {
         handleConfirm(row, item, options) {
             this.handleDelete(row, item, options);
         },
-        createData() {
-            this.$refs[this.item.formName].validate((valid) => {
-                if (valid) {
-                    delete this.form.id;
-                    api.queryAdd(this.form, pageData).then((response) => {
-                        if (this.total < this.query.size) {
-                            this.items.splice(0, 0, response.data)
-                        }
-                        else {
-                            this.items.unshift(response.data);
-                        }
-                        this.total = this.total + 1;
-                        this.dialogFormVisible = false;
-                        this.$notify({
-                            title: '成功',
-                            message: '创建成功',
-                            type: 'success',
-                            duration: 2000
-                        });
-                    })
-                }
-            })
-        },
-        editData() {
-            this.$refs[this.item.formName].validate((valid) => {
-                if (valid) {
-                    this.dialogButtonLoading = true;
-                    this.dialogButtonDisabled = true;
-                    let pgData = this.getBeforeEditPageData();
-
-                    api.queryEdit(this.postForm || this.form, pgData).then((response) => {
-                        for (const v of this.items) {
-                            if (v[this.idKey || 'id'] === this.form.id) {
-                                const index = this.items.indexOf(v);
-                                if (pgData.isEditedAssignRow) {
-                                    this.row = _.assignIn(this.row, response.data);
-                                }
-                                else {
-                                    this.row = _.assignIn(this.row, this.form);
-                                }
-                                //关闭编辑窗口之后执行
-                                if (typeof this.afterCloseDialog === 'function') {
-                                    this.afterCloseDialog(this.row);
-                                }
-
-                                this.items.splice(index, 1, this.row);
-                                break;
-                            }
-                        }
-                        this.dialogFormVisible = false;
-                        this.$notify({
-                            title: '成功',
-                            message: '更新成功',
-                            type: 'success',
-                            duration: 2000
-                        })
-                    })
-                }
-            })
-        },
-        getBeforeEditPageData() {
-            if (typeof this.beforeEdit === 'function') {
-                this.beforeEdit(this.row);
+        /**
+         * 请求保存数据
+         */
+        saveData(item) {
+            this._checkItem(item);
+            //不满足条件或者只要不是create状态,就是edit数据,基本上dialog弹窗都是来自于handleUpdate
+            if (item.form && item.form.id || this.dialogStatus !== 'create') {
+                this._editData()
+            } else {
+                this._createData()
             }
-            let pgData = _.assign({}, pageData, this.item.pageData);
-            return pgData;
         },
+        /**
+         * 设置Item
+         * 当前操作的项
+         */
+        setItem(item) {
+            if (item) {
+                this.item = item;
+            }
+            if (item && item.form) {
+                this.form = item.form;
+                if (!item.originForm) {
+                    item.originForm = _.extend(item.form);
+                }
+            }
+            if (!item.pageData) {
+                item.pageData = {};
+            }
+            this.postForm = '';
+        },
+        /**
+         * 重置表单
+         */
         resetForm() {
             if (this.dialogStatus === 'create') {
+                //编辑和新增都会调用setItem,resetForm方法
+                //此时的item.form会有值,所有在此将重置item.form
                 this.$nextTick(() => {
-                    this.$refs[this.item.formName].resetFields();
+                    if (this.$refs[this.item.formName]) {
+                        this.$refs[this.item.formName].resetFields();
+                    }
+                    for (let item in this.item.form) {
+                        if (_.isArray(this.item.form[item])) {
+                            this.item.form[item] = [];
+                        }
+                        else if (_.isObject(this.item.form[item])) {
+                            this.item.form[item] = {};
+                        }
+                        else {
+                            this.item.form[item] = '';
+                        }
+                    }
                 })
             }
             this.dialogFormVisible = true;
@@ -213,23 +322,16 @@ window.pageInit = function pageInit(options, api) {
             this.dialogButtonDisabled = false;
             this.clearValidate();
         },
-        getList() {
-            if (!this.apiPrefix) {
-                this.itemLoading = false;
-                return false;
+        /**
+         * 清除验证
+         */
+        clearValidate() {
+            let formName = this.item.formName;
+            if (this.$refs[formName]) {
+                this.$nextTick(() => {
+                    this.$refs[formName].clearValidate()
+                })
             }
-            this.itemLoading = true;
-            this.setQueryItem();
-            let that = this;
-            api.queryList(this.query, pageData).then(response => {
-                this.items = response.data;
-                this.itemLoading = false;
-                if (that.isQueryCount) {
-                    api.queryCount(this.query, pageData).then(response => {
-                        that.total = response.data;
-                    })
-                }
-            });
         },
         /**
          * 设置窗口对象
@@ -248,32 +350,13 @@ window.pageInit = function pageInit(options, api) {
             }
         },
         /**
-         * 设置Item
+         * 排序改变事件
          */
-        setItem(item) {
-            if (item) {
-                this.item = item;
-            }
-            if (item && item.form) {
-                this.form = item.form;
-                if (!item.originForm) {
-                    item.originForm = _.extend(item.form);
-                }
-            }
-            if (!item.pageData) {
-                item.pageData = {};
-            }
-        },
-        /**
-         * 清除验证
-         */
-        clearValidate() {
-            let formName = this.item.formName;
-            if (formName) {
-                this.$nextTick(() => {
-                    this.$refs[formName].clearValidate()
-                })
-            }
+        handleSortChange({column, prop, order}) {
+            let sort = (order === 'ascending' ? 'asc' : 'desc')
+            this.query.sortField = prop || ''
+            this.query.sortDirection = sort || ''
+            this._getList()
         },
         /**
          * 设置查询对象

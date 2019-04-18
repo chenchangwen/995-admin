@@ -102,7 +102,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="editData"
+                <el-button type="primary" @click="saveData(commonForm)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -187,12 +187,12 @@
                             operatorSummary: '',
                             operatorUserId: this.home.username
                         };
-                        this.commonForm.pageData.apiQueryConfirmName = '/confirm';
+                        this.commonForm.pageData.apiQueryConfirmUrl = '/confirm';
                     }
                     if (this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonForm.form);
                         delete this.postForm.total;
-                        this.commonForm.pageData.apiQueryEditName = '/refuse';
+                        this.commonForm.pageData.apiQueryEditUrl = '/refuse';
                     }
                 }
             }
