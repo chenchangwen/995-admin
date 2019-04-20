@@ -99,7 +99,6 @@
                     return this.$route.matched[0].path + "/site";
                 },
                 beforeMounted() {
-                    this.commonForm.form.userId = this.home.username;
                     this.apiQueryUrl = '/sites/' + this.$route.params.id;
                 },
                 onDetailLoaded(response) {
