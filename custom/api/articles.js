@@ -50,7 +50,7 @@ export function articles(id) {
  */
 export function addImage(options) {
     return request({
-        url: '/articles/image/medium/base64/add',
+        url: '/articles/medium/add/base64',
         method: 'post',
         data: options
     })

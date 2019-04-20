@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-form :rules="rules" ref="form" :model="form" label-position="left"
                  label-width="80px"
-                 class="form-box">
+                 class="detail-form-box">
             <el-form-item :label="'标题'" prop="title">
                 <el-input v-model="form.title" placeholder="标题"></el-input>
             </el-form-item>
@@ -40,7 +40,7 @@
                 <Tinymce ref="editor" :height="400" v-model="form.articleDetail.content"/>
             </el-form-item>
 
-            <el-form-item class="btn-box">
+            <el-form-item class="detail-btn-box">
                 <el-button size="medium" type="primary" :loading="buttonLoading" :disabled="buttonDisabled"
                            @click="handleUpdate">更新
                 </el-button>
@@ -175,20 +175,3 @@
         }
     }
 </script>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-    .form-box {
-        padding: 30px 45px 20px 50px;
-        width: 85%;
-    }
-
-    .btn-box {
-        position: fixed;
-        padding: 10px 30px;
-        text-align: right;
-        right: 0;
-        bottom: 0;
-        background: none;
-        margin-bottom: 0;
-    }
-</style>

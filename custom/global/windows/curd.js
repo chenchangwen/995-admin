@@ -50,10 +50,17 @@ window.curd.queryConfirm = function (query, pageData) {
     })
 };
 
-window.curd.queryDetail = function (query, pageData) {
+window.curd.queryDetail = function (pageData) {
     return request({
         url: pageData.apiPrefix + (pageData.apiQueryDetailUrl),
         method: 'get',
         params: query
+    })
+};
+
+window.curd.queryUrl = function (pageData, options) {
+    return request({
+        url: pageData.apiPrefix + (pageData.apiQueryUrl),
+        method: 'get'
     })
 };

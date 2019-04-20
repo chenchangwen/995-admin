@@ -47,6 +47,7 @@ window.pageInit = function pageInit(options) {
                 apiQueryDeleteUrl: '',
                 apiQueryCountUrl: '',
                 apiQueryConfirmUrl: '',
+                apiQueryUrl: '',
                 //日期范围控制,需有form.beginTime,form.endTime, 如果有多个时间,需要另外定义
                 beginTimeOptions: {
                     disabledDate: (time) => {
@@ -75,10 +76,20 @@ window.pageInit = function pageInit(options) {
             return _.assign({}, defaults, options.data || '');
         },
         mounted() {
+            if (typeof this.beforeMounted === 'function') {
+                this.beforeMounted(pageData);
+            }
             if (this.apiPrefix || this.apiQueryListUrl) {
                 this._getList()
-            } else if (this.apiQueryDetailUrl && this.$route.params.id) {
+            } else if (this.$route.params.id) {
                 this._getDetail()
+            }
+            //tagsView切换提存在响应所以清空
+            else {
+                let item = this.initItemFormName;
+                if (item) {
+                    deepClearObject(this[item].form);
+                }
             }
         }
     };
@@ -123,11 +134,21 @@ window.pageInit = function pageInit(options) {
          */
         _getDetail() {
             let that = this
-            api.queryDetail({id: this.$route.params.id}, pageData).then(response => {
-                if (typeof that.onDetailLoaded === 'function') {
-                    that.onDetailLoaded(response)
-                }
-            })
+            if (this.apiQueryDetailUrl) {
+                api.queryDetail({id: this.$route.params.id}, pageData).then(response => {
+                    if (typeof that.onDetailLoaded === 'function') {
+                        that.onDetailLoaded(response)
+                    }
+                })
+            }
+            else if (this.apiQueryUrl) {
+                pageData.apiQueryUrl = this.apiQueryUrl;
+                api.queryUrl(pageData).then(response => {
+                    if (typeof that.onDetailLoaded === 'function') {
+                        that.onDetailLoaded(response)
+                    }
+                })
+            }
         },
         _createData() {
             let that = this

@@ -42,10 +42,8 @@ export function deepClearObject(form) {
         if (_.isArray(form[item])) {
             form[item] = []
         } else if (_.isObject(form[item])) {
-            for (let objItem in form[item]){
-                deepClearObject(form[item][objItem])
-            }
-        } else {
+            deepClearObject(form[item])
+        } else if(!_.isBoolean(form[item])) {
             form[item] = ''
         }
     }

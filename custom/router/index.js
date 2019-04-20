@@ -136,5 +136,27 @@ export let resourcesRouter = {
     '/relations/users/**':{
         path: 'relations-users',
         component: () => import('../views/resources/relations/user/index'),
+    },
+    //网站
+    '/sites/**':{
+        path: 'site',
+        component: () => import('../views/resources/site/list/index'),
+        children: [
+            {
+                name: 'site-edit',
+                path: 'site/edit/:id?',
+                component: () => import('../views/resources/site/list/edit'),
+                meta: {
+                    title: '网站',
+                },
+                hidden: true,
+                children: []
+            }
+        ]
+    },
+    //网站模版
+    '/sites/themes/**':{
+        path: 'sites-themes',
+        component: () => import('../views/resources/site/theme/index'),
     }
 };

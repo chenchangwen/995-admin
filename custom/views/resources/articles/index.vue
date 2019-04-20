@@ -60,7 +60,6 @@
             methods: {
                 handleEdit(id){
                     this.$router.push(this.$route.path + "/edit" +  (id ? ('/'+ id) : ''));
-
                 }
             },
             components: {
