@@ -3,7 +3,7 @@
  * @param options vue 实例参数
  * @param api 如果有,则覆盖window.curd
  */
-import {mergeSameRow, setSameRowSign} from '../../utils';
+import {mergeSameRow, setSameRowSign, deepClearObject} from '../../utils';
 
 window.pageInit = function pageInit(options) {
     let api = window.curd;
@@ -108,6 +108,9 @@ window.pageInit = function pageInit(options) {
             api.queryList(this.query, pageData).then(response => {
                 this.items = response.data;
                 this.itemLoading = false;
+                if (this.isSetSameRowSign) {
+                    setSameRowSign.call(this, this.items)
+                }
                 if (that.isQueryCount) {
                     api.queryCount(this.query, pageData).then(response => {
                         that.total = response.data;
@@ -233,7 +236,7 @@ window.pageInit = function pageInit(options) {
                 return false
             }
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
-            this.setItem(item || row);
+            this.setItem(item);
             this.row = _.cloneDeep(row);
             let pgData = this._getBeforeEditPageData();
             let defaults = {
@@ -266,12 +269,12 @@ window.pageInit = function pageInit(options) {
          * 请求保存数据
          */
         saveData(item) {
-            this._checkItem(item);
-            //不满足条件或者只要不是create状态,就是edit数据,基本上dialog弹窗都是来自于handleUpdate
-            if (item.form && item.form.id || this.dialogStatus !== 'create') {
-                this._editData()
-            } else {
+            this._checkItem(item)
+            if (item.form && !item.form.id) {
                 this._createData()
+            }
+            else {
+                this._editData()
             }
         },
         /**
@@ -298,23 +301,15 @@ window.pageInit = function pageInit(options) {
          */
         resetForm() {
             if (this.dialogStatus === 'create') {
-                //编辑和新增都会调用setItem,resetForm方法
-                //此时的item.form会有值,所有在此将重置item.form
                 this.$nextTick(() => {
-                    if (this.$refs[this.item.formName]) {
-                        this.$refs[this.item.formName].resetFields();
-                    }
-                    for (let item in this.item.form) {
-                        if (_.isArray(this.item.form[item])) {
-                            this.item.form[item] = [];
+                    //编辑和新增都会调用setItem,resetForm方法
+                    //此时的item.form会有值,所有在此将重置item.form
+                    this.$nextTick(() => {
+                        if (this.$refs[this.item.formName]) {
+                            this.$refs[this.item.formName].resetFields()
                         }
-                        else if (_.isObject(this.item.form[item])) {
-                            this.item.form[item] = {};
-                        }
-                        else {
-                            this.item.form[item] = '';
-                        }
-                    }
+                        deepClearObject(this.item.form);
+                    })
                 })
             }
             this.dialogFormVisible = true;
@@ -354,8 +349,13 @@ window.pageInit = function pageInit(options) {
          */
         handleSortChange({column, prop, order}) {
             let sort = (order === 'ascending' ? 'asc' : 'desc')
-            this.query.sortField = prop || ''
-            this.query.sortDirection = sort || ''
+            if (prop) {
+                this.query.sortField = prop
+                this.query.sortDirection = sort
+            } else {
+                delete this.query.sortField
+                delete this.query.sortDirection
+            }
             this._getList()
         },
         /**

@@ -33,3 +33,21 @@ export function mergeSameRow({row, column, rowIndex, columnIndex}) {
         }
     }
 }
+
+/**
+ * 深度递归清空对象
+ */
+export function deepClearObject(form) {
+    for (let item in form) {
+        if (_.isArray(form[item])) {
+            form[item] = []
+        } else if (_.isObject(form[item])) {
+            for (let objItem in form[item]){
+                deepClearObject(form[item][objItem])
+            }
+        } else {
+            form[item] = ''
+        }
+    }
+}
+
