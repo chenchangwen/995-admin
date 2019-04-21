@@ -93,7 +93,7 @@
             },
             methods: {
                 beforeEdit() {
-                    this.commonForm.form.userId = this.home.username;
+                    this.commonForm.form.userId = this.home.user.id;
                 },
                 getBackPath() {
                     return this.$route.matched[0].path + "/site";

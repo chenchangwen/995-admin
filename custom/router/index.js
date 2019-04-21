@@ -158,5 +158,10 @@ export let resourcesRouter = {
     '/sites/themes/**':{
         path: 'sites-themes',
         component: () => import('../views/resources/site/theme/index'),
+    },
+    //评论
+    '/comments/**':{
+        path: 'comment',
+        component: () => import('../views/resources/comment/list/index'),
     }
 };

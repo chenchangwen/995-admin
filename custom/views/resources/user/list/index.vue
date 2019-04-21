@@ -299,7 +299,7 @@
                         this.postForm = _.cloneDeep(this.changePasswordItem.form);
                         delete this.postForm.name;
                         delete this.postForm.id;
-                        this.postForm.userId = this.home.username;
+                        this.postForm.userId = this.home.user.id;
                     }
                 }
             },

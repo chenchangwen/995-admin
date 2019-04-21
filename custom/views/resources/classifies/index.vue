@@ -124,8 +124,8 @@
                 ])
             },
             created() {
-                this.commonForm.form.userId = this.home.username;
-                this.queryItem.userId.value = this.home.username;
+                this.commonForm.form.userId = this.home.user.id;
+                this.queryItem.userId.value = this.home.user.id;
             }
         }
     );

@@ -105,7 +105,7 @@ const actions = {
         return Promise.all([homeAPI.home(), homeAPI.menus()]).then(function (response) {
             let homeResponse = response[0];
             let menusResponse = response[1];
-            commit('SET_HOME', homeResponse.data.principal);
+            commit('SET_HOME', homeResponse.data);
             commit('user/SET_ROLES', 1, {root: true});
             return new Promise(resolve => {
                 let accessedRouters = getMenus(menusResponse.data);

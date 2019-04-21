@@ -203,7 +203,7 @@
                 beforeEdit(row) {
                     this.postForm = {
                         id: row.id,
-                        operationUserId: parseInt(this.home.username)
+                        operationUserId: parseInt(this.home.user.id)
                     };
                     if (this.dialogStatus === 'agree') {
                         this.postForm.summary ='';

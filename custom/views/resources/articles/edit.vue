@@ -107,7 +107,7 @@
                 fileReader.onload = () => {
                     let imageOptions = {
                         articleId: that.form.id,
-                        userId: that.home.username,
+                        userId: that.home.user.id,
                         base64: fileReader.result,
                     };
 
@@ -150,7 +150,7 @@
             },
             draft() {
                 let that = this;
-                articlesAPI.draft(this.home.username).then(function (response) {
+                articlesAPI.draft(this.home.user.id).then(function (response) {
                     that.buttonDisabled = false;
                     that.setForm(response.data);
                 })

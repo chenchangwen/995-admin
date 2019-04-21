@@ -181,7 +181,7 @@
                 beforeOpenDialog(row) {
                     if (this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonForm.form);
-                        this.postForm.userId = this.home.username;
+                        this.postForm.userId = this.home.user.id;
                         this.postForm.wechatMenu = {
                             params : JSON.stringify(this.commonForm.form.wechatMenu)
                         };

@@ -170,8 +170,10 @@ window.pageInit = function pageInit(options) {
             let that = this
             this._queryData(api.queryEdit, true, function (pgData, response) {
                 if (that.items) {
+                    //遍历items,即所有row.id和当前row.id对比正确后.更新当前row,那就不必重新请求接口获取数据
                     for (const v of that.items) {
-                        if (v[that.idKey || 'id'] === that.form.id) {
+                        //可能当前操作的row相对来说不是一级的,那么这个row的id相对来说就是不正确的通过page.idKey更换
+                        if (v[that.idKey || 'id'] === pgData.idKey || that.form.id) {
                             const index = that.items.indexOf(v)
                             if (pgData.isEditedAssignRow) {
                                 that.row = _.assignIn(that.row, response.data)

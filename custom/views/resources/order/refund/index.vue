@@ -185,7 +185,7 @@
                         this.postForm = {
                             id: row.id,
                             operatorSummary: '',
-                            operatorUserId: this.home.username
+                            operatorUserId: this.home.user.id
                         };
                         this.commonForm.pageData.apiQueryConfirmUrl = '/confirm';
                     }

@@ -7,3 +7,5 @@ Vue.use(viewer);
 
 import Cookies from 'js-cookie'
 global.Cookies = Cookies;
+
+
