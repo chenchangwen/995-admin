@@ -20,7 +20,7 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -72,10 +72,10 @@
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button  v-if="scope.row.status==='NEW'" type="primary" size="mini"
-                               @click="handleConfirm(scope.row,commonForm, commonForm.agreeOptions)">同意
+                               @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)">同意
                     </el-button>
                     <el-button  v-if="scope.row.status==='NEW'" type="danger" size="mini"
-                               @click="handleUpdate(scope.row,commonForm)">拒绝
+                               @click="handleUpdate(scope.row,commonItem)">拒绝
                     </el-button>
 
                 </template>
@@ -83,7 +83,7 @@
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'订单号'">
@@ -102,7 +102,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)"
+                <el-button type="primary" @click="saveData(commonItem)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -133,7 +133,7 @@
                     }
                 ],
                 //创建表单
-                commonForm: {
+                commonItem: {
                     form: {
                         total: '',
                         operatorSummary: '',
@@ -142,7 +142,7 @@
                     rules: {
                         operatorSummary: [{required: true, message: '拒绝原因不能为空', trigger: 'blur'}]
                     },
-                    formName: 'commonForm',
+                    formName: 'commonItem',
                     agreeOptions: {
                         dialogStatus: 'agree',
                         confirmOptions: {
@@ -180,19 +180,19 @@
                 ])
             },
             methods: {
-                beforeEdit(row) {
+                beforeEditRequest(row) {
                     if (this.dialogStatus === 'agree') {
                         this.postForm = {
                             id: row.id,
                             operatorSummary: '',
                             operatorUserId: this.home.user.id
                         };
-                        this.commonForm.pageData.apiQueryConfirmUrl = '/confirm';
+                        this.commonItem.pageData.apiQueryConfirmUrl = '/confirm';
                     }
                     if (this.dialogStatus === 'update') {
-                        this.postForm = _.cloneDeep(this.commonForm.form);
+                        this.postForm = _.cloneDeep(this.commonItem.form);
                         delete this.postForm.total;
-                        this.commonForm.pageData.apiQueryEditUrl = '/refuse';
+                        this.commonItem.pageData.apiQueryEditUrl = '/refuse';
                     }
                 }
             }

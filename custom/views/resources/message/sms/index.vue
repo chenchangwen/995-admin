@@ -10,7 +10,7 @@
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
       </el-button>
     </div>
-    <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+    <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
       <el-table-column align="left" label='消息ID' width="300">
         <template slot-scope="scope">
           {{scope.row.id}}

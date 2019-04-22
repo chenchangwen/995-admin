@@ -8,7 +8,7 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='主体' width="200">
                 <template slot-scope="scope">
                     {{scope.row.subject}}
@@ -136,7 +136,6 @@
     let page = new pageInit(
         {
             data: {
-                isEditedAssignRow: true,
                 replyEditItem: {
                     form: {
                         disable: '',
@@ -210,7 +209,7 @@
                         this.replyItem.form.commentId = row.id;
                     }
                 },
-                beforeEdit(row) {
+                beforeEditRequest(row) {
                     if (this.dialogStatus === 'reply') {
                         this.postForm = _.cloneDeep(this.replyItem.form);
                         delete this.postForm.target;

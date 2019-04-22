@@ -20,7 +20,7 @@
         </sl-vue-tree>
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" @open="handleOpen">
-            <el-form :rules="rules" ref="commonForm" :model="commonItem.form"
+            <el-form :rules="rules" ref="commonItem" :model="commonItem.form"
                      label-position="left"
                      label-width="80px"
                      style='margin-left:50px;'>
@@ -58,7 +58,7 @@
                         name: '',
                     },
                     key: '',
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 rules: {
                     name: [{required: true, message: '名称不能为空', trigger: 'blur'}]
@@ -161,7 +161,7 @@
                 },
                 handleTempSave() {
                     let that = this;
-                    this.$refs['commonForm'].validate((valid) => {
+                    this.$refs['commonItem'].validate((valid) => {
                         if (valid) {
                             let node = _.cloneDeep(that.form);
                             let selectedNode = that.selectedNode;

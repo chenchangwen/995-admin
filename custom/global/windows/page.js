@@ -21,13 +21,16 @@ window.pageInit = function pageInit(options) {
                 row: {},
                 //更新,删除时的对象id键
                 idKey: 'id',
+                //表格的全部行数据对象
                 items: null,
-                itemLoading: true,
+                //全部行数据是否加载中
+                itemsLoading: true,
                 total: null,
                 query: {
                     page: 0,
                     size: 10
                 },
+                //RSQL查询对象
                 queryItem: {},
                 dialogFormVisible: false,
                 dialogStatus: undefined,
@@ -65,19 +68,31 @@ window.pageInit = function pageInit(options) {
                     }
                 },
                 //是否编辑成功后合并row
-                //默认:false , 用最小的差去合并
+                //默认:true , 用最大的差去合并
                 //因为后端接口返回成功不一定返回一个row,所以根据情况去使用
                 //true:  合并 response.data 到 this.row
                 //false: 合并 this.form 到 this.row
-                isEditedAssignRow: false,
+                isEditedAssignRow: true,
                 //是否设置相同行标记
-                isSetSameRowSign: false
+                isSetSameRowSign: false,
+                //在mounted请求数据之前回调
+                beforeRequestMounted: '',
+                //在mounted请求数据之后回调
+                afterRequestMounted: '',
+                //不请求数据时回调,一般在新增页面
+                noRequestMounted: '',
+                //编辑数据请求之前回调
+                beforeEditRequest: '',
+                //打开dialog之前回调
+                //beforeOpenDialog: '',
+                //关闭dialog之后回调
+                //afterCloseDialog: ''
             };
             return _.assign({}, defaults, options.data || '');
         },
         mounted() {
-            if (typeof this.beforeMounted === 'function') {
-                this.beforeMounted(pageData);
+            if (_.isFunction(this.beforeRequestMounted)) {
+                this.beforeRequestMounted(pageData);
             }
             if (this.apiPrefix || this.apiQueryListUrl) {
                 this._getList()
@@ -89,6 +104,9 @@ window.pageInit = function pageInit(options) {
                 let item = this.initItemFormName;
                 if (item) {
                     deepClearObject(this[item].form);
+                }
+                if (_.isFunction(this.noRequestMounted)) {
+                    this.noRequestMounted(pageData);
                 }
             }
         }
@@ -113,17 +131,17 @@ window.pageInit = function pageInit(options) {
          * 请求列表数据
          */
         _getList() {
-            this.itemLoading = true;
+            this.itemsLoading = true;
             this.setQueryItem();
             let that = this;
-            api.queryList(this.query, pageData).then(response => {
-                this.items = response.data;
-                this.itemLoading = false;
-                if (this.isSetSameRowSign) {
-                    setSameRowSign.call(this, this.items)
+            this._queryData(api.queryList, false, function (pgData, response) {
+                that.items = response.data;
+                that.itemsLoading = false;
+                if (that.isSetSameRowSign) {
+                    setSameRowSign.call(that, that.items)
                 }
                 if (that.isQueryCount) {
-                    api.queryCount(this.query, pageData).then(response => {
+                    api.queryCount(that.query, pageData).then(response => {
                         that.total = response.data;
                     })
                 }
@@ -131,21 +149,22 @@ window.pageInit = function pageInit(options) {
         },
         /**
          * 请求详情数据
+         * 一般针对编辑页面
          */
         _getDetail() {
             let that = this
             if (this.apiQueryDetailUrl) {
                 api.queryDetail({id: this.$route.params.id}, pageData).then(response => {
-                    if (typeof that.onDetailLoaded === 'function') {
-                        that.onDetailLoaded(response)
+                    if (_.isFunction(that.afterRequestMounted)) {
+                        that.afterRequestMounted(response);
                     }
                 })
             }
             else if (this.apiQueryUrl) {
                 pageData.apiQueryUrl = this.apiQueryUrl;
                 api.queryUrl(pageData).then(response => {
-                    if (typeof that.onDetailLoaded === 'function') {
-                        that.onDetailLoaded(response)
+                    if (_.isFunction(that.afterRequestMounted)) {
+                        that.afterRequestMounted(response);
                     }
                 })
             }
@@ -181,8 +200,7 @@ window.pageInit = function pageInit(options) {
                                 that.row = _.assignIn(that.row, that.form)
                             }
 
-                            //关闭编辑窗口之后
-                            if (typeof that.afterCloseDialog === 'function') {
+                            if (_.isFunction(that.afterCloseDialog)) {
                                 that.afterCloseDialog(that.row)
                             }
 
@@ -194,12 +212,19 @@ window.pageInit = function pageInit(options) {
                 that._notify({message: '更新成功'})
             })
         },
-        _getBeforeEditPageData() {
-            if (typeof this.beforeEdit === 'function') {
-                this.beforeEdit(this.row)
+        /**
+         * 获取编辑请求数据之前的pageData
+         */
+        _getBeforeEditRequestPageData() {
+            if (_.isFunction(this.beforeEditRequest)) {
+                this.beforeEditRequest(this.row)
             }
-            let pgData = _.assign({}, pageData, this.item.pageData)
-            return pgData
+            if (this.item && this.item.pageData) {
+                return _.assign({}, pageData, this.item.pageData);
+            }
+            else {
+                return pageData;
+            }
         },
         _checkItem(item) {
             if (item && !this.item) {
@@ -209,19 +234,23 @@ window.pageInit = function pageInit(options) {
         /**
          * 请求接口数据
          */
-        _queryData(queryFn, isValidate, onSuccess) {
+        _queryData(queryFn, isValidate, onSuccess, query) {
             let that = this
 
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
-                let pgData = that._getBeforeEditPageData()
+                let pgData = that._getBeforeEditRequestPageData()
 
-                queryFn(that.postForm || that.form, pgData).then((response) => {
+                queryFn(query || (that.postForm || that.form), pgData).then((response) => {
                     if (typeof onSuccess === 'function') {
                         onSuccess(pgData, response)
                     }
                     that.dialogFormVisible = false
+                    that.dialogButtonLoading = false
+                    that.dialogButtonDisabled = false
+                }).catch(_ => {
+                    that.itemsLoading = false;
                     that.dialogButtonLoading = false
                     that.dialogButtonDisabled = false
                 })
@@ -261,7 +290,7 @@ window.pageInit = function pageInit(options) {
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
             this.setItem(item);
             this.row = _.cloneDeep(row);
-            let pgData = this._getBeforeEditPageData();
+            let pgData = this._getBeforeEditRequestPageData();
             let defaults = {
                 title: '提示',
                 text: '确定删除',
@@ -362,8 +391,7 @@ window.pageInit = function pageInit(options) {
             if (!this.form['id']) {
                 this.form['id'] = row['id'] || '';
             }
-            //打开编辑窗口之前执行
-            if (typeof this.beforeOpenDialog === 'function') {
+            if (_.isFunction(this.beforeOpenDialog)) {
                 this.beforeOpenDialog(row);
             }
         },
@@ -383,6 +411,7 @@ window.pageInit = function pageInit(options) {
         },
         /**
          * 设置查询对象
+         * 针对RSQL处理
          */
         setQueryItem() {
             let searchList = [];

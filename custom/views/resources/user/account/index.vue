@@ -12,7 +12,7 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -41,7 +41,7 @@
         <page></page>
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="editItem.rules" ref="editForm" :model="editItem.form" label-position="left"
+            <el-form :rules="editItem.rules" ref="editItem" :model="editItem.form" label-position="left"
                      v-if="dialogStatus ==='update'"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
@@ -130,7 +130,7 @@
                     rules: {
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     },
-                    formName: 'editForm'
+                    formName: 'editItem'
                 },
                 //查询对象
                 queryItem: {

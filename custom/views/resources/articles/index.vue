@@ -12,7 +12,7 @@
                        icon="el-icon-edit">新增
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
 
             <el-table-column label="标题" width="110" align="left">
                 <template slot-scope="scope">

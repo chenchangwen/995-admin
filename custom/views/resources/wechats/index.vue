@@ -6,11 +6,11 @@
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-            <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"-->
+            <!--<el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonItem)" type="primary"-->
                        <!--icon="el-icon-edit">新增-->
             <!--</el-button>-->
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='开发者ID' width="200">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -58,13 +58,13 @@
             </el-table-column>
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" v-if="dialogStatus==='update'">
-            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'开发者ID'" prop="id">
@@ -113,7 +113,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)" :loading="dialogButtonLoading"
+                <el-button type="primary" @click="saveData(commonItem)" :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
             </div>
@@ -126,7 +126,7 @@
     let page = new pageInit(
         {
             data: {
-                commonForm: {
+                commonItem: {
                     form: {
                         id:'',
                         name: '',
@@ -145,7 +145,7 @@
                         id: [{required: true, message: '开发者ID不能为空', trigger: 'blur'}],
                         secret: [{required: true, message: '秘钥不能为空', trigger: 'blur'}],
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 //查询对象
                 queryItem: {
@@ -180,10 +180,10 @@
             methods: {
                 beforeOpenDialog(row) {
                     if (this.dialogStatus === 'update') {
-                        this.postForm = _.cloneDeep(this.commonForm.form);
+                        this.postForm = _.cloneDeep(this.commonItem.form);
                         this.postForm.userId = this.home.user.id;
                         this.postForm.wechatMenu = {
-                            params : JSON.stringify(this.commonForm.form.wechatMenu)
+                            params : JSON.stringify(this.commonItem.form.wechatMenu)
                         };
                     }
                 },

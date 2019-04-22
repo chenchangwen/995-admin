@@ -20,7 +20,7 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -76,17 +76,17 @@
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" style="width: 80px" size="mini"
-                               @click="handleUpdate(scope.row,commonForm,commonForm.payOptions)">现金支付
+                               @click="handleUpdate(scope.row,commonItem,commonItem.payOptions)">现金支付
                     </el-button>
                     <el-button v-if="scope.row.status==='NEW'" type="default" style="width: 80px" size="mini"
-                               @click="handleUpdate(scope.row,commonForm, commonForm.cancelOptions)">取消订单
+                               @click="handleUpdate(scope.row,commonItem, commonItem.cancelOptions)">取消订单
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'订单号'">
@@ -102,7 +102,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)"
+                <el-button type="primary" @click="saveData(commonItem)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -143,21 +143,18 @@
                     }
                 ],
                 //创建表单
-                commonForm: {
+                commonItem: {
                     form: {
                         userId: '',
                         summary: '',
                         total: 0
                     },
-                    formName: 'commonForm',
+                    formName: 'commonItem',
                     payOptions: {
                         dialogStatus: 'pay',
                     },
                     cancelOptions: {
                         dialogStatus: 'cancel'
-                    },
-                    pageData: {
-                        isEditedAssignRow: true
                     }
                 },
                 //查询对象
@@ -185,15 +182,15 @@
                 apiPrefix: '/orders',
             },
             methods: {
-                beforeEdit(row) {
-                    this.postForm = _.cloneDeep(this.commonForm.form);
+                beforeEditRequest(row) {
+                    this.postForm = _.cloneDeep(this.commonItem.form);
                     delete this.postForm.summary;
                     delete this.postForm.total;
                     if (this.dialogStatus === 'pay') {
-                        this.commonForm.pageData.apiQueryEditUrl = '/pay/cash';
+                        this.commonItem.pageData.apiQueryEditUrl = '/pay/cash';
                     }
                     if (this.dialogStatus === 'cancel') {
-                        this.commonForm.pageData.apiQueryEditUrl = '/cancel';
+                        this.commonItem.pageData.apiQueryEditUrl = '/cancel';
                         delete this.postForm.userId;
                     }
                 }

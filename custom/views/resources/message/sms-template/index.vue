@@ -10,7 +10,7 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -47,13 +47,13 @@
             </el-table-column>
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'模版名称'" prop="name">
@@ -71,7 +71,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)" v-if="dialogStatus!=='create'"
+                <el-button type="primary" @click="saveData(commonItem)" v-if="dialogStatus!=='create'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -86,12 +86,12 @@
             data: {
                 test: '',
                 //创建表单
-                commonForm: {
+                commonItem: {
                     form: {
                         enable: true,
                         name: '',
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 //查询对象
                 queryItem: {
@@ -112,9 +112,9 @@
                 apiPrefix: '/sms/templates',
             },
             methods: {
-                beforeEdit(row) {
+                beforeEditRequest(row) {
                     if (this.dialogStatus === 'update') {
-                        this.postForm = _.cloneDeep(this.commonForm.form);
+                        this.postForm = _.cloneDeep(this.commonItem.form);
                         delete this.postForm.name;
                     }
                 },

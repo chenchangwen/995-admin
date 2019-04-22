@@ -7,7 +7,7 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='交易主体' width="200">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.subject}}</p>
@@ -68,7 +68,7 @@
     let page = new pageInit(
         {
             data: {
-                commonForm: {
+                commonItem: {
                     form: {
                         //名称
                         name: '',
@@ -76,7 +76,7 @@
                     rules: {
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 //查询对象
                 queryItem: {

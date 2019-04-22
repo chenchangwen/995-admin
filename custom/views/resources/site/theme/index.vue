@@ -6,11 +6,11 @@
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonItem)" type="primary"
                        icon="el-icon-edit">新增
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -50,13 +50,13 @@
 
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonForm)">编辑</el-button>
+                    <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'名称'" prop="name">
@@ -96,7 +96,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)"
+                <el-button type="primary" @click="saveData(commonItem)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -127,7 +127,7 @@
                         text: 'DOCUMENT'
                     }
                 ],
-                commonForm: {
+                commonItem: {
                     form: {
                         name: '',
                         type: '',
@@ -139,7 +139,7 @@
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                         type: [{required: true, message: '请选择类型', trigger: 'blur'}],
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 //查询对象
                 queryItem: {

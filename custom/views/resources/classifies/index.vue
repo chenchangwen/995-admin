@@ -1,11 +1,11 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonForm)" type="primary"
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonItem)" type="primary"
                        icon="el-icon-edit">新增主题
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -35,7 +35,7 @@
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
 
-            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'用户ID'">
@@ -53,7 +53,7 @@
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="saveData(commonForm)" v-if="dialogStatus==='update'"
+                <el-button type="primary" @click="saveData(commonItem)" v-if="dialogStatus==='update'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -68,7 +68,7 @@
     let page = new pageInit(
         {
             data: {
-                commonForm: {
+                commonItem: {
                     form: {
                         subject: '',
                         userId: ''
@@ -76,7 +76,7 @@
                     rules: {
                         subject: [{required: true, message: '主题不能为空', trigger: 'blur'}],
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 queryItem: {
                     userId: {
@@ -124,7 +124,7 @@
                 ])
             },
             created() {
-                this.commonForm.form.userId = this.home.user.id;
+                this.commonItem.form.userId = this.home.user.id;
                 this.queryItem.userId.value = this.home.user.id;
             }
         }

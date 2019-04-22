@@ -10,7 +10,7 @@
                        icon="el-icon-edit">新增
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -54,7 +54,7 @@
                 </el-form-item>
             </el-form>
 
-            <el-form :rules="editItem.rules" ref="editForm" :model="editItem.form" label-position="left"
+            <el-form :rules="editItem.rules" ref="editItem" :model="editItem.form" label-position="left"
                      label-width="80px" v-if="dialogStatus ==='update'"
                      style='margin-left:50px;'>
                 <el-form-item :label="'Id'">
@@ -110,7 +110,7 @@
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     },
                     key: 1,
-                    formName: 'editForm'
+                    formName: 'editItem'
                 },
                 //查询对象
                 queryItem: {

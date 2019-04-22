@@ -17,7 +17,7 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
             <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -72,17 +72,17 @@
             <el-table-column align="left" :label="'操作'">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
-                               @click="handleUpdate(scope.row,commonForm, commonForm.agreeOptions)">通过
+                               @click="handleUpdate(scope.row,commonItem, commonItem.agreeOptions)">通过
                     </el-button>
                     <el-button v-if="scope.row.status==='NEW'" type="danger" size="mini"
-                               @click="handleUpdate(scope.row,commonForm, commonForm.refuseOptions)">拒绝
+                               @click="handleUpdate(scope.row,commonItem, commonItem.refuseOptions)">拒绝
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
         <page></page>
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-            <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="left"
+            <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="150px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'主体'">
@@ -116,7 +116,7 @@
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveData(commonForm)"
+                <el-button type="primary" @click="saveData(commonItem)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -146,7 +146,7 @@
                         label: 'REFUSE'
                     }
                 ],
-                commonForm: {
+                commonItem: {
                     form: {
                         centSubject: '',
                         centSubjectId: '',
@@ -167,10 +167,7 @@
                     refuseOptions: {
                         dialogStatus: 'refuse',
                     },
-                    pageData: {
-                        isEditedAssignRow: true
-                    },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 },
                 //查询对象
                 queryItem: {
@@ -200,18 +197,18 @@
                 this.textMap.refuse = '拒绝提现';
             },
             methods: {
-                beforeEdit(row) {
+                beforeEditRequest(row) {
                     this.postForm = {
                         id: row.id,
                         operationUserId: parseInt(this.home.user.id)
                     };
                     if (this.dialogStatus === 'agree') {
                         this.postForm.summary ='';
-                        this.commonForm.pageData.apiQueryEditUrl = '/confirm';
+                        this.commonItem.pageData.apiQueryEditUrl = '/confirm';
                     }
                     if (this.dialogStatus === 'refuse') {
-                        this.postForm.summary = this.commonForm.form.summary;
-                        this.commonForm.pageData.apiQueryEditUrl = '/refuse';
+                        this.postForm.summary = this.commonItem.form.summary;
+                        this.commonItem.pageData.apiQueryEditUrl = '/refuse';
                     }
                 }
             }

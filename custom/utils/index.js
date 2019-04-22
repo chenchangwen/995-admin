@@ -49,3 +49,15 @@ export function deepClearObject(form) {
     }
 }
 
+/**
+ * 解析JSON
+ * 返回 obj || 数组
+ */
+export function getJsonToArray(str, obj) {
+    if(str){
+        return JSON.parse(str);
+    }
+    else{
+        return obj || [];
+    }
+}

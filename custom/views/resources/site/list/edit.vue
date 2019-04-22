@@ -1,48 +1,48 @@
 <template>
     <div class="app-container">
-        <el-form :rules="commonForm.rules" ref="commonForm" :model="commonForm.form" label-position="right"
+        <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="right"
                  label-width="120px"
                  class="detail-form-box">
             <el-form-item :label="'网站名称'" prop="name">
-                <el-input v-model="commonForm.form.name" placeholder="网站名称"></el-input>
+                <el-input v-model="commonItem.form.name" placeholder="网站名称"></el-input>
             </el-form-item>
 
             <el-form-item :label="'主题'" prop="siteTheme">
-                <select-item :value.sync="commonForm.form.siteTheme" :options="themeOptions"></select-item>
+                <select-item :value.sync="commonItem.form.siteTheme" :options="themeOptions"></select-item>
             </el-form-item>
 
             <el-form-item :label="'摘要'">
-                <el-input v-model="commonForm.form.summary" placeholder="摘要"></el-input>
+                <el-input v-model="commonItem.form.summary" placeholder="摘要"></el-input>
             </el-form-item>
 
             <el-form-item :label="'网址'">
-                <el-input v-model="commonForm.form.domain" placeholder="网址"></el-input>
+                <el-input v-model="commonItem.form.domain" placeholder="网址"></el-input>
             </el-form-item>
 
             <el-form-item :label="'联系电话'">
-                <el-input v-model="commonForm.form.siteContact.phones" placeholder="联系电话"></el-input>
+                <el-input v-model="commonItem.form.siteContact.phones" placeholder="联系电话"></el-input>
             </el-form-item>
 
             <el-form-item :label="'联系地址'">
-                <el-input v-model="commonForm.form.siteContact.address" placeholder="联系地址"></el-input>
+                <el-input v-model="commonItem.form.siteContact.address" placeholder="联系地址"></el-input>
             </el-form-item>
 
             <el-form-item :label="'邮箱'">
-                <el-input v-model="commonForm.form.siteContact.emails" placeholder="邮箱"></el-input>
+                <el-input v-model="commonItem.form.siteContact.emails" placeholder="邮箱"></el-input>
             </el-form-item>
 
             <el-form-item :label="'网站备案号'">
-                <el-input v-model="commonForm.form.registrationNo" placeholder="网站备案号"></el-input>
+                <el-input v-model="commonItem.form.registrationNo" placeholder="网站备案号"></el-input>
             </el-form-item>
 
             <el-form-item :label="'关于我们'" style="margin-bottom: 30px;">
-                <Tinymce ref="editor" :height="400" v-model="commonForm.form.siteAbout.detail"/>
+                <Tinymce ref="editor" :height="400" v-model="commonItem.form.siteAbout.detail"/>
             </el-form-item>
 
         </el-form>
 
         <fix-bar :back-path="getBackPath()">
-            <el-button type="primary" @click="saveData(commonForm)">更新</el-button>
+            <el-button type="primary" @click="saveData(commonItem)">更新</el-button>
         </fix-bar>
     </div>
 </template>
@@ -67,8 +67,8 @@
                 },
                 apiQueryAddUrl: '/sites/add',
                 apiQueryEditUrl: '/sites/edit/',
-                initItemFormName: 'commonForm',
-                commonForm: {
+                initItemFormName: 'commonItem',
+                commonItem: {
                     form: {
                         name: '',
                         summary: '',
@@ -88,22 +88,22 @@
                         siteTheme: [{required: true, message: '请选择主题', trigger: 'blur'}],
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}]
                     },
-                    formName: 'commonForm'
+                    formName: 'commonItem'
                 }
             },
             methods: {
-                beforeEdit() {
-                    this.commonForm.form.userId = this.home.user.id;
+                beforeEditRequest() {
+                    this.commonItem.form.userId = this.home.user.id;
                 },
                 getBackPath() {
                     return this.$route.matched[0].path + "/site";
                 },
-                beforeMounted() {
+                beforeRequestMounted() {
                     this.apiQueryUrl = '/sites/' + this.$route.params.id;
                 },
-                onDetailLoaded(response) {
+                afterRequestMounted(response) {
                     let data = response.data;
-                    this.commonForm.form = {
+                    this.commonItem.form = {
                         id: data.id,
                         name: data.name,
                         summary: data.summary,
