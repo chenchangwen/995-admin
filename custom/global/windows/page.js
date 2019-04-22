@@ -302,7 +302,7 @@ window.pageInit = function pageInit(options) {
             this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
                 let that = this;
                 let query = {
-                    id: row[that.idKey]
+                    id: row[pgData.idKey || that.form.id]
                 };
                 api.queryConfirm(this.postForm || query, pgData).then((response) => {
                     that._getList();
