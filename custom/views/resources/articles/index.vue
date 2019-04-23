@@ -53,7 +53,7 @@
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleEdit(scope.row.id)">编辑</el-button>
-                    <el-button size="mini" type="danger" @click="handleConfirm(scope.row.id)">删除</el-button>
+                    <el-button size="mini" type="danger" @click="handleConfirm(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -74,6 +74,7 @@
                     }
                 },
                 apiPrefix: '/articles',
+                apiQueryConfirmUrl:'/delete'
             },
             methods: {
                 handleEdit(id){

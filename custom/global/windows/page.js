@@ -297,7 +297,7 @@ window.pageInit = function pageInit(options) {
                 return false
             }
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
-            this.setItem(item);
+            this.setItem(item || row)
             this.row = _.cloneDeep(row);
             let pgData = this._getBeforeEditRequestPageData();
             let defaults = {
