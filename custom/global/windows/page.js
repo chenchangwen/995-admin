@@ -28,7 +28,7 @@ window.pageInit = function pageInit(options) {
                 total: null,
                 query: {
                     page: 0,
-                    size: 10
+                    size: 20
                 },
                 //RSQL查询对象
                 queryItem: {},
@@ -47,7 +47,6 @@ window.pageInit = function pageInit(options) {
                 apiQueryListUrl: '',
                 apiQueryAddUrl: '',
                 apiQueryEditUrl: '',
-                apiQueryDeleteUrl: '',
                 apiQueryCountUrl: '',
                 apiQueryConfirmUrl: '',
                 apiQueryUrl: '',
@@ -74,19 +73,7 @@ window.pageInit = function pageInit(options) {
                 //false: 合并 this.form 到 this.row
                 isEditedAssignRow: true,
                 //是否设置相同行标记
-                isSetSameRowSign: false,
-                //在mounted请求数据之前回调
-                beforeRequestMounted: '',
-                //在mounted请求数据之后回调
-                afterRequestMounted: '',
-                //不请求数据时回调,一般在新增页面
-                noRequestMounted: '',
-                //编辑数据请求之前回调
-                beforeEditRequest: '',
-                //打开dialog之前回调
-                //beforeOpenDialog: '',
-                //关闭dialog之后回调
-                //afterCloseDialog: ''
+                isSetSameRowSign: false
             };
             return _.assign({}, defaults, options.data || '');
         },
@@ -117,6 +104,24 @@ window.pageInit = function pageInit(options) {
 
     //页面基础方法
     let methods = {
+        //在mounted请求数据之前回调
+        beforeRequestMounted: () => {
+        },
+        //在mounted请求数据之后回调
+        afterRequestMounted: () => {
+        },
+        //不请求数据时回调,一般在新增页面
+        noRequestMounted: () => {
+        },
+        //编辑数据请求之前回调
+        beforeEditRequest: () => {
+        },
+        //打开dialog之前回调
+        beforeOpenDialog: () => {
+        },
+        //关闭dialog之后回调
+        afterCloseDialog: () => {
+        },
         _notify(options) {
             let defaults = {
                 title: '成功',
@@ -238,13 +243,9 @@ window.pageInit = function pageInit(options) {
                 that.dialogButtonDisabled = true
                 let pgData = that._getBeforeEditRequestPageData()
                 queryFn(query || (that.postForm || that.form), pgData).then((response) => {
-                    let data = response.data
-                    if (data.success) {
-                        if (_.isFunction(onRequestSuccess)) {
-                            onRequestSuccess(pgData, response)
-                        }
-                    } else {
-                        that.$message.error(data.message)
+                    let data = response.data;
+                    if (_.isFunction(onRequestSuccess)) {
+                        onRequestSuccess(pgData, response)
                     }
                     that.dialogFormVisible = false
                     that.dialogButtonLoading = false
