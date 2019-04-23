@@ -145,7 +145,7 @@ window.pageInit = function pageInit(options) {
                         that.total = response.data;
                     })
                 }
-            })
+            },that.query)
         },
         /**
          * 请求详情数据
@@ -153,21 +153,18 @@ window.pageInit = function pageInit(options) {
          */
         _getDetail() {
             let that = this
-            if (this.apiQueryDetailUrl) {
-                api.queryDetail({id: this.$route.params.id}, pageData).then(response => {
-                    if (_.isFunction(that.afterRequestMounted)) {
-                        that.afterRequestMounted(response);
-                    }
-                })
+            let query = {
+                id: this.$route.params.id
             }
-            else if (this.apiQueryUrl) {
-                pageData.apiQueryUrl = this.apiQueryUrl;
-                api.queryUrl(pageData).then(response => {
-                    if (_.isFunction(that.afterRequestMounted)) {
-                        that.afterRequestMounted(response);
-                    }
-                })
+            if (this.apiQueryUrl) {
+                query = ''
             }
+            let queryAPI = query ? api.queryDetail : query
+            this._queryData(queryAPI, false, function(pgData, response) {
+                if (_.isFunction(that.afterRequestMounted)) {
+                    that.afterRequestMounted(response)
+                }
+            }, query)
         },
         _createData() {
             let that = this
@@ -234,17 +231,20 @@ window.pageInit = function pageInit(options) {
         /**
          * 请求接口数据
          */
-        _queryData(queryFn, isValidate, onSuccess, query) {
+        _queryData(queryFn, isValidate, onRequestSuccess, query) {
             let that = this
-
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
                 let pgData = that._getBeforeEditRequestPageData()
-
                 queryFn(query || (that.postForm || that.form), pgData).then((response) => {
-                    if (typeof onSuccess === 'function') {
-                        onSuccess(pgData, response)
+                    let data = response.data
+                    if (data.success) {
+                        if (_.isFunction(onRequestSuccess)) {
+                            onRequestSuccess(pgData, response)
+                        }
+                    } else {
+                        that.$message.error(data.message)
                     }
                     that.dialogFormVisible = false
                     that.dialogButtonLoading = false
@@ -282,7 +282,7 @@ window.pageInit = function pageInit(options) {
             this.setDialogItem(this.row);
             this.resetForm();
         },
-        handleDelete(row, item, options) {
+        handleConfirm(row, item, options) {
             let that = this;
             if (!row[that.idKey]) {
                 return false
@@ -300,22 +300,17 @@ window.pageInit = function pageInit(options) {
             };
             let confirm = _.assignIn(defaults, (options && options.confirmOptions));
             this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
-                let that = this;
+                let that = this
                 let query = {
                     id: row[pgData.idKey || that.form.id]
-                };
-                api.queryConfirm(this.postForm || query, pgData).then((response) => {
-                    that._getList();
-                });
+                }
+                that.postForm = query
+                this._queryData(api.queryConfirm, false, function() {
+                    that._getList()
+                })
             }).catch(_ => {
 
             });
-        },
-        /**
-         * 与handleDelete逻辑一样,但更具体的处理需要confirm确认类api.
-         */
-        handleConfirm(row, item, options) {
-            this.handleDelete(row, item, options);
         },
         /**
          * 请求保存数据

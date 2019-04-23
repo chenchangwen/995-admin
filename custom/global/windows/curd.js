@@ -26,14 +26,6 @@ window.curd.queryEdit = function (query, pageData) {
     })
 };
 
-window.curd.queryRemove = function (query, pageData) {
-    return request({
-        url: pageData.apiPrefix + (pageData.apiQueryDeleteUrl || '/delete'),
-        method: 'post',
-        data: query
-    })
-};
-
 window.curd.queryCount = function (params, pageData) {
     return request({
         url: pageData.apiPrefix + (pageData.apiQueryCountUrl || '/count'),
@@ -50,7 +42,7 @@ window.curd.queryConfirm = function (query, pageData) {
     })
 };
 
-window.curd.queryDetail = function (pageData) {
+window.curd.queryDetail = function (query, pageData) {
     return request({
         url: pageData.apiPrefix + (pageData.apiQueryDetailUrl),
         method: 'get',

@@ -47,7 +47,7 @@
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
-                    <el-button type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+                    <el-button type="danger" size="mini" @click="handleConfirm(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
