@@ -48,6 +48,7 @@
                 slVueTree
             },
             data: {
+                isNoMountedRequest: true,
                 originData: '',
                 isRootLevel: false,
                 selectedNode: '',
@@ -110,35 +111,7 @@
                         method: 'post',
                         data: this.originData
                     };
-                    let old = [
-                        {
-                            "id": "7ecc6a73-880e-4e59-92db-22f9bd0945ab",
-                            "subject": "commodity",
-                            "userId": 1,
-                            "classifies": [
-                                {
-                                    "id": "2c9139606a25abdf016a25ac0bb8002a",
-                                    "classifySubjectId": "7ecc6a73-880e-4e59-92db-22f9bd0945ab",
-                                    "name": "外套",
-                                    "image": null,
-                                    "parentId": null,
-                                    "children": [],
-                                    "index": 0,
-                                    "floor": 0
-                                },
-                                {
-                                    "id": "2c9139606a25abdf016a25ac0bb8002b",
-                                    "classifySubjectId": "7ecc6a73-880e-4e59-92db-22f9bd0945ab",
-                                    "name": "裤子",
-                                    "image": null,
-                                    "parentId": null,
-                                    "children": [],
-                                    "index": 1,
-                                    "floor": 0
-                                }],
-                            "updateTime": "2019-04-16 18:23:13",
-                            "createTime": "2019-04-16 18:23:13"
-                        }];
+
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
                     let that = this;
@@ -239,7 +212,7 @@
                 },
                 queryClassifies() {
                     let options = {
-                        url: '/classifies/subjects',
+                        url: 'classifies/subjects',
                         method: 'get',
                         params: {
                             search: 'id==' + this.$route.params.id

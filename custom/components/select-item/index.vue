@@ -3,8 +3,8 @@
         <el-option v-if="items"
                    v-for="item in items"
                    :key="item.id"
-                   :label="item.name"
-                   :value="item">
+                   :label="item[labelKey]"
+                   :value="item[labelValue]">
         </el-option>
 
     </el-select>
@@ -18,6 +18,14 @@
             options: {
                 type: Object,
                 default: {}
+            },
+            labelKey:{
+                type :String,
+                default: 'name'
+            },
+            valueKey:{
+                type :String,
+                default: 'value'
             }
         },
         data() {

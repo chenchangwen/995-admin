@@ -1,14 +1,33 @@
 <template>
     <div class="app-container">
         <el-form :rules="rules" ref="form" :model="form" label-position="left"
-                 label-width="80px"
+                 label-width="110px"
                  class="detail-form-box">
             <el-form-item :label="'标题'" prop="title">
                 <el-input v-model="form.title" placeholder="标题"></el-input>
             </el-form-item>
 
+            <el-form-item :label="'分类'">
+                <select-classifies :value.sync="form.classifies"></select-classifies>
+            </el-form-item>
+
+            <el-form-item :label="'状态'">
+                <el-radio-group v-model="form.status">
+                    <el-radio :label="'DRAFT'">草稿</el-radio>
+                    <el-radio :label="'LAUNCH'">发布</el-radio>
+                </el-radio-group>
+            </el-form-item>
+
             <el-form-item :label="'作者'">
                 <el-input v-model="form.author" placeholder="作者"></el-input>
+            </el-form-item>
+
+            <el-form-item :label="'来源名称'">
+                <el-input v-model="form.sourceName" placeholder="来源名称"></el-input>
+            </el-form-item>
+
+            <el-form-item :label="'来源链接'">
+                <el-input v-model="form.sourceLink" placeholder="来源链接"></el-input>
             </el-form-item>
 
             <el-form-item :label="'缩略图'">
@@ -21,8 +40,16 @@
 
             </el-form-item>
 
-
             <el-form-item :label="'置顶'">
+                <el-switch
+                    v-model="form.commentAble"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949">
+                </el-switch>
+            </el-form-item>
+
+
+            <el-form-item :label="'评论已打开'">
                 <el-switch
                         v-model="form.top"
                         active-color="#13ce66"
@@ -42,7 +69,7 @@
 
             <el-form-item class="detail-btn-box">
                 <el-button size="medium" type="primary" :loading="buttonLoading" :disabled="buttonDisabled"
-                           @click="handleUpdate">更新
+                           @click="handleUpdate">保存
                 </el-button>
                 <el-button size="medium" type="default" @click="backToList">返回</el-button>
             </el-form-item>
@@ -56,9 +83,10 @@
     import Tinymce from '@/components/Tinymce'
     import {mapGetters} from 'vuex';
     import articlesAPI from '../../../api/articles';
+    import SelectClassifies from "../../../components/select-classifies";
 
     export default {
-        components: {Tinymce},
+        components: {SelectClassifies, Tinymce},
         data() {
             return {
                 cover: {
@@ -82,13 +110,17 @@
                     //引用名称
                     sourceName: '',
                     //是否置顶
-                    top: false
+                    top: '',
+                    commentAble: '',
+                    classifies: [],
+                    status: 'DRAFT'
                 },
                 rules: {
                     author: [{required: true, message: '作者不能为空', trigger: 'blur'}],
                     summary: [{required: true, message: '摘要不能为空', trigger: 'blur'}],
                     title: [{required: true, message: '标题不能为空', trigger: 'blur'}]
                 },
+                classifiesOptions:'',
                 buttonDisabled: true,
                 buttonLoading: false
             }

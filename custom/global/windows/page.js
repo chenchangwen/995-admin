@@ -73,11 +73,17 @@ window.pageInit = function pageInit(options) {
                 //false: 合并 this.form 到 this.row
                 isEditedAssignRow: true,
                 //是否设置相同行标记
-                isSetSameRowSign: false
+                isSetSameRowSign: false,
+                //是否mounted请求数据
+                isNoMountedRequest: false
+
             };
             return _.assign({}, defaults, options.data || '');
         },
         mounted() {
+            if (this.isNoMountedRequest)
+                return false;
+
             if (_.isFunction(this.beforeRequestMounted)) {
                 this.beforeRequestMounted(pageData);
             }
@@ -150,7 +156,7 @@ window.pageInit = function pageInit(options) {
                         that.total = response.data;
                     })
                 }
-            },that.query)
+            }, that.query)
         },
         /**
          * 请求详情数据
@@ -165,7 +171,7 @@ window.pageInit = function pageInit(options) {
                 query = ''
             }
             let queryAPI = query ? api.queryDetail : query
-            this._queryData(queryAPI, false, function(pgData, response) {
+            this._queryData(queryAPI, false, function (pgData, response) {
                 if (_.isFunction(that.afterRequestMounted)) {
                     that.afterRequestMounted(response)
                 }
@@ -238,6 +244,7 @@ window.pageInit = function pageInit(options) {
          */
         _queryData(queryFn, isValidate, onRequestSuccess, query) {
             let that = this
+
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
@@ -274,6 +281,7 @@ window.pageInit = function pageInit(options) {
         handleCreate(item, options) {
             this.dialogStatus = (options && options.dialogStatus) || 'create';
             this.setItem(item);
+            this.setDialogItem();
             this.resetForm();
         },
         handleUpdate(row, item, options) {
@@ -306,7 +314,7 @@ window.pageInit = function pageInit(options) {
                     id: row[pgData.idKey || that.form.id]
                 }
                 that.postForm = query
-                this._queryData(api.queryConfirm, false, function() {
+                this._queryData(api.queryConfirm, false, function () {
                     that._getList()
                 })
             }).catch(_ => {
@@ -380,12 +388,13 @@ window.pageInit = function pageInit(options) {
          * 设置窗口对象
          */
         setDialogItem(row) {
-            this.postForm = '';
-            for (let item in this.form) {
-                this.form[item] = _.isBoolean(row[item]) ? row[item] : (row[item] || '');
-            }
-            if (!this.form['id']) {
-                this.form['id'] = row['id'] || '';
+            if (row) {
+                for (let item in this.form) {
+                    this.form[item] = _.isBoolean(row[item]) ? row[item] : (row[item] || '');
+                }
+                if (!this.form['id']) {
+                    this.form['id'] = row['id'] || '';
+                }
             }
             if (_.isFunction(this.beforeOpenDialog)) {
                 this.beforeOpenDialog(row);

@@ -39,21 +39,17 @@
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
                 <el-form-item :label="'用户ID'">
-                    {{form.userId}}
+                    {{userId}}
                 </el-form-item>
                 <el-form-item :label="'主题'" prop="subject">
-                    <el-input v-model="form.subject" placeholder="主题"></el-input>
+                    <el-input v-model="commonItem.form.subject" placeholder="主题"></el-input>
                 </el-form-item>
 
             </el-form>
 
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取消</el-button>
-                <el-button type="primary" @click="customCreateData" v-if="dialogStatus==='create'"
-                           :loading="dialogButtonLoading"
-                           :disabled="dialogButtonDisabled">确认
-                </el-button>
-                <el-button type="primary" @click="saveData(commonItem)" v-if="dialogStatus==='update'"
+                <el-button type="primary" @click="saveData(commonItem)"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -78,41 +74,17 @@
                     },
                     formName: 'commonItem'
                 },
-                queryItem: {
-                    userId: {
-                        key: 'userId',
-                        operation: '==',
-                        value: '',
-                        predicate: ";"
-                    },
-                },
                 isQueryCount: false,
-                apiPrefix: '/classifies/subjects',
-                apiQueryAddUrl: '/edit',
+                apiQueryListUrl: '/classifies/subjects',
+                apiQueryAddUrl: '/classifies/subjects/add',
+                userId: ''
             },
             methods: {
-                customCreateData() {
-                    let that = this;
+                beforeEditRequest(){
                     let form = _.cloneDeep(this.form);
                     form.classifies = [];
-                    form.userId = this.queryItem.userId.value;
-                    this.$refs[this.item.formName].validate((valid) => {
-                        if (valid) {
-                            request({
-                                url: '/classifies/subjects/add',
-                                method: 'post',
-                                data: form
-                            }).then(function (response) {
-                                that.dialogFormVisible = false;
-                                that.$notify({
-                                    title: '成功',
-                                    message: '更新成功',
-                                    type: 'success',
-                                    duration: 2000
-                                })
-                            });
-                        }
-                    })
+                    form.userId = this.home.user.id;
+                    this.postForm = form;
                 },
                 handleUpdate(row){
                     this.$router.push(this.$route.path + "/edit/" +  row.id);
@@ -124,8 +96,7 @@
                 ])
             },
             created() {
-                this.commonItem.form.userId = this.home.user.id;
-                this.queryItem.userId.value = this.home.user.id;
+                this.userId = this.home.user.id;
             }
         }
     );

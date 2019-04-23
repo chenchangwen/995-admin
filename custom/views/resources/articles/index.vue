@@ -14,9 +14,9 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
 
-            <el-table-column label="标题" width="110" align="left">
+            <el-table-column label="id" width="300" align="left">
                 <template slot-scope="scope">
-                    {{scope.row.title}}
+                    {{scope.row.id}}
                 </template>
             </el-table-column>
 
@@ -25,12 +25,30 @@
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column label="作者" width="110" align="left">
+
+            <el-table-column label="作者" width="150" align="left">
                 <template slot-scope="scope">
                     {{scope.row.author}}
                 </template>
             </el-table-column>
 
+            <el-table-column align="left" label='置顶' width="100">
+                <template slot-scope="scope">
+                    <i :class="scope.row.top ? 'el-icon-success' : 'el-icon-error'"></i>
+                </template>
+            </el-table-column>
+
+            <el-table-column label="状态" width="150" align="left">
+                <template slot-scope="scope">
+                    {{scope.row.status}}
+                </template>
+            </el-table-column>
+
+            <el-table-column label="标题" width="350" align="left">
+                <template slot-scope="scope">
+                    {{scope.row.title}}
+                </template>
+            </el-table-column>
 
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
