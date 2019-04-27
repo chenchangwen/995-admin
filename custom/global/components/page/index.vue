@@ -14,14 +14,14 @@
         methods: {
             handleSizeChange(val) {
                 this.$parent.query.size = val;
-                this.$parent.getList()
+                this.$parent._getList()
             },
             handleCurrentChange(val) {
                 if (val > 0) {
                     val = val - 1;
                 }
                 this.$parent.query.page = val;
-                this.$parent.getList();
+                this.$parent._getList();
             }
         },
         mounted(){
