@@ -46,9 +46,21 @@ export function articles(id) {
 }
 
 /**
- * 添加文章头图片
+ * 缩略图
  */
-export function addImage(options) {
+export function addCoverImage(options) {
+    return request({
+        url: '/articles/medium/image/add/base64',
+        method: 'post',
+        data: options
+    })
+}
+
+/**
+ * 内容图
+ */
+
+export function addContentImage(options) {
     return request({
         url: '/articles/medium/add/base64',
         method: 'post',
@@ -62,5 +74,6 @@ export default {
     draftNew,
     edit,
     articles,
-    addImage
+    addCoverImage,
+    addContentImage
 }

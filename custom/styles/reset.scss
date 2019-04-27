@@ -1,0 +1,9 @@
+.editor-custom-btn-container {
+    .el-upload-list {
+        display: none;
+    }
+}
+
+.el-upload-list--picture-card .el-upload-list__item-status-label {
+    display: none !important;
+}

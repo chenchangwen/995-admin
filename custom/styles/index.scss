@@ -1,5 +1,5 @@
 @import '~sl-vue-tree/dist/sl-vue-tree-dark.css';
-
+@import "reset";
 .sl-vue-tree-sidebar {
     margin-left: 10px;
 }
@@ -34,4 +34,8 @@
     bottom: 0;
     background: none;
     margin-bottom: 0;
+}
+
+.el-loading-mask{
+    z-index: 1;
 }

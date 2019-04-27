@@ -31,13 +31,7 @@
             </el-form-item>
 
             <el-form-item :label="'缩略图'">
-                <el-upload action=""
-                           list-type="picture-card"
-                           :http-request="httpRequest"
-                           :file-list="cover.fileList">
-                    <i class="el-icon-upload"></i>
-                </el-upload>
-
+                <file-upload :http-request="httpRequest" :file-list="cover.fileList"></file-upload>
             </el-form-item>
 
             <el-form-item :label="'置顶'">
@@ -51,9 +45,9 @@
 
             <el-form-item :label="'评论已打开'">
                 <el-switch
-                        v-model="form.top"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949">
+                    v-model="form.top"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949">
                 </el-switch>
             </el-form-item>
 
@@ -64,7 +58,8 @@
 
 
             <el-form-item :label="'文章详情'" style="margin-bottom: 30px;">
-                <Tinymce ref="editor" :height="400" v-model="form.articleDetail.content"/>
+                <Tinymce ref="editor" :height="400" v-model="form.articleDetail.content" :http-request="httpRequest"
+                         :is-from-edit="true"/>
             </el-form-item>
 
             <el-form-item class="detail-btn-box">
@@ -80,13 +75,14 @@
 </template>
 
 <script>
-    import Tinymce from '@/components/Tinymce'
+    import Tinymce from '../../../components/Tinymce'
+    import fileUpload from '../../../components/file-upload';
     import {mapGetters} from 'vuex';
     import articlesAPI from '../../../api/articles';
     import SelectClassifies from "../../../components/select-classifies";
 
     export default {
-        components: {SelectClassifies, Tinymce},
+        components: {SelectClassifies, Tinymce, fileUpload},
         data() {
             return {
                 cover: {
@@ -120,7 +116,7 @@
                     summary: [{required: true, message: '摘要不能为空', trigger: 'blur'}],
                     title: [{required: true, message: '标题不能为空', trigger: 'blur'}]
                 },
-                classifiesOptions:'',
+                classifiesOptions: '',
                 buttonDisabled: true,
                 buttonLoading: false
             }
@@ -129,7 +125,8 @@
             backToList() {
                 this.$router.push(this.$route.matched[0].path + "/articles");
             },
-            httpRequest(options) {
+            httpRequest(options, onSuccess, onFail) {
+                let isFromEdit = event.target.parentElement.parentElement.attributes['is-from-edit']
                 let that = this;
                 let file = options.file;
                 let fileReader = new FileReader();
@@ -137,16 +134,27 @@
                     fileReader.readAsDataURL(file)
                 }
                 fileReader.onload = () => {
+
+                    let requestAPI = isFromEdit ? articlesAPI.addContentImage : articlesAPI.addCoverImage;
                     let imageOptions = {
                         articleId: that.form.id,
                         userId: that.home.user.id,
                         base64: fileReader.result,
                     };
 
-                    articlesAPI.addImage(imageOptions).then(function (response) {
-                        that.cover.fileList = [{
-                            url: oss + response.data.uri,
-                        }]
+                    requestAPI(imageOptions).then(function (response) {
+                        if (_.isFunction(onSuccess)) {
+                            onSuccess(response.data);
+                        }
+                        else {
+                            that.cover.fileList = [{
+                                url: oss + response.data.uri,
+                            }]
+                        }
+                    }).catch(function (response) {
+                        if (_.isFunction(onFail)) {
+                            onFail(response);
+                        }
                     })
                 }
             },
