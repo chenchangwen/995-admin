@@ -163,5 +163,10 @@ export let resourcesRouter = {
     '/comments/**':{
         path: 'comment',
         component: () => import('../views/resources/comment/list/index'),
+    },
+    //评论
+    '/faqs/**':{
+        path: 'faq',
+        component: () => import('../views/resources/faq/index'),
     }
 };

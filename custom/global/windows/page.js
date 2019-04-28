@@ -191,7 +191,7 @@ window.pageInit = function pageInit(options) {
                 }
                 that.total = that.total + 1;
                 that._notify({message: '创建成功'})
-            })
+            }, null, true)
         },
         _editData() {
             let that = this
@@ -218,13 +218,13 @@ window.pageInit = function pageInit(options) {
                     }
                 }
                 that._notify({message: '更新成功'})
-            })
+            }, null, true)
         },
         /**
          * 获取编辑请求数据之前的pageData
          */
-        _getBeforeEditRequestPageData() {
-            if (_.isFunction(this.beforeEditRequest)) {
+        _getBeforeEditRequestPageData(isCallBeforeEditRequest) {
+            if (isCallBeforeEditRequest && _.isFunction(this.beforeEditRequest)) {
                 this.beforeEditRequest(this.row)
             }
             if (this.item && this.item.pageData) {
@@ -242,13 +242,13 @@ window.pageInit = function pageInit(options) {
         /**
          * 请求接口数据
          */
-        _queryData(queryFn, isValidate, onRequestSuccess, query) {
+        _queryData(queryFn, isValidate, onRequestSuccess, query, isCallBeforeEditRequest) {
             let that = this
 
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
-                let pgData = that._getBeforeEditRequestPageData()
+                let pgData = that._getBeforeEditRequestPageData(isCallBeforeEditRequest);
                 queryFn(query || (that.postForm || that.form), pgData).then((response) => {
                     let data = response.data;
                     if (_.isFunction(onRequestSuccess)) {
