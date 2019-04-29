@@ -114,7 +114,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/faqs'
+                request: {
+                    queryPrefix: '/faqs'
+                }
             },
             computed: {
                 ...mapGetters([
@@ -123,7 +125,6 @@
             },
             methods: {
                 beforeEditRequest(row) {
-                    debugger;
                     this.postForm = _.cloneDeep(this.commonItem.form);
                     this.postForm.userId = this.home.user.id;
                     this.postForm.faqDetail.contentType = 'textarea';

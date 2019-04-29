@@ -65,9 +65,15 @@
                         size: 1000
                     }
                 },
-                apiQueryAddUrl: '/sites/add',
-                apiQueryEditUrl: '/sites/edit/',
                 initItemFormName: 'commonItem',
+                request: {
+                    queryAdd: {
+                        url: '/sites/add'
+                    },
+                    queryEdit: {
+                        url: '/sites/edit/'
+                    }
+                },
                 commonItem: {
                     form: {
                         name: '',
@@ -99,7 +105,9 @@
                     return this.$route.matched[0].path + "/site";
                 },
                 beforeRequestMounted() {
-                    this.apiQueryUrl = '/sites/' + this.$route.params.id;
+                    this.request.queryUrl ={
+                        url: '/sites/' + this.$route.params.id
+                    }
                 },
                 afterRequestMounted(response) {
                     let data = response.data;

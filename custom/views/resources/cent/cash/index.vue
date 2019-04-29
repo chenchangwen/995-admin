@@ -185,7 +185,9 @@
                     },
                 },
                 idKey: 'id',
-                apiPrefix: '/cents/cashes'
+                request: {
+                    queryPrefix: '/cents/cashes'
+                }
             },
             computed: {
                 ...mapGetters([

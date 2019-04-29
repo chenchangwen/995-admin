@@ -21,7 +21,8 @@
                        icon="el-icon-edit">添加
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
+                  highlight-current-row>
             <el-table-column align="left" label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -95,9 +96,9 @@
 
                 <el-form-item :label="'是否可用'">
                     <el-switch
-                            v-model="form.userDetail.enabled"
-                            active-color="#13ce66"
-                            inactive-color="#ff4949">
+                        v-model="form.userDetail.enabled"
+                        active-color="#13ce66"
+                        inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
             </el-form>
@@ -194,7 +195,7 @@
                         //用户名称
                         username: '',
                         password: '',
-                        mobile:''
+                        mobile: ''
                     },
                     rules: {
                         username: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
@@ -274,8 +275,12 @@
                         }
                     ]
                 },
-                apiPrefix: '/users',
-                apiQueryAddUrl: '/name/add',
+                request: {
+                    queryPrefix: '/users',
+                    queryAdd: {
+                        url: '/name/add'
+                    }
+                }
             },
             methods: {
                 beforeOpenDialog(row) {
@@ -290,7 +295,7 @@
 
 
                 },
-                beforeEditRequestRequest(row) {
+                beforeEditRequest(row) {
                     if (this.dialogStatus === 'create') {
                         this.postForm = _.cloneDeep(this.createItem.form);
                         delete this.postForm.password;

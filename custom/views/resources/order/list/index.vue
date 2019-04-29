@@ -179,7 +179,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/orders',
+                request: {
+                    queryPrefix: '/orders'
+                }
             },
             methods: {
                 beforeEditRequest(row) {

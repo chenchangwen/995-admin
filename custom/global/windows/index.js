@@ -19,6 +19,5 @@ global.redirectTo = function () {
 
 require('./vendor');
 require('./page');
-require('./curd');
 require('./url-parse');
 require('./config');

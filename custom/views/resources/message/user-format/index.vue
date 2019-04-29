@@ -135,7 +135,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/users/messages/formats',
+                request: {
+                    queryPrefix: '/users/messages/formats'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

@@ -151,7 +151,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/sites/themes'
+                request: {
+                    queryPrefix: '/sites/themes'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

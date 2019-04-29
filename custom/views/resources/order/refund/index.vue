@@ -172,7 +172,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/orders/refunds',
+                request: {
+                    queryPrefix: '/orders/refunds'
+                }
             },
             computed: {
                 ...mapGetters([

@@ -147,7 +147,7 @@
                         dialogStatus: 'replyEditItemUpdate'
                     },
                     pageData: {
-                        apiQueryEditUrl: '/ats/edit',
+                        queryEditUrl: '/ats/edit',
                         idKey: 'commentId'
                     }
                 },
@@ -163,7 +163,7 @@
                         dialogStatus: 'commentEditUpdate'
                     },
                     pageData: {
-                        apiQueryEditUrl: '/edit',
+                        queryEditUrl: '/edit',
                     }
                 },
                 replyItem: {
@@ -183,7 +183,7 @@
                         dialogStatus: 'reply'
                     },
                     pageData: {
-                        apiQueryEditUrl: '/ats/add'
+                        queryEditUrl: '/ats/add'
                     }
                 },
                 //查询对象
@@ -196,7 +196,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/comments'
+                request: {
+                    queryPrefix: '/comments'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

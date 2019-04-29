@@ -124,7 +124,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/cents'
+                request: {
+                    queryPrefix: '/cents'
+                }
             },
             methods: {
                 beforeEditRequest(row) {

@@ -147,7 +147,9 @@
                         predicate: ""
                     }
                 },
-                apiPrefix: '/users',
+                request: {
+                    queryPrefix: '/users',
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

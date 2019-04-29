@@ -86,7 +86,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/relations/users'
+                request: {
+                    queryPrefix: '/relations/users'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

@@ -75,7 +75,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/sites'
+                request: {
+                    queryPrefix: '/sites'
+                }
             },
             methods: {
                 handleEdit(id){

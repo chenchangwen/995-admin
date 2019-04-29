@@ -10,7 +10,8 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
+                  highlight-current-row>
             <el-table-column align="left" label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -109,7 +110,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/sms/templates',
+                request: {
+                    queryPrefix: '/sms/templates',
+                }
             },
             methods: {
                 beforeEditRequest(row) {

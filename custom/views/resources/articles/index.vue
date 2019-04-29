@@ -73,8 +73,9 @@
                         predicate: ";"
                     }
                 },
-                apiPrefix: '/articles',
-                apiQueryConfirmUrl:'/delete'
+                request: {
+                    queryPrefix: '/articles'
+                }
             },
             methods: {
                 handleEdit(id){

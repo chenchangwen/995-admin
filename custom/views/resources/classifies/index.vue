@@ -75,8 +75,17 @@
                     formName: 'commonItem'
                 },
                 isQueryCount: false,
-                apiQueryListUrl: '/classifies/subjects',
-                apiQueryAddUrl: '/classifies/subjects/add',
+                request: {
+                    queryList:{
+                        url :'/classifies/subjects'
+                    },
+                    queryCount:{
+                        url: '/classifies/subjects/count'
+                    },
+                    queryAdd: {
+                        url:'/classifies/subjects/add'
+                    }
+                },
                 userId: ''
             },
             methods: {

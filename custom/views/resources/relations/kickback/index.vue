@@ -88,7 +88,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/relations/kickbacks'
+                request: {
+                    queryPrefix: '/relations/kickbacks'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

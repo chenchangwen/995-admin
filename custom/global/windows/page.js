@@ -4,9 +4,9 @@
  * @param api 如果有,则覆盖window.curd
  */
 import {mergeSameRow, setSameRowSign, deepClearObject} from '../../utils';
+import * as commonQuery from './common-query'
 
 window.pageInit = function pageInit(options) {
-    let api = window.curd;
     let page = {
         data() {
             let defaults = {
@@ -26,10 +26,7 @@ window.pageInit = function pageInit(options) {
                 //全部行数据是否加载中
                 itemsLoading: true,
                 total: null,
-                query: {
-                    page: 0,
-                    size: 20
-                },
+                query: {},
                 //RSQL查询对象
                 queryItem: {},
                 dialogFormVisible: false,
@@ -50,6 +47,17 @@ window.pageInit = function pageInit(options) {
                 apiQueryCountUrl: '',
                 apiQueryConfirmUrl: '',
                 apiQueryUrl: '',
+                request: {
+                    queryPrefix: '',
+                    //以下对象,必填url,可选method
+                    queryList: {},
+                    queryDetail: {},
+                    queryAdd: {},
+                    queryEdit: {},
+                    queryConfirm: {},
+                    queryCount: {},
+                    query: {}
+                },
                 //日期范围控制,需有form.beginTime,form.endTime, 如果有多个时间,需要另外定义
                 beginTimeOptions: {
                     disabledDate: (time) => {
@@ -83,11 +91,12 @@ window.pageInit = function pageInit(options) {
         mounted() {
             if (this.isNoMountedRequest)
                 return false;
-
             if (_.isFunction(this.beforeRequestMounted)) {
                 this.beforeRequestMounted(pageData);
             }
-            if (this.apiPrefix || this.apiQueryListUrl) {
+            if (this.request && (this.request.queryList && this.request.queryList.url) || this.request.queryPrefix) {
+                this.query.page = 0
+                this.query.size = 20
                 this._getList()
             } else if (this.$route.params.id) {
                 this._getDetail()
@@ -145,18 +154,22 @@ window.pageInit = function pageInit(options) {
             this.itemsLoading = true;
             this.setQueryItem();
             let that = this;
-            this._queryData(api.queryList, false, function (pgData, response) {
-                that.items = response.data;
-                that.itemsLoading = false;
+            this._queryData(commonQuery.queryList, false, function (pgData, response) {
+                if (that.request && that.request.queryList && that.request.queryList.itemsKey) {
+                    that.items = eval('response.data.' + that.request.queryList.itemsKey)
+                } else {
+                    that.items = response.data
+                }
                 if (that.isSetSameRowSign) {
                     setSameRowSign.call(that, that.items)
                 }
                 if (that.isQueryCount) {
-                    api.queryCount(that.query, pageData).then(response => {
+                    commonQuery.queryCount(pageData).then(response => {
                         that.total = response.data;
                     })
                 }
-            }, that.query)
+                that.itemsLoading = false
+            })
         },
         /**
          * 请求详情数据
@@ -167,10 +180,17 @@ window.pageInit = function pageInit(options) {
             let query = {
                 id: this.$route.params.id
             }
-            if (this.apiQueryUrl) {
+            if (this.request.queryUrl) {
                 query = ''
             }
-            let queryAPI = query ? api.queryDetail : query
+            let queryAPI = query ? commonQuery.queryDetail : commonQuery.queryUrl
+            let querySum = 0
+            for (let item in that.query) {
+                querySum += 1
+            }
+            if (querySum > 0) {
+                query = that.query
+            }
             this._queryData(queryAPI, false, function (pgData, response) {
                 if (_.isFunction(that.afterRequestMounted)) {
                     that.afterRequestMounted(response)
@@ -180,7 +200,7 @@ window.pageInit = function pageInit(options) {
         _createData() {
             let that = this
             delete this.form.id;
-            this._queryData(api.queryAdd, true, function (pgData, response) {
+            this._queryData(commonQuery.queryAdd, true, function (pgData, response) {
                 if (that.items) {
                     if (that.total < that.query.size) {
                         that.items.splice(0, 0, response.data)
@@ -191,11 +211,11 @@ window.pageInit = function pageInit(options) {
                 }
                 that.total = that.total + 1;
                 that._notify({message: '创建成功'})
-            }, null, true)
+            }, '', 'edit')
         },
         _editData() {
             let that = this
-            this._queryData(api.queryEdit, true, function (pgData, response) {
+            this._queryData(commonQuery.queryEdit, true, function (pgData, response) {
                 if (that.items) {
                     //遍历items,即所有row.id和当前row.id对比正确后.更新当前row,那就不必重新请求接口获取数据
                     for (const v of that.items) {
@@ -218,20 +238,26 @@ window.pageInit = function pageInit(options) {
                     }
                 }
                 that._notify({message: '更新成功'})
-            }, null, true)
+            }, '', 'edit')
         },
         /**
          * 获取编辑请求数据之前的pageData
          */
-        _getBeforeEditRequestPageData(isCallBeforeEditRequest) {
+        _getBeforeEditRequestPageData(isCallBeforeEditRequest, queryType) {
             if (isCallBeforeEditRequest && _.isFunction(this.beforeEditRequest)) {
                 this.beforeEditRequest(this.row)
             }
-            if (this.item && this.item.pageData) {
-                return _.assign({}, pageData, this.item.pageData);
+            if (queryType === 'edit') {
+                pageData.query = this.postForm || this.form
+            } else if (!_.isEmpty(this.query)) {
+                pageData.query = this.query
+            } else if (!_.isEmpty(this.form)) {
+                pageData.query = this.form
             }
-            else {
-                return pageData;
+            if (this.item && this.item.pageData) {
+                return _.assign({}, pageData, this.item.pageData)
+            } else {
+                return pageData
             }
         },
         _checkItem(item) {
@@ -242,15 +268,15 @@ window.pageInit = function pageInit(options) {
         /**
          * 请求接口数据
          */
-        _queryData(queryFn, isValidate, onRequestSuccess, query, isCallBeforeEditRequest) {
+        _queryData(queryFn, isValidate, onRequestSuccess, query, queryType) {
             let that = this
 
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
-                let pgData = that._getBeforeEditRequestPageData(isCallBeforeEditRequest);
-                queryFn(query || (that.postForm || that.form), pgData).then((response) => {
-                    let data = response.data;
+                let pgData = that._getBeforeEditRequestPageData(true, queryType);
+                pgData.query = query || pgData.query
+                queryFn(pgData).then((response) => {
                     if (_.isFunction(onRequestSuccess)) {
                         onRequestSuccess(pgData, response)
                     }
@@ -299,7 +325,6 @@ window.pageInit = function pageInit(options) {
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
             this.setItem(item || row)
             this.row = _.cloneDeep(row);
-            let pgData = this._getBeforeEditRequestPageData();
             let defaults = {
                 title: '提示',
                 text: '确定删除',
@@ -311,12 +336,11 @@ window.pageInit = function pageInit(options) {
             this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
                 let that = this
                 let query = {
-                    id: row[pgData.idKey || that.form.id]
-                }
-                that.postForm = query
-                this._queryData(api.queryConfirm, false, function () {
+                    id: row[pageData.idKey || that.form.id]
+                };
+                this._queryData(commonQuery.queryConfirm, false, function () {
                     that._getList()
-                })
+                }, query)
             }).catch(_ => {
 
             });

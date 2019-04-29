@@ -85,9 +85,15 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/wechats',
-                apiQueryListUrl: '/users/messages/texts',
-                apiQueryCountUrl: '/users/messages/texts/count'
+                request: {
+                    queryPrefix: '/wechats',
+                    queryList:{
+                        url :'/users/messages/texts'
+                    },
+                    queryCount:{
+                        url: '/users/messages/texts/count'
+                    }
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

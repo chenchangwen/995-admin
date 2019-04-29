@@ -128,7 +128,9 @@
                     },
                 },
                 idKey: 'id',
-                apiPrefix: '/authorities'
+                request: {
+                    queryPrefix: '/authorities'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

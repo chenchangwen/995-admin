@@ -4,7 +4,7 @@
                    v-for="item in items"
                    :key="item.id"
                    :label="item[labelKey]"
-                   :value="item[labelValue]">
+                   :value="item">
         </el-option>
 
     </el-select>
@@ -25,7 +25,7 @@
             },
             valueKey:{
                 type :String,
-                default: 'value'
+                default: 'id'
             }
         },
         data() {

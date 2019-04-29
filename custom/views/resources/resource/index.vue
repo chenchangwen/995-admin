@@ -133,7 +133,9 @@
                     }
                 },
                 idKey: 'userId',
-                apiPrefix: '/resources'
+                request: {
+                    queryPrefix: '/resources'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

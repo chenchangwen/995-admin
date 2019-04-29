@@ -69,7 +69,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/cents/changes'
+                request: {
+                    queryPrefix: '/cents/changes'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

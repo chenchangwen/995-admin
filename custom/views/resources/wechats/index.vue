@@ -157,7 +157,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/wechats',
+                request: {
+                    queryPrefix: '/wechats'
+                },
                 typeOptions:[
                     {
                         id: 'SERVICE',
