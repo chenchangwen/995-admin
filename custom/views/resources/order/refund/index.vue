@@ -20,7 +20,8 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
+                  highlight-current-row>
             <el-table-column align="left" label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -71,10 +72,10 @@
 
             <el-table-column align="left" :label="'操作'" width="230">
                 <template slot-scope="scope">
-                    <el-button  v-if="scope.row.status==='NEW'" type="primary" size="mini"
+                    <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)">同意
                     </el-button>
-                    <el-button  v-if="scope.row.status==='NEW'" type="danger" size="mini"
+                    <el-button v-if="scope.row.status==='NEW'" type="danger" size="mini"
                                @click="handleUpdate(scope.row,commonItem)">拒绝
                     </el-button>
 
@@ -189,12 +190,16 @@
                             operatorSummary: '',
                             operatorUserId: this.home.user.id
                         };
-                        this.commonItem.pageData.apiQueryConfirmUrl = '/confirm';
+                        this.commonItem.pageData.queryConfirm = {
+                            url: '/confirm'
+                        }
                     }
                     if (this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         delete this.postForm.total;
-                        this.commonItem.pageData.apiQueryEditUrl = '/refuse';
+                        this.commonItem.pageData.queryEdit = {
+                            url: '/refuse'
+                        }
                     }
                 }
             }

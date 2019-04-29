@@ -45,7 +45,9 @@
                     }
                 },
                 idKey: 'id',
-                apiPrefix: '/wechats'
+                request: {
+                    queryPrefix: '/wechats'
+                }
             },
             methods: {
                 beforeOpenDialog(row) {

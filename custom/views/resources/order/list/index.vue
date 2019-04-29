@@ -20,7 +20,8 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
+                  highlight-current-row>
             <el-table-column align="left" label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
@@ -189,10 +190,14 @@
                     delete this.postForm.summary;
                     delete this.postForm.total;
                     if (this.dialogStatus === 'pay') {
-                        this.commonItem.pageData.apiQueryEditUrl = '/pay/cash';
+                        this.commonItem.pageData.queryEdit = {
+                            url: '/pay/cash'
+                        };
                     }
                     if (this.dialogStatus === 'cancel') {
-                        this.commonItem.pageData.apiQueryEditUrl = '/cancel';
+                        this.commonItem.pageData.queryEdit = {
+                            url: '/cancel'
+                        };
                         delete this.postForm.userId;
                     }
                 }

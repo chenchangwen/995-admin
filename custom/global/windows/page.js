@@ -41,11 +41,6 @@ window.pageInit = function pageInit(options) {
                 isQueryCount: true,
                 //api地址前缀
                 apiPrefix: '',
-                apiQueryListUrl: '',
-                apiQueryAddUrl: '',
-                apiQueryEditUrl: '',
-                apiQueryCountUrl: '',
-                apiQueryConfirmUrl: '',
                 apiQueryUrl: '',
                 request: {
                     queryPrefix: '',

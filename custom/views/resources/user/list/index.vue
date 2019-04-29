@@ -231,7 +231,9 @@
                     },
                     formName: 'editItem',
                     pageData: {
-                        apiQueryEditUrl: ''
+                        queryEdit: {
+                            url: ''
+                        }
                     }
                 },
                 //更改密码表单
@@ -249,7 +251,9 @@
                         dialogStatus: 'change'
                     },
                     pageData: {
-                        apiQueryEditUrl: '/password/reset'
+                        queryEdit: {
+                            url: '/password/reset'
+                        }
                     }
                 },
                 //查询对象

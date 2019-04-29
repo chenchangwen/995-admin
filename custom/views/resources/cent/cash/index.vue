@@ -206,11 +206,11 @@
                     };
                     if (this.dialogStatus === 'agree') {
                         this.postForm.summary ='';
-                        this.commonItem.pageData.apiQueryEditUrl = '/confirm';
+                        this.commonItem.pageData.queryEditUrl = '/confirm';
                     }
                     if (this.dialogStatus === 'refuse') {
                         this.postForm.summary = this.commonItem.form.summary;
-                        this.commonItem.pageData.apiQueryEditUrl = '/refuse';
+                        this.commonItem.pageData.queryEditUrl = '/refuse';
                     }
                 }
             }
