@@ -105,7 +105,7 @@
                     return this.$route.matched[0].path + "/site";
                 },
                 beforeRequestMounted() {
-                    this.request.queryUrl ={
+                    this.request.query ={
                         url: '/sites/' + this.$route.params.id
                     }
                 },

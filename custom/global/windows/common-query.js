@@ -67,10 +67,10 @@ export function queryConfirm(pageData) {
     return queryData(options)
 }
 
-export function queryUrl(pageData) {
+export function query(pageData) {
     let options = {
         method: 'get',
-        requestKey: 'queryUrl',
+        requestKey: 'query',
         pageData: pageData
     }
     return queryData(options)

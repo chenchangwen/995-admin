@@ -147,8 +147,9 @@ window.pageInit = function pageInit(options) {
             this.setQueryItem();
             let that = this;
             this._queryData(commonQuery.queryList, false, function (pgData, response) {
-                if (that.request && that.request.queryList && that.request.queryList.itemsKey) {
-                    that.items = eval('response.data.' + that.request.queryList.itemsKey)
+                let thatRequest = that.request;
+                if (thatRequest && thatRequest.queryList && thatRequest.queryList.itemsKey) {
+                    that.items = eval('response.data.' + thatRequest.queryList.itemsKey)
                 } else {
                     that.items = response.data
                 }
@@ -172,10 +173,10 @@ window.pageInit = function pageInit(options) {
             let query = {
                 id: this.$route.params.id
             }
-            if (this.request.queryUrl) {
+            if (this.request.query) {
                 query = ''
             }
-            let queryAPI = query ? commonQuery.queryDetail : commonQuery.queryUrl
+            let queryAPI = query ? commonQuery.queryDetail : commonQuery.query
             let querySum = 0
             for (let item in that.query) {
                 querySum += 1
