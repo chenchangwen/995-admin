@@ -39,9 +39,6 @@ window.pageInit = function pageInit(options) {
                 },
                 //是否查询count接口
                 isQueryCount: true,
-                //api地址前缀
-                apiPrefix: '',
-                apiQueryUrl: '',
                 request: {
                     queryPrefix: '',
                     //以下对象,必填url,可选method
