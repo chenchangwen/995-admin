@@ -23,6 +23,8 @@ window.pageInit = function pageInit(options) {
                 idKey: 'id',
                 //表格的全部行数据对象
                 items: null,
+                //页面是否加载中
+                pageLoading: true,
                 //全部行数据是否加载中
                 itemsLoading: true,
                 total: null,
@@ -102,6 +104,8 @@ window.pageInit = function pageInit(options) {
                 if (_.isFunction(this.noRequestMounted)) {
                     this.noRequestMounted(pageData);
                 }
+                this.itemsLoading = false
+                this.pageLoading = false
             }
         }
     };
@@ -161,7 +165,6 @@ window.pageInit = function pageInit(options) {
                         that.total = response.data;
                     })
                 }
-                that.itemsLoading = false
             })
         },
         /**
@@ -267,6 +270,7 @@ window.pageInit = function pageInit(options) {
             function apiQuery() {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
+                that.pageLoading = true
                 let pgData = that._getBeforeEditRequestPageData(true, queryType);
                 pgData.query = query || pgData.query
                 queryFn(pgData).then((response) => {
@@ -276,10 +280,14 @@ window.pageInit = function pageInit(options) {
                     that.dialogFormVisible = false
                     that.dialogButtonLoading = false
                     that.dialogButtonDisabled = false
+                    that.pageLoading = false
+                    that.itemsLoading = false
                 }).catch(_ => {
                     that.itemsLoading = false;
                     that.dialogButtonLoading = false
                     that.dialogButtonDisabled = false
+                    that.pageLoading = false
+                    that.itemsLoading = false
                 })
             }
 

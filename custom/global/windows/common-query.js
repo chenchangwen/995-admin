@@ -1,5 +1,5 @@
 /**
- * 增删改查
+ * 通用数据请求
  */
 
 function queryData(options) {
