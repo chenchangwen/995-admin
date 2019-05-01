@@ -3,7 +3,7 @@
         <el-option v-if="items"
                    v-for="item in items"
                    :key="item.id"
-                   :label="item.subject"
+                   :label="item.name"
                    :value="item">
         </el-option>
 
@@ -12,6 +12,7 @@
 
 <script>
     import {mapGetters} from 'vuex';
+
     export default {
         name: 'select-classifies',
         props: {
@@ -19,11 +20,15 @@
                 type: Array,
                 default: () => []
             },
+            searchType: {
+                type: String,
+                default: ''
+            }
         },
         data() {
             return {
                 items: [],
-                selectedValue: []
+                selectedValue: ''
             }
         },
         computed: {
@@ -36,7 +41,7 @@
                 let that = this;
                 let option = {
                     method: 'get',
-                    url:  `/classifies/subjects?search=subject==article;userId==${this.home.user.id}`,
+                    url: `/classifies/subjects?search=subject==${this.searchType};userId==${this.home.user.id}`,
                     params: {
                         page: 0,
                         size: 1000
@@ -50,15 +55,22 @@
                 }
                 request(option).then(function (response) {
                     that.items = response.data;
-                    that.items.map(function (item) {
-                        if (ids.length > 0) {
-                            if (ids.indexOf(item.id) > -1) {
-                                that.selectedValue.push(item);
-                            }
+                    if (!_.isEmpty(that.items)) {
+                        that.items = that.items[0].classifies;
+                        if (!_.isEmpty(that.items)) {
+                            that.items.map(function (item) {
+                                if (ids.length > 0) {
+                                    if (ids.indexOf(item.id) > -1) {
+                                        that.selectedValue.push(item);
+                                    }
+                                }
+                                return item;
+                            });
                         }
-                        return item;
-                    });
+                    }
+
                 })
+
             },
             handleChange(value) {
                 this.$emit('update:value', value)

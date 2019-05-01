@@ -478,6 +478,12 @@ window.pageInit = function pageInit(options) {
                 }
             }
         },
+        /**
+         * 访问路由实例
+         */
+        routerPush(path, id) {
+            this.$router.push(path + (id ? ('/' + id) : ''))
+        }
     };
 
     //增加mergeSameRow方法

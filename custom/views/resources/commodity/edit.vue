@@ -3,12 +3,21 @@
         <el-form :rules="rules" ref="form" :model="form" label-position="left"
                  label-width="110px"
                  class="detail-form-box">
-            <el-form-item :label="'标题'" prop="title">
-                <el-input v-model="form.title" placeholder="标题"></el-input>
+
+            <el-form-item :label="'名称'" prop="name">
+                <el-input v-model="form.name" placeholder="名称"></el-input>
+            </el-form-item>
+
+            <el-form-item :label="'价格'">
+                <el-input-number style="width:210px" v-model="form.price" :precision="4" :step="0.1" :max="9999999999.9999"></el-input-number>
+            </el-form-item>
+
+            <el-form-item :label="'划线价'">
+                <el-input-number style="width:210px" v-model="form.originalPrice" :precision="4" :step="0.1" :max="9999999999.9999"></el-input-number>
             </el-form-item>
 
             <el-form-item :label="'分类'">
-                <select-classifies :value.sync="form.classifies" :search-type="'subject'"></select-classifies>
+                <select-classifies :value.sync="form.classifies" :search-type="'commodity'"></select-classifies>
             </el-form-item>
 
             <el-form-item :label="'状态'">
@@ -16,10 +25,6 @@
                     <el-radio :label="'DRAFT'">草稿</el-radio>
                     <el-radio :label="'LAUNCH'">发布</el-radio>
                 </el-radio-group>
-            </el-form-item>
-
-            <el-form-item :label="'作者'">
-                <el-input v-model="form.author" placeholder="作者"></el-input>
             </el-form-item>
 
             <el-form-item :label="'来源名称'">
@@ -58,7 +63,7 @@
 
 
             <el-form-item :label="'文章详情'" style="margin-bottom: 30px;">
-                <Tinymce ref="editor" :height="400" v-model="form.articleDetail.content" :http-request="httpRequest"
+                <Tinymce ref="editor" :height="400" v-model="form.commodityDetail.content" :http-request="httpRequest"
                          :is-from-edit="true"/>
             </el-form-item>
 
@@ -78,7 +83,7 @@
     import Tinymce from '../../../components/Tinymce'
     import fileUpload from '../../../components/file-upload';
     import {mapGetters} from 'vuex';
-    import articlesAPI from '../../../api/articles';
+    import commoditiesAPI from '../../../api/commodities';
     import SelectClassifies from "../../../components/select-classifies";
 
     export default {
@@ -90,31 +95,23 @@
                 },
                 form: {
                     id: '',
-                    //作者
-                    author: '',
-                    //摘要
+                    name: '',
+                    originalPrice: 1,
+                    price: 1,
                     summary: '',
-                    //标题
-                    title: '',
-                    //内容类型
-                    contentType: '',
-                    articleDetail: {
+                    commodityDetail: {
                         content: ''
                     },
-                    //引用链接
                     sourceLink: '',
-                    //引用名称
                     sourceName: '',
-                    //是否置顶
                     top: '',
                     commentAble: '',
                     classifies: [],
                     status: 'DRAFT'
                 },
                 rules: {
-                    author: [{required: true, message: '作者不能为空', trigger: 'blur'}],
+                    name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                     summary: [{required: true, message: '摘要不能为空', trigger: 'blur'}],
-                    title: [{required: true, message: '标题不能为空', trigger: 'blur'}]
                 },
                 classifiesOptions: '',
                 buttonDisabled: true,
@@ -123,7 +120,7 @@
         },
         methods: {
             backToList() {
-                this.$router.push(this.$route.matched[0].path + "/articles");
+                this.$router.push(this.$route.matched[0].path + "/commodity");
             },
             httpRequest(options, onSuccess, onFail) {
                 let isFromEdit = event.target.parentElement.parentElement.attributes['is-from-edit']
@@ -135,9 +132,9 @@
                 }
                 fileReader.onload = () => {
 
-                    let requestAPI = isFromEdit ? articlesAPI.addContentImage : articlesAPI.addCoverImage;
+                    let requestAPI = isFromEdit ? commoditiesAPI.addContentImage : commoditiesAPI.addCoverImage;
                     let imageOptions = {
-                        articleId: that.form.id,
+                        commodityId: that.form.id,
                         userId: that.home.user.id,
                         base64: fileReader.result,
                     };
@@ -161,7 +158,7 @@
             handleUpdate() {
                 let that = this;
                 this.buttonLoading = true;
-                articlesAPI.edit(this.form).then(function (response) {
+                commoditiesAPI.edit(this.form).then(function (response) {
                     that.buttonLoading = false;
                     that.$notify({
                         title: '成功',
@@ -174,26 +171,19 @@
             setForm(data) {
                 let that = this;
                 Object.keys(that.form).forEach(item => {
-                    if (item !== 'articleDetail') {
+                    if (item !== 'commodityDetail') {
                         that.form[item] = data[item];
                         that.buttonDisabled = false;
                     }
                 });
-                if (data.articleDetail) {
-                    that.form.articleDetail.content = data.articleDetail.content;
+                if (data.commodityDetail) {
+                    that.form.commodityDetail.content = data.commodityDetail.content;
                 }
                 if (data.image) {
                     that.cover.fileList = [{
                         url: oss + data.image,
                     }]
                 }
-            },
-            draft() {
-                let that = this;
-                articlesAPI.draft(this.home.user.id).then(function (response) {
-                    that.buttonDisabled = false;
-                    that.setForm(response.data);
-                })
             }
         },
         computed: {
@@ -205,12 +195,9 @@
             let that = this;
             let id = this.$route.params.id;
             if (id) {
-                articlesAPI.articles(id).then(function (response) {
+                commoditiesAPI.commodities(id).then(function (response) {
                     that.setForm(response.data);
                 })
-            }
-            else {
-                this.draft();
             }
         }
     }

@@ -168,5 +168,22 @@ export let resourcesRouter = {
     '/faqs/**':{
         path: 'faq',
         component: () => import('../views/resources/faq/index'),
+    },
+    //评论
+    '/commodities/**':{
+        path: 'commodity',
+        component: () => import('../views/resources/commodity/index'),
+        children: [
+            {
+                name: 'commodity-edit',
+                path: 'commodity/edit/:id?',
+                component: () => import('../views/resources/commodity/edit'),
+                meta: {
+                    title: '产品',
+                },
+                hidden: true,
+                children: []
+            }
+        ]
     }
 };
