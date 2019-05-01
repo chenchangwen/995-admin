@@ -184,6 +184,13 @@
                         url: oss + data.image,
                     }]
                 }
+            },
+            draft() {
+                let that = this;
+                commoditiesAPI.draft(this.home.user.id).then(function (response) {
+                    that.buttonDisabled = false;
+                    that.setForm(response.data);
+                })
             }
         },
         computed: {
@@ -198,6 +205,9 @@
                 commoditiesAPI.commodities(id).then(function (response) {
                     that.setForm(response.data);
                 })
+            }
+            else{
+                this.draft();
             }
         }
     }

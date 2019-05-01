@@ -22,13 +22,13 @@
             },
             searchType: {
                 type: String,
-                default: ''
+                default: []
             }
         },
         data() {
             return {
                 items: [],
-                selectedValue: ''
+                selectedValue: []
             }
         },
         computed: {
@@ -53,6 +53,7 @@
                         return item.id;
                     });
                 }
+
                 request(option).then(function (response) {
                     that.items = response.data;
                     if (!_.isEmpty(that.items)) {
@@ -60,11 +61,12 @@
                         if (!_.isEmpty(that.items)) {
                             that.items.map(function (item) {
                                 if (ids.length > 0) {
+                                    debugger;
                                     if (ids.indexOf(item.id) > -1) {
                                         that.selectedValue.push(item);
+                                        return item;
                                     }
                                 }
-                                return item;
                             });
                         }
                     }
@@ -78,7 +80,9 @@
         },
         watch: {
             value(newValue, oldValue) {
-                this.selectedValue = newValue;
+                if (newValue) {
+                    this.selectedValue = newValue;
+                }
             }
         },
         mounted() {
