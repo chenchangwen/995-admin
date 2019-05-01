@@ -19,7 +19,7 @@
             </el-table-column>
             <el-table-column align="left" label='答案' width="200">
                 <template slot-scope="scope">
-                    {{scope.row.faqDetail && scope.row.faqDetail.conetent}}
+                    {{scope.row.summary}}
                 </template>
             </el-table-column>
             <el-table-column align="left" label='创建时间' width="155">
@@ -115,7 +115,7 @@
                 },
                 idKey: 'id',
                 request: {
-                    queryPrefix: '/faqs'
+                    queryPrefix: '/faqs',
                 }
             },
             computed: {
@@ -124,6 +124,21 @@
                 ])
             },
             methods: {
+                beforeOpenDialog(row) {
+                    if (row) {
+                        let options = {
+                            url: '/faqs/' + row.id,
+                            method: 'get'
+                        }
+                        let that = this;
+                        request(options).then(function (response) {
+                            that.commonItem.form.faqDetail = {
+                                content: response.data.faqDetail.content,
+                                contentType: 'textarea'
+                            };
+                        })
+                    }
+                },
                 beforeEditRequest(row) {
                     this.postForm = _.cloneDeep(this.commonItem.form);
                     this.postForm.userId = this.home.user.id;
