@@ -17,11 +17,26 @@
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='答案' width="200">
+            <el-table-column align="left" label='答案概要' width="200">
                 <template slot-scope="scope">
                     {{scope.row.summary}}
                 </template>
             </el-table-column>
+
+            <el-table-column align="left" label='禁用' width="100">
+                <template slot-scope="scope">
+                    <i :class="scope.row.disable ? 'el-icon-success' : 'el-icon-error'"></i>
+                </template>
+            </el-table-column>
+
+
+            <el-table-column align="left" label='置顶' width="100">
+                <template slot-scope="scope">
+                    <i :class="scope.row.top ? 'el-icon-success' : 'el-icon-error'"></i>
+                </template>
+            </el-table-column>
+
+
             <el-table-column align="left" label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
@@ -44,7 +59,7 @@
                     <el-input v-model="commonItem.form.name" placeholder="问题"></el-input>
                 </el-form-item>
 
-                <el-form-item :label="'答案'" prop="faqDetail.content">
+                <el-form-item :label="'答案概要'" prop="faqDetail.content">
                     <el-input
                         type="textarea"
                         :rows="3"
