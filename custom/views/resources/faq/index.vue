@@ -59,12 +59,12 @@
                     <el-input v-model="commonItem.form.name" placeholder="问题"></el-input>
                 </el-form-item>
 
-                <el-form-item :label="'答案概要'" prop="faqDetail.content">
+                <el-form-item :label="'答案概要'" prop="summary">
                     <el-input
                         type="textarea"
                         :rows="3"
                         placeholder="答案"
-                        v-model="commonItem.form.faqDetail.content">
+                        v-model="commonItem.form.summary">
                     </el-input>
                 </el-form-item>
 
@@ -82,6 +82,15 @@
                         active-color="#13ce66"
                         inactive-color="#ff4949">
                     </el-switch>
+                </el-form-item>
+
+                <el-form-item :label="'答案'" prop="faqDetail.content">
+                    <el-input
+                        type="textarea"
+                        :rows="3"
+                        placeholder="答案"
+                        v-model="commonItem.form.faqDetail.content">
+                    </el-input>
                 </el-form-item>
 
             </el-form>
@@ -106,6 +115,7 @@
                 commonItem: {
                     form: {
                         name: '',
+                        summary: '',
                         faqDetail: {
                             content: "",
                             contentType: ''
@@ -115,6 +125,7 @@
                     },
                     rules: {
                         name: [{required: true, message: '问题不能为空', trigger: 'blur'}],
+                        summary: [{required: true, message: '答案概要不能为空', trigger: 'blur'}],
                         'faqDetail.content': [{required: true, message: '答案不能为空', trigger: 'blur'}],
                     },
                     formName: 'commonItem'
