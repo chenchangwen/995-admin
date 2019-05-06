@@ -1,6 +1,6 @@
 // set function parseTime,formatTime to filter
 export { parseTime, formatTime } from '@/utils'
-
+export * from '../../custom/filters'
 function pluralize(time, label) {
   if (time === 1) {
     return time + label

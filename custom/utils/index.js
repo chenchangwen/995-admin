@@ -61,3 +61,12 @@ export function getJsonToArray(str, obj) {
         return obj || [];
     }
 }
+
+/**
+ * 获取对象返回值
+ */
+export function getKeyValues(values, key){
+    return values.map(function(item){
+        return item[key || 'id']
+    })
+}

@@ -133,6 +133,10 @@ window.pageInit = function pageInit(options) {
         //关闭dialog之后回调
         afterCloseDialog: () => {
         },
+        //全部基础验证成功之后回调
+        afterValidateSuccess: () => {
+            return true
+        },
         _notify(options) {
             let defaults = {
                 title: '成功',
@@ -294,7 +298,14 @@ window.pageInit = function pageInit(options) {
             if (isValidate) {
                 this.$refs[this.item.formName].validate((valid) => {
                     if (valid) {
-                        apiQuery()
+                        if (_.isFunction(that.afterValidateSuccess)) {
+                            let pass = that.afterValidateSuccess()
+                            if (pass) {
+                                apiQuery()
+                            }
+                        } else {
+                            apiQuery()
+                        }
                     }
                 })
             } else {
@@ -483,6 +494,22 @@ window.pageInit = function pageInit(options) {
          */
         routerPush(path, id) {
             this.$router.push(path + (id ? ('/' + id) : ''))
+        },
+        /**
+         * 操作项 增加
+         */
+        handleOpItemAdd(values, item, index) {
+            values.splice(index + 1, 0, item)
+        },
+        /**
+         * 操作项 删除
+         */
+        handleOpItemRemove(values, index, messageText) {
+            if (values.length === 1) {
+                this.$message(messageText || '至少保留一项')
+            } else {
+                values.splice(index, 1)
+            }
         }
     };
 

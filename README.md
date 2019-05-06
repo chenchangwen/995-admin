@@ -15,6 +15,7 @@
 #### 文件
 * `./src/main.js`: 调整相关引用.
 * `./src/styles/index.scss`: 引入自定义样式.
+* `./src/filters/index.js`: 引入自定义过滤器.
 * `./src/store/getters.js`: 新增store属性.
 * `./src/store/permission.js`: 用户权限,调整通过接口返回权限.
 * `./src/utils/request.js` : HTTP请求,处理相关逻辑.
