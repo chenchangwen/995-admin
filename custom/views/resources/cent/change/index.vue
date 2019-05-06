@@ -21,12 +21,12 @@
                     <p>用户ID{{scope.row.userId}}</p>
                 </template>
             </el-table-column>
-            <el-table-column  label='事件' min-width="300">
+            <el-table-column  label='事件' min-width="150">
                 <template slot-scope="scope">
                     {{scope.row.fromSubjectSummary}}
                 </template>
             </el-table-column>
-            <el-table-column  label='来源' min-width="300">
+            <el-table-column  label='来源' min-width="150">
                 <template slot-scope="scope">
                     <p>类型:{{scope.row.fromSubject}}</p>
                     <p>账号:{{scope.row.fromSubjectId}}</p>

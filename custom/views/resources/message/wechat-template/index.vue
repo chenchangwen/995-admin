@@ -31,14 +31,14 @@
                     {{scope.row.content}}
                 </template>
             </el-table-column>
-            <el-table-column  label='事件' width="200">
+            <el-table-column  label='事件' min-width="150">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.eventSubject}}</p>
                     <p>主体ID:{{scope.row.eventSubjectId}}</p>
                     <p>主体描述:{{scope.row.eventSubjectSummary}}</p>
                 </template>
             </el-table-column>
-            <el-table-column  label='来源' width="200">
+            <el-table-column  label='来源' min-width="150">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.fromSubject}}</p>
                     <p>主体ID:{{scope.row.fromSubjectId}}</p>
