@@ -12,19 +12,19 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='用户ID' width="95">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="名称" width="110" align="left">
+            <el-table-column label="名称">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="系统账号" width="200" align="left">
+            <el-table-column label="系统账号" width="200" >
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.userAccounts">
                         <p>{{item.subject}}:{{item.subjectId}}</p>
@@ -32,7 +32,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'" width="230">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleChangeId(scope.row,editItem)" style="width: 80px">交换账号</el-button>
                 </template>

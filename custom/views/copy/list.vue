@@ -10,8 +10,8 @@
                        icon="el-icon-edit">新增
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='ID' width="300">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>

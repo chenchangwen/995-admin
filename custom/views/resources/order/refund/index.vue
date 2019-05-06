@@ -22,13 +22,13 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column align="left" label='订单号' width="300">
+            <el-table-column  label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='项目' width="150">
+            <el-table-column  label='项目'>
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.orderItems">
                         <p>{{item.name}}</p>
@@ -37,31 +37,31 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='总价格' width="150">
+            <el-table-column  label='总价格' width="150">
                 <template slot-scope="scope">
                     {{scope.row.total}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='用户ID' width="150">
+            <el-table-column  label='用户ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.userId}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='退款金额' width="150">
+            <el-table-column  label='退款金额' width="150">
                 <template slot-scope="scope">
                     {{scope.row.total}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='退款详情' width="155">
+            <el-table-column  label='退款详情' width="155">
                 <template slot-scope="scope">
                     <p>退款状态:{{scope.row.x}}</p>
                     <p>退款账号:{{scope.row.refundSubjectId}}</p>
@@ -70,7 +70,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'" width="230">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)">同意

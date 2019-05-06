@@ -8,51 +8,51 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='关系类型' width="200">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='关系类型' min-width="300">
                 <template slot-scope="scope">
                     <p>名称:{{scope.row.relation.name}}</p>
                     <p>主体:{{scope.row.relation.subject}}</p>
                     <p>主体ID:{{scope.row.relation.subjectId}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='用户ID' width="300">
+            <el-table-column  label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.userId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='用户名称' width="150">
+            <el-table-column  label='用户名称' width="150">
                 <template slot-scope="scope">
                     {{scope.row.userName}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='是否无线层' width="150">
+            <el-table-column  label='是否无线层' width="150">
                 <template slot-scope="scope">
                     {{scope.row.unlimited}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='层级' width="150">
+            <el-table-column  label='层级' width="150">
                 <template slot-scope="scope">
                     {{scope.row.relateFloor}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='推荐人ID' width="150">
+            <el-table-column  label='推荐人ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.relateUserId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='推荐人名称' width="150">
+            <el-table-column  label='推荐人名称' width="150">
                 <template slot-scope="scope">
                     {{scope.row.relateUserName}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" width="230">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" disabled size="mini">重置用户关系</el-button>
                 </template>

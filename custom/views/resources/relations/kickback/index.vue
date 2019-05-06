@@ -7,33 +7,33 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='交易主体' width="200">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='交易主体' min-width="300">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.subject}}</p>
                     <p>主体ID:{{scope.row.subjectId}}</p>
                     <p>主体名称:{{scope.row.subjectSummary}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='是否无线层' width="150">
+            <el-table-column  label='是否无线层' width="150">
                 <template slot-scope="scope">
                     {{scope.row.unlimited}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='规则' width="200">
+            <el-table-column  label='规则' width="200">
                 <template slot-scope="scope">
                     用户角色:{{scope.row.role}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='用户关系' width="200">
+            <el-table-column  label='用户关系' min-width="200">
                 <template slot-scope="scope">
                     层级:{{scope.row.floor}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='返点' width="200">
+            <el-table-column  label='返点' min-width="200">
                 <template slot-scope="scope">
                     <p>返点方式:{{scope.row.rate ? '按比例返点' : '直接返点'}}</p>
                     <p>返点账号类别:{{scope.row.centSubject}}</p>
@@ -42,19 +42,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='返点类别' width="200">
+            <el-table-column  label='返点类别' min-width="200">
                 <template slot-scope="scope">
                     层级:{{scope.row.summary}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='是否可用' width="100">
+            <el-table-column  label='是否可用' width="100">
                 <template slot-scope="scope">
                     <i :class="scope.row.enable ? 'el-icon-success' : 'el-icon-error'"></i>
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>

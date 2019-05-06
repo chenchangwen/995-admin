@@ -12,36 +12,36 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column align="left" label='消息ID' width="300">
+            <el-table-column  label='消息ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='用户ID' width="150">
+            <el-table-column  label='用户ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.userId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='内容' width="150">
+            <el-table-column  label='内容' min-width="300">
                 <template slot-scope="scope">
                     {{scope.row.content}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='事件' width="200">
+            <el-table-column  label='事件' width="200">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.eventSubject}}</p>
                     <p>主体ID:{{scope.row.eventSubjectId}}</p>
                     <p>主体描述:{{scope.row.eventSubjectSummary}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='来源' width="200">
+            <el-table-column  label='来源' width="200">
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.fromSubject}}</p>
                     <p>主体ID:{{scope.row.fromSubjectId}}</p>
                     <p>主体描述:{{scope.row.fromSubjectSummary}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>

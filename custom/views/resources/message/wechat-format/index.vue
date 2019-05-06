@@ -10,38 +10,38 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='消息ID' width="300">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='消息ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='微信' width="150">
+            <el-table-column  label='微信' width="150">
                 <template slot-scope="scope">
                     {{scope.row.wechatId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='模版名称' width="150">
+            <el-table-column  label='模版名称'>
                 <template slot-scope="scope">
                     {{scope.row.templateName}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='模版ID' width="150">
+            <el-table-column  label='模版ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.templateId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='模版格式' width="150">
+            <el-table-column  label='模版格式' width="150">
                 <template slot-scope="scope">
                     <span v-html="scope.row.content"></span>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='模版示例' width="150">
+            <el-table-column  label='模版示例' width="150">
                 <template slot-scope="scope">
                     {{scope.row.contentExample}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>

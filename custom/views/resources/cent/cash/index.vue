@@ -17,24 +17,24 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='ID' width="300">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='用户ID' width="300">
+            <el-table-column  label='用户ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.userId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='账号' width="200">
+            <el-table-column  label='账号'>
                 <template slot-scope="scope">
                     <p>主体:{{scope.row.centSubject}}</p>
                     <p>主体ID:{{scope.row.centId}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='提现信息' width="200">
+            <el-table-column  label='提现信息' width="200">
                 <template slot-scope="scope">
                     <p>提现到:{{scope.row.targetSubject}}</p>
                     <p>账号类别:{{scope.row.targetSubjectAccountClass}}</p>
@@ -42,34 +42,34 @@
                     <p>拥有人:{{scope.row.targetSubjectId}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='提现金额' width="150">
+            <el-table-column  label='提现金额' width="150">
                 <template slot-scope="scope">
                     {{scope.row.originalNumber}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='最终提出' width="150">
+            <el-table-column  label='最终提出' width="150">
                 <template slot-scope="scope">
                     {{scope.row.number}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='手续费' width="150">
+            <el-table-column  label='手续费' width="150">
                 <template slot-scope="scope">
                     {{scope.row.containFee}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='操作信息' width="200">
+            <el-table-column  label='操作信息' width="200">
                 <template slot-scope="scope">
                     <p>原因:{{scope.row.summary}}</p>
                     <p>操作人:{{scope.row.operationUserId}}</p>
                     <p>审核时间:{{scope.row.operationDate}}</p>
                 </template>
             </el-table-column>
-            <el-table-column label="申请时间" width="155" align="left">
+            <el-table-column label="申请时间" width="155" >
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" size="mini"
                                @click="handleUpdate(scope.row,commonItem, commonItem.agreeOptions)">通过

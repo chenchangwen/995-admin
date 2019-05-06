@@ -12,41 +12,41 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column align="left" label='ID' width="300">
+            <el-table-column  label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='模版名称' width="150">
+            <el-table-column  label='模版名称'>
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='签名' width="150">
+            <el-table-column  label='签名' width="150">
                 <template slot-scope="scope">
                     {{scope.row.signName}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='模版码' width="150">
+            <el-table-column  label='模版码' width="150">
                 <template slot-scope="scope">
                     {{scope.row.templateCode}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='是否可用' width="150">
+            <el-table-column  label='是否可用' width="150">
                 <template slot-scope="scope">
                     <i :class="scope.row.enable ? 'el-icon-success' : 'el-icon-error'"></i>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" width="230">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
                 </template>

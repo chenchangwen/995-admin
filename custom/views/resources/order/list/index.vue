@@ -22,13 +22,13 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column align="left" label='订单号' width="300">
+            <el-table-column  label='订单号' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='项目' width="150">
+            <el-table-column  label='项目'>
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.orderItems">
                         <p>{{item.name}}</p>
@@ -37,19 +37,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='总价格' width="150">
+            <el-table-column  label='总价格' width="150">
                 <template slot-scope="scope">
                     {{scope.row.total}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='用户ID' width="150">
+            <el-table-column  label='用户ID' width="150">
                 <template slot-scope="scope">
                     {{scope.row.userId}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='支付方式' width="150">
+            <el-table-column  label='支付方式' width="150">
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.orderPayments">
                         <p>{{item.orderPayments}}</p>
@@ -57,24 +57,24 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='交易状态' width="150">
+            <el-table-column  label='交易状态' width="150">
                 <template slot-scope="scope">
                     {{scope.row.status}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='支付时间' width="155">
+            <el-table-column  label='支付时间' width="155">
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.orderPayments">
                         <p>{{item.payTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}</p>
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" :label="'操作'" width="230">
+            <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button v-if="scope.row.status==='NEW'" type="primary" style="width: 80px" size="mini"
                                @click="handleUpdate(scope.row,commonItem,commonItem.payOptions)">现金支付

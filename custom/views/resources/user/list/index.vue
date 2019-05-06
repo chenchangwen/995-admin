@@ -23,18 +23,18 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column align="left" label='用户ID' width="95">
+            <el-table-column  label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column label="名称" width="150" align="left">
+            <el-table-column label="名称">
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="角色" width="200" align="left">
+            <el-table-column label="角色" width="200" >
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.authorities">
                         <p>{{item.name}}</p>
@@ -42,25 +42,25 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="手机号" width="150" align="left">
+            <el-table-column label="手机号" width="150" >
                 <template slot-scope="scope">
                     {{scope.row.mobile}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="是否有效" width="110" align="left">
+            <el-table-column label="是否有效" width="110" >
                 <template slot-scope="scope">
                     <i :class="scope.row.userDetail.enabled ? 'el-icon-success' : 'el-icon-error'"></i>
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间" width="155" align="left">
+            <el-table-column label="创建时间" width="155" >
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" :label="'操作'">
+            <el-table-column align="center" :label="'操作'" width="330">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" style="width: 110px"
                                @click="handleUpdate(scope.row,editItem)">登录用户后台

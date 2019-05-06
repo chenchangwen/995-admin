@@ -8,39 +8,39 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row>
-            <el-table-column align="left" label='ID' width="300">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+            <el-table-column  label='ID' width="300">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='交易主体' width="200">
+            <el-table-column  label='交易主体'>
                 <template slot-scope="scope">
                     {{scope.row.relationKickbackTradeId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='推荐人ID' width="300">
+            <el-table-column  label='推荐人ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.kickbackUserId}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='返佣关系' width="300">
+            <el-table-column  label='返佣关系' min-width="300">
                 <template slot-scope="scope">
                     <p>用户层级{{scope.row.kickbackFloor}}</p>
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='账号类型' width="150">
+            <el-table-column  label='账号类型' width="150">
                 <template slot-scope="scope">
                     {{scope.row.kickbackCentSubject}}
                 </template>
             </el-table-column>
-            <el-table-column align="left" label='获得积分' width="150">
+            <el-table-column  label='获得积分' width="150">
                 <template slot-scope="scope">
                     {{scope.row.kickbackCents}}
                 </template>
             </el-table-column>
 
-            <el-table-column align="left" label='创建时间' width="155">
+            <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
