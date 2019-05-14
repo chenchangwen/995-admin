@@ -1,12 +1,11 @@
 <template>
-    <el-select v-model="selectedValue" multiple value-key="id" placeholder="请选择" @change="handleChange">
+    <el-select v-model="selectedValue" multiple value-key="id" placeholder="选择分类" @change="handleChange">
         <el-option v-if="items"
                    v-for="item in items"
                    :key="item.id"
                    :label="item.name"
                    :value="item">
         </el-option>
-
     </el-select>
 </template>
 

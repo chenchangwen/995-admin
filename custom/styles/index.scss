@@ -26,9 +26,22 @@
     width: 85%;
 }
 
-.detail-btn-box {
+.sticky-box {
+    margin: -20px;
+    background: #d0d0d0;
+    .sticky-item{
+        height: 50px;
+        padding: 7px 20px 7px 0px;
+        //line-height: 50px;
+        position: relative;
+        text-align: right;
+        background: #d0d0d0;
+    }
+}
+
+.detail-top-box{
     position: fixed;
-    padding: 10px 30px;
+    padding: 7px 30px;
     text-align: right;
     right: 0;
     bottom: 0;
