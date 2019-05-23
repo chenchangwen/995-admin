@@ -10,15 +10,20 @@
         :http-request="currentHttpRequest"
         :on-change="handleChange"
         :on-success="handleSuccess"
+        :name="name"
         :file-list="fileList">
         <el-button size="small" type="primary" v-if="!showTip" :class="{'from-edit' : isFormEdit}">点击上传</el-button>
         <i class="el-icon-upload" v-if="showTip"></i>
-        <div slot="tip" class="el-upload__tip" v-if="showTip">只能上传jpg/png文件，且不超过5M</div>
+        <div slot="tip" class="el-upload__tip" v-if="showTip">{{TipText}}</div>
     </el-upload>
 </template>
 <script>
     export default {
         props: {
+            name: {
+                type: String,
+                default: ''
+            },
             listType: {
                 type: String,
                 default: 'picture-card'
@@ -36,6 +41,10 @@
             showTip: {
                 type: Boolean,
                 default: true
+            },
+            TipText:{
+                type: String,
+                default: '只能上传jpg/png文件，且不超过5M'
             },
             fileIndex: {
                 type: Number,

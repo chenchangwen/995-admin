@@ -185,5 +185,21 @@ export let resourcesRouter = {
                 children: []
             }
         ]
-    }
+    },
+    '/crowds/**':{
+        path: 'activity',
+        component: () => import('../views/resources/activity/index'),
+        children: [
+            {
+                name: 'activity-edit',
+                path: 'activity/edit/:id',
+                component: () => import('../views/resources/activity/edit'),
+                meta: {
+                    title: '活动',
+                },
+                hidden: true,
+                children: []
+            }
+        ]
+    },
 };
