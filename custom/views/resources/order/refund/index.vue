@@ -190,14 +190,14 @@
                             operatorSummary: '',
                             operatorUserId: this.home.user.id
                         };
-                        this.commonItem.pageData.queryConfirm = {
+                        this.request.queryConfirm ={
                             url: '/confirm'
                         }
                     }
                     if (this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         delete this.postForm.total;
-                        this.commonItem.pageData.queryEdit = {
+                        this.request.queryConfirm ={
                             url: '/refuse'
                         }
                     }

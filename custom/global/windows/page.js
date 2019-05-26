@@ -76,6 +76,8 @@ window.pageInit = function pageInit(options) {
                 isEditedAssignRow: true,
                 //是否设置相同行标记
                 isSetSameRowSign: false,
+                //相同行标记键
+                sameRowKey : '',
                 //是否mounted请求数据
                 isNoMountedRequest: false
 
@@ -169,6 +171,9 @@ window.pageInit = function pageInit(options) {
                         that.total = response.data;
                     })
                 }
+                if (_.isFunction(that.afterRequestMounted)) {
+                    that.afterRequestMounted(response)
+                }
             })
         },
         /**
@@ -194,6 +199,9 @@ window.pageInit = function pageInit(options) {
             this._queryData(queryAPI, false, function (pgData, response) {
                 if (_.isFunction(that.afterRequestMounted)) {
                     that.afterRequestMounted(response)
+                }
+                if (that.isSetSameRowSign && !_.isEmpty(that.items)) {
+                    setSameRowSign.call(that, that.items , that.sameRowKey)
                 }
             }, query)
         },
@@ -337,22 +345,25 @@ window.pageInit = function pageInit(options) {
             this.dialogStatus = (options && options.dialogStatus) || 'delete';
             this.setItem(item || row)
             this.row = _.cloneDeep(row);
+            let pgData = this._getBeforeEditRequestPageData()
             let defaults = {
                 title: '提示',
-                text: '确定删除',
+                text: '确定删除?',
                 options: {
                     type: 'warning'
                 }
             };
             let confirm = _.assignIn(defaults, (options && options.confirmOptions));
+            let queryKey = options && options.queryKey;
             this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
                 let that = this
                 let query = {
-                    id: row[pageData.idKey || that.form.id]
-                };
+                    [queryKey || 'id']: row[pgData.idKey || that.form.id]
+                }
+                that.postForm = query
                 this._queryData(commonQuery.queryConfirm, false, function () {
                     that._getList()
-                }, query)
+                },'', 'edit')
             }).catch(_ => {
 
             });

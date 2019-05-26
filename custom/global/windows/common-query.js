@@ -3,9 +3,9 @@
  */
 
 function queryData(options) {
-    let requestObj = options.pageData.request || {};
-    let requestKey = requestObj[options.requestKey] || '';
-    let queryPrefix = requestObj.queryPrefix || '';
+    let requestObj = options.pageData.request || {}
+    let requestKey = requestObj[options.requestKey] || ''
+    let queryPrefix = requestObj.queryPrefix || ''
     let query = {
         url: queryPrefix + ((requestKey.url || options.url) || ''),
         method: requestKey.method || options.method
@@ -15,7 +15,14 @@ function queryData(options) {
     if (query.method === 'get') {
         queryDataKey = 'params'
     }
-    query[queryDataKey] = options.pageData.query
+    if (options.requestKey === 'queryCount') {
+        query[queryDataKey] = {
+            search :options.pageData.query.search
+        }
+    }
+    else {
+        query[queryDataKey] = options.pageData.query
+    }
     return request(query)
 }
 

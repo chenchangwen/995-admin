@@ -166,9 +166,11 @@
                     }
                 },
                 beforeEditRequest(row) {
-                    this.postForm = _.cloneDeep(this.commonItem.form);
-                    this.postForm.userId = this.home.user.id;
-                    this.postForm.faqDetail.contentType = 'textarea';
+                    if(this.dialogStatus === 'update') {
+                        this.postForm = _.cloneDeep(this.commonItem.form);
+                        this.postForm.userId = this.home.user.id;
+                        this.postForm.faqDetail.contentType = 'textarea';
+                    }
                 },
             }
         }

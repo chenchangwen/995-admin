@@ -186,6 +186,7 @@ export let resourcesRouter = {
             }
         ]
     },
+    //活动(暂用众筹路由)
     '/crowds/**':{
         path: 'activity',
         component: () => import('../views/resources/activity/index'),
@@ -196,6 +197,16 @@ export let resourcesRouter = {
                 component: () => import('../views/resources/activity/edit'),
                 meta: {
                     title: '活动',
+                },
+                hidden: true,
+                children: []
+            },
+            {
+                name: 'activity-pending',
+                path: 'activity/pending',
+                component: () => import('../views/resources/activity/pending'),
+                meta: {
+                    title: '待审核活动',
                 },
                 hidden: true,
                 children: []

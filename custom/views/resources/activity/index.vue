@@ -14,6 +14,8 @@
             </el-select>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
+
+            <el-button class="filter-item" type="primary" v-waves @click="routerPush( $route.path + '/pending')">待审核({{pendingCount}})条</el-button>
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
                   style="width: 100%">
@@ -67,6 +69,7 @@
     let page = new pageInit(
         {
             data: {
+                pendingCount: 0,
                 statusOptions: [
                     {
                         value: 'NEW',
@@ -117,11 +120,18 @@
                 }
             },
             methods: {
-                beforeOpenDialog(row) {
-
-                },
-                afterCloseDialog(row) {
-
+                afterRequestMounted(){
+                    let options = {
+                        url: '/activities/count',
+                        method: 'get',
+                        params:{
+                            search : 'status==NEW'
+                        }
+                    }
+                    let that = this;
+                    request(options).then(function (response) {
+                        that.pendingCount = response.data;
+                    })
                 }
             }
         }
