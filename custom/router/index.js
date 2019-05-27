@@ -186,8 +186,8 @@ export let resourcesRouter = {
             }
         ]
     },
-    //活动(暂用众筹路由)
-    '/crowds/**':{
+    //活动
+    '/activities/**':{
         path: 'activity',
         component: () => import('../views/resources/activity/index'),
         children: [
@@ -212,5 +212,10 @@ export let resourcesRouter = {
                 children: []
             }
         ]
+    },
+    '/identifications/**':{
+        path: 'identifications',
+        component: () => import('../views/resources/identification/index'),
+        children: []
     },
 };
