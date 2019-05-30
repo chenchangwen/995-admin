@@ -3,7 +3,7 @@
  * @param options vue 实例参数
  * @param api 如果有,则覆盖window.curd
  */
-import {mergeSameRow, setSameRowSign, deepClearObject} from '../../utils';
+import { mergeSameRow, setSameRowSign, deepClearObject } from '../../utils'
 import * as commonQuery from './common-query'
 
 window.pageInit = function pageInit(options) {
@@ -56,16 +56,15 @@ window.pageInit = function pageInit(options) {
                 beginTimeOptions: {
                     disabledDate: (time) => {
                         if (this.form.endTime) {
-                            return time.getTime() > this.form.endTime;
-                        }
-                        else {
-                            return time.getTime() < this.form.endTime;
+                            return time.getTime() > this.form.endTime
+                        } else {
+                            return time.getTime() < this.form.endTime
                         }
                     }
                 },
                 endTimeOptions: {
                     disabledDate: (time) => {
-                        return time.getTime() < this.form.beginTime;
+                        return time.getTime() < this.form.beginTime
                     }
                 },
                 //是否编辑成功后合并row
@@ -77,18 +76,19 @@ window.pageInit = function pageInit(options) {
                 //是否设置相同行标记
                 isSetSameRowSign: false,
                 //相同行标记键
-                sameRowKey : '',
+                sameRowKey: '',
                 //是否mounted请求数据
-                isNoMountedRequest: false
-
-            };
-            return _.assign({}, defaults, options.data || '');
+                isNoMountedRequest: false,
+                isUseRSQL: true
+            }
+            return _.assign({}, defaults, options.data || '')
         },
         mounted() {
-            if (this.isNoMountedRequest)
-                return false;
+            if (this.isNoMountedRequest) {
+                return false
+            }
             if (_.isFunction(this.beforeRequestMounted)) {
-                this.beforeRequestMounted(pageData);
+                this.beforeRequestMounted(pageData)
             }
             if (this.request && (this.request.queryList && this.request.queryList.url) || this.request.queryPrefix) {
                 this.query.page = 0
@@ -99,21 +99,21 @@ window.pageInit = function pageInit(options) {
             }
             //tagsView切换提存在响应所以清空
             else {
-                let item = this.initItemFormName;
+                let item = this.initItemFormName
                 if (item) {
-                    deepClearObject(this[item].form);
+                    deepClearObject(this[item].form)
                 }
                 if (_.isFunction(this.noRequestMounted)) {
-                    this.noRequestMounted(pageData);
+                    this.noRequestMounted(pageData)
                 }
                 this.itemsLoading = false
                 this.pageLoading = false
             }
         }
-    };
+    }
 
     //页面基础数据
-    let pageData = page.data();
+    let pageData = page.data()
 
     //页面基础方法
     let methods = {
@@ -145,19 +145,21 @@ window.pageInit = function pageInit(options) {
                 message: '创建成功',
                 type: 'success',
                 duration: 2000
-            };
-            let option = _.assignIn(defaults, options);
+            }
+            let option = _.assignIn(defaults, options)
             this.$notify(option)
         },
         /**
          * 请求列表数据
          */
         _getList() {
-            this.itemsLoading = true;
-            this.setQueryItem();
-            let that = this;
-            this._queryData(commonQuery.queryList, false, function (pgData, response) {
-                let thatRequest = that.request;
+            this.itemsLoading = true
+            if (this.isUseRSQL) {
+                this.setQueryItem()
+            }
+            let that = this
+            this._queryData(commonQuery.queryList, false, function(pgData, response) {
+                let thatRequest = that.request
                 if (thatRequest && thatRequest.queryList && thatRequest.queryList.itemsKey) {
                     that.items = eval('response.data.' + thatRequest.queryList.itemsKey)
                 } else {
@@ -168,7 +170,7 @@ window.pageInit = function pageInit(options) {
                 }
                 if (that.isQueryCount) {
                     commonQuery.queryCount(pageData).then(response => {
-                        that.total = response.data;
+                        that.total = response.data
                     })
                 }
                 if (_.isFunction(that.afterRequestMounted)) {
@@ -196,40 +198,41 @@ window.pageInit = function pageInit(options) {
             if (querySum > 0) {
                 query = that.query
             }
-            this._queryData(queryAPI, false, function (pgData, response) {
+            this._queryData(queryAPI, false, function(pgData, response) {
                 if (_.isFunction(that.afterRequestMounted)) {
                     that.afterRequestMounted(response)
                 }
                 if (that.isSetSameRowSign && !_.isEmpty(that.items)) {
-                    setSameRowSign.call(that, that.items , that.sameRowKey)
+                    setSameRowSign.call(that, that.items, that.sameRowKey)
                 }
             }, query)
         },
         _createData() {
             let that = this
-            delete this.form.id;
-            this._queryData(commonQuery.queryAdd, true, function (pgData, response) {
+            delete this.form.id
+            this._queryData(commonQuery.queryAdd, true, function(pgData, response) {
                 if (that.items) {
                     if (that.total < that.query.size) {
                         that.items.splice(0, 0, response.data)
-                    }
-                    else {
-                        that.items.unshift(response.data);
+                    } else {
+                        that.items.unshift(response.data)
                     }
                 }
-                that.total = that.total + 1;
-                that._notify({message: '创建成功'})
+                that.total = that.total + 1
+                that._notify({ message: '创建成功' })
             }, '', 'edit')
         },
         _editData() {
             let that = this
-            this._queryData(commonQuery.queryEdit, true, function (pgData, response) {
+            debugger;
+            this._queryData(commonQuery.queryEdit, true, function(pgData, response) {
                 if (that.items) {
                     //遍历items,即所有row.id和当前row.id对比正确后.更新当前row,那就不必重新请求接口获取数据
+                    let index = 0
                     for (const v of that.items) {
                         //可能当前操作的row相对来说不是一级的,那么这个row的id相对来说就是不正确的通过page.idKey更换
-                        if (v[that.idKey || 'id'] === pgData.idKey || that.form.id) {
-                            const index = that.items.indexOf(v)
+                        if (v[that.idKey || 'id'] === that.row[pgData.idKey || that.form.id]) {
+                            // const index = that.items.indexOf(v)
                             if (pgData.isEditedAssignRow) {
                                 that.row = _.assignIn(that.row, response.data)
                             } else {
@@ -243,9 +246,10 @@ window.pageInit = function pageInit(options) {
                             that.items.splice(index, 1, that.row)
                             break
                         }
+                        index++
                     }
                 }
-                that._notify({message: '更新成功'})
+                that._notify({ message: '更新成功' })
             }, '', 'edit')
         },
         /**
@@ -283,7 +287,7 @@ window.pageInit = function pageInit(options) {
                 that.dialogButtonLoading = true
                 that.dialogButtonDisabled = true
                 that.pageLoading = true
-                let pgData = that._getBeforeEditRequestPageData(true, queryType);
+                let pgData = that._getBeforeEditRequestPageData(true, queryType)
                 pgData.query = query || pgData.query
                 queryFn(pgData).then((response) => {
                     if (_.isFunction(onRequestSuccess)) {
@@ -295,7 +299,7 @@ window.pageInit = function pageInit(options) {
                     that.pageLoading = false
                     that.itemsLoading = false
                 }).catch(_ => {
-                    that.itemsLoading = false;
+                    that.itemsLoading = false
                     that.dialogButtonLoading = false
                     that.dialogButtonDisabled = false
                     that.pageLoading = false
@@ -321,30 +325,26 @@ window.pageInit = function pageInit(options) {
             }
         },
         handleFilter() {
-            this.query.page = 0;
-            this._getList();
+            this.query.page = 0
+            this._getList()
         },
         handleCreate(item, options) {
-            this.dialogStatus = (options && options.dialogStatus) || 'create';
-            this.setItem(item);
-            this.setDialogItem();
-            this.resetForm();
+            this.dialogStatus = (options && options.dialogStatus) || 'create'
+            this.setItem(item)
+            this.setDialogItem()
+            this.resetForm()
         },
         handleUpdate(row, item, options) {
-            this.dialogStatus = (options && options.dialogStatus) || 'update';
-            this.setItem(item);
-            this.row = _.cloneDeep(row);
-            this.setDialogItem(this.row);
-            this.resetForm();
+            this.dialogStatus = (options && options.dialogStatus) || 'update'
+            this.setItem(item)
+            this.row = _.cloneDeep(row)
+            this.setDialogItem(this.row)
+            this.resetForm()
         },
         handleConfirm(row, item, options) {
-            let that = this;
-            if (!row[that.idKey]) {
-                return false
-            }
-            this.dialogStatus = (options && options.dialogStatus) || 'delete';
+            this.dialogStatus = (options && options.dialogStatus) || 'delete'
             this.setItem(item || row)
-            this.row = _.cloneDeep(row);
+            this.row = _.cloneDeep(row)
             let pgData = this._getBeforeEditRequestPageData()
             let defaults = {
                 title: '提示',
@@ -352,21 +352,21 @@ window.pageInit = function pageInit(options) {
                 options: {
                     type: 'warning'
                 }
-            };
-            let confirm = _.assignIn(defaults, (options && options.confirmOptions));
-            let queryKey = options && options.queryKey;
+            }
+            let confirm = _.assignIn(defaults, (options && options.confirmOptions))
+            let queryKey = options && options.queryKey
             this.$confirm(confirm.text, confirm.title, confirm.options).then(_ => {
                 let that = this
                 let query = {
-                    [queryKey || 'id']: row[pgData.idKey || that.form.id]
+                    [queryKey || 'id']: (row[pgData.idKey || that.form.id])
                 }
                 that.postForm = query
-                this._queryData(commonQuery.queryConfirm, false, function () {
+                this._queryData(commonQuery.queryConfirm, false, function() {
                     that._getList()
-                },'', 'edit')
+                }, '', 'edit')
             }).catch(_ => {
 
-            });
+            })
         },
         /**
          * 请求保存数据
@@ -375,8 +375,7 @@ window.pageInit = function pageInit(options) {
             this._checkItem(item)
             if (item.form && !item.form.id) {
                 this._createData()
-            }
-            else {
+            } else {
                 this._editData()
             }
         },
@@ -386,18 +385,18 @@ window.pageInit = function pageInit(options) {
          */
         setItem(item) {
             if (item) {
-                this.item = item;
+                this.item = item
             }
             if (item && item.form) {
-                this.form = item.form;
+                this.form = item.form
                 if (!item.originForm) {
-                    item.originForm = _.extend(item.form);
+                    item.originForm = _.extend(item.form)
                 }
             }
             if (!item.pageData) {
-                item.pageData = {};
+                item.pageData = {}
             }
-            this.postForm = '';
+            this.postForm = ''
         },
         /**
          * 重置表单
@@ -411,20 +410,20 @@ window.pageInit = function pageInit(options) {
                         if (this.$refs[this.item.formName]) {
                             this.$refs[this.item.formName].resetFields()
                         }
-                        deepClearObject(this.item.form);
+                        deepClearObject(this.item.form)
                     })
                 })
             }
-            this.dialogFormVisible = true;
-            this.dialogButtonLoading = false;
-            this.dialogButtonDisabled = false;
-            this.clearValidate();
+            this.dialogFormVisible = true
+            this.dialogButtonLoading = false
+            this.dialogButtonDisabled = false
+            this.clearValidate()
         },
         /**
          * 清除验证
          */
         clearValidate() {
-            let formName = this.item.formName;
+            let formName = this.item.formName
             if (this.$refs[formName]) {
                 this.$nextTick(() => {
                     this.$refs[formName].clearValidate()
@@ -437,20 +436,20 @@ window.pageInit = function pageInit(options) {
         setDialogItem(row) {
             if (row) {
                 for (let item in this.form) {
-                    this.form[item] = _.isBoolean(row[item]) ? row[item] : (row[item] || '');
+                    this.form[item] = _.isBoolean(row[item]) ? row[item] : (row[item] || '')
                 }
                 if (!this.form['id']) {
-                    this.form['id'] = row['id'] || '';
+                    this.form['id'] = row['id'] || ''
                 }
             }
             if (_.isFunction(this.beforeOpenDialog)) {
-                this.beforeOpenDialog(row);
+                this.beforeOpenDialog(row)
             }
         },
         /**
          * 排序改变事件
          */
-        handleSortChange({column, prop, order}) {
+        handleSortChange({ column, prop, order }) {
             let sort = (order === 'ascending' ? 'asc' : 'desc')
             if (prop) {
                 this.query.sortField = prop
@@ -466,37 +465,36 @@ window.pageInit = function pageInit(options) {
          * 针对RSQL处理
          */
         setQueryItem() {
-            let searchList = [];
-            this.query.search = '';
-            let queryItem = this.queryItem;
+            let searchList = []
+            this.query.search = ''
+            let queryItem = this.queryItem
             for (let item in queryItem) {
-                let searchStr = '';
-                let thisItem = queryItem[item];
+                let searchStr = ''
+                let thisItem = queryItem[item]
                 if (_.isArrayLike(thisItem)) {
                     if (thisItem.value) {
                         for (let qItem in thisItem) {
-                            let q = thisItem[qItem];
+                            let q = thisItem[qItem]
                             if (q.key) {
-                                searchStr = q.key + q.operation + thisItem.value + q.predicate;
-                                searchList.push(searchStr);
+                                searchStr = q.key + q.operation + thisItem.value + q.predicate
+                                searchList.push(searchStr)
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     if (thisItem.value) {
-                        searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate;
-                        searchList.push(searchStr);
+                        searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate
+                        searchList.push(searchStr)
                     }
                 }
             }
 
             if (searchList.length > 0) {
-                this.query.search = searchList.join('');
-                let lastIndex = this.query.search.length - 1;
-                let lastChar = this.query.search.charAt(lastIndex);
+                this.query.search = searchList.join('')
+                let lastIndex = this.query.search.length - 1
+                let lastChar = this.query.search.charAt(lastIndex)
                 if ([',', ';'].indexOf(lastChar) > -1) {
-                    this.query.search = this.query.search.substr(0, lastIndex);
+                    this.query.search = this.query.search.substr(0, lastIndex)
                 }
             }
         },
@@ -522,20 +520,20 @@ window.pageInit = function pageInit(options) {
                 values.splice(index, 1)
             }
         }
-    };
+    }
 
     //增加mergeSameRow方法
     if (pageData.isSetSameRowSign) {
-        methods.mergeSameRow = mergeSameRow;
+        methods.mergeSameRow = mergeSameRow
     }
 
     //合并基础方法
-    page.methods = _.assign({}, methods, options.methods || '');
+    page.methods = _.assign({}, methods, options.methods || '')
     //合并页面自定义属性
     Object.keys(options).forEach(item => {
         if (item !== 'methods' && item !== 'data') {
-            page[item] = options[item];
+            page[item] = options[item]
         }
-    });
-    return page;
-};
+    })
+    return page
+}

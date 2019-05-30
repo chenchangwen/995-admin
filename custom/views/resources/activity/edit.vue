@@ -14,6 +14,18 @@
                 <el-form-item :label="'活动ID'">
                     {{form.id}} (系统级,不可更改)
                 </el-form-item>
+
+                <el-form-item :label="'状态'">
+                    <el-select v-model="form.status" placeholder="状态" style="width: 200px">
+                        <el-option
+                            v-for="item in statusOptions"
+                            :key="item.value"
+                            :label="item.value"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
                 <el-form-item :label="'活动标题'" prop="name">
                     <el-input v-model="form.name" placeholder="活动标题"></el-input>
                 </el-form-item>
@@ -102,6 +114,20 @@
         components: { Tinymce, fileUpload, Sticky },
         data() {
             return {
+                statusOptions: [
+                    {
+                        value: 'NEW',
+                        label: 'NEW'
+                    },
+                    {
+                        value: 'LAUNCH',
+                        label: 'LAUNCH'
+                    },
+                    {
+                        value: 'DISABLE',
+                        label: 'DISABLE'
+                    }
+                ],
                 originForm: '',
                 enrollEndTimeOptions: {
                     disabledDate: (time) => {

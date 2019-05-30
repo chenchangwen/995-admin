@@ -210,6 +210,26 @@ export let resourcesRouter = {
                 },
                 hidden: true,
                 children: []
+            },
+            {
+                name: 'activity-crowd',
+                path: 'activity/crowd/:activityId',
+                component: () => import('../views/resources/activity/crowd/list'),
+                meta: {
+                    title: '活动-众筹详情',
+                },
+                hidden: true,
+                children: []
+            },
+            {
+                name: 'activity-crowd/support',
+                path: 'activity/crowd/:activityId/support',
+                component: () => import('../views/resources/activity/crowd/support'),
+                meta: {
+                    title: '众筹详情-支持详情',
+                },
+                hidden: true,
+                children: []
             }
         ]
     },

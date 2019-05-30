@@ -186,7 +186,8 @@
                 },
                 idKey: 'id',
                 request: {
-                    queryPrefix: '/cents/cashes'
+                    queryPrefix: '/cents/cashes',
+                    queryEdit:{}
                 }
             },
             computed: {
@@ -206,11 +207,11 @@
                     };
                     if (this.dialogStatus === 'agree') {
                         this.postForm.summary ='';
-                        this.commonItem.pageData.queryEditUrl = '/confirm';
+                        this.request.queryEdit.url = '/confirm';
                     }
                     if (this.dialogStatus === 'refuse') {
                         this.postForm.summary = this.commonItem.form.summary;
-                        this.commonItem.pageData.queryEditUrl = '/refuse';
+                        this.request.queryEdit.url = '/refuse';
                     }
                 }
             }

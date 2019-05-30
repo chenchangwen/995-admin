@@ -8,10 +8,16 @@
             </el-button>
 
         </div>
-        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row style="width: 100%">
+        <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
+                  style="width: 100%">
             <el-table-column label='主体' width="200">
                 <template slot-scope="scope">
                     {{scope.row.subject}}
+                </template>
+            </el-table-column>
+            <el-table-column label='id' width="200">
+                <template slot-scope="scope">
+                    {{scope.row.id}}
                 </template>
             </el-table-column>
             <el-table-column label='主体名称' width="200">
@@ -34,7 +40,9 @@
                             {{item.userName}} #{{item.userId}} : @{{item.atUserNames}}#{{item.atUserIds}}
                             {{item.content}}
                         </el-tag>
-                        <el-button size="mini" type="primary" @click="handleUpdate(item, replyEditItem ,replyEditItem.options)">编辑</el-button>
+                        <el-button size="mini" type="primary"
+                                   @click="handleUpdate(item, replyEditItem ,replyEditItem.options)">编辑
+                        </el-button>
                     </p>
 
                 </template>
@@ -68,7 +76,7 @@
 
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
 
-            <el-form ref="replyForm" :model="replyItem.form" label-position="left"
+            <el-form :rules="replyItem.rules" ref="replyForm" :model="replyItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;' v-if="dialogStatus ==='reply'">
                 <el-form-item :label="'回复对象'" prop="name">
@@ -80,7 +88,8 @@
 
             </el-form>
 
-            <el-form :rules="commentEditItem.rules" ref="commentEditItem" :model="commentEditItem.form" label-position="left"
+            <el-form :rules="commentEditItem.rules" ref="commentEditItem" :model="commentEditItem.form"
+                     label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;' v-if="dialogStatus ==='commentEditUpdate'">
                 <el-form-item :label="'置顶'">
@@ -131,7 +140,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex'
 
     let page = new pageInit(
         {
@@ -141,14 +150,17 @@
                         disable: '',
                         id: ''
                     },
-                    key: '',
                     formName: 'replyEditItem',
                     options: {
                         dialogStatus: 'replyEditItemUpdate'
                     },
                     pageData: {
-                        queryEditUrl: '/ats/edit',
-                        idKey: 'commentId'
+                        idKey: 'commentId',
+                        request:{
+                            queryEdit: {
+                                url: '/comments/ats/edit'
+                            }
+                        }
                     }
                 },
                 commentEditItem: {
@@ -157,13 +169,16 @@
                         id: '',
                         top: ''
                     },
-                    key: '',
                     formName: 'commentEditItem',
                     options: {
                         dialogStatus: 'commentEditUpdate'
                     },
                     pageData: {
-                        queryEditUrl: '/edit',
+                        request: {
+                            queryEdit: {
+                                url: '/comments/edit'
+                            }
+                        }
                     }
                 },
                 replyItem: {
@@ -176,14 +191,18 @@
                         target: ''
                     },
                     rules: {
-                        content: [{required: true, message: '回复内容不能为空', trigger: 'blur'}],
+                        content: [{ required: true, message: '回复内容不能为空', trigger: 'blur' }]
                     },
                     formName: 'replyForm',
                     options: {
                         dialogStatus: 'reply'
                     },
                     pageData: {
-                        queryEditUrl: '/ats/add'
+                        request: {
+                            queryEdit: {
+                                url: '/comments/ats/add'
+                            }
+                        }
                     }
                 },
                 //查询对象
@@ -192,7 +211,7 @@
                         key: 'name',
                         operation: '==',
                         value: '',
-                        predicate: ";"
+                        predicate: ';'
                     }
                 },
                 idKey: 'id',
@@ -203,38 +222,35 @@
             methods: {
                 beforeOpenDialog(row) {
                     if (this.dialogStatus === 'reply') {
-                        this.textMap.reply = '回复';
-                        this.replyItem.form.userId = this.home.user.id;
-                        this.replyItem.form.userName = this.home.user.name;
-                        this.replyItem.form.content = '';
-                        this.replyItem.form.target = row.userName + ' # ' + row.userId;
-                        this.replyItem.form.commentId = row.id;
+                        this.textMap.reply = '回复'
+                        this.replyItem.form.userId = this.home.user.id
+                        this.replyItem.form.userName = this.home.user.name
+                        this.replyItem.form.content = ''
+                        this.replyItem.form.target = row.userName + ' # ' + row.userId
+                        this.replyItem.form.commentId = row.id
                     }
                 },
                 beforeEditRequest(row) {
                     if (this.dialogStatus === 'reply') {
-                        this.postForm = _.cloneDeep(this.replyItem.form);
-                        delete this.postForm.target;
-                        delete this.postForm.id;
+                        this.postForm = _.cloneDeep(this.replyItem.form)
+                        delete this.postForm.target
+                        delete this.postForm.id
                     }
-                },
-                afterCloseDialog(){
-
                 }
             },
             created() {
-                this.textMap.replyEditItemUpdate = '回复编辑';
-                this.textMap.commentEditUpdate = '评论编辑';
-                this.textMap.reply = '回复';
+                this.textMap.replyEditItemUpdate = '回复编辑'
+                this.textMap.commentEditUpdate = '评论编辑'
+                this.textMap.reply = '回复'
             },
             computed: {
                 ...mapGetters([
-                    'home',
+                    'home'
                 ])
             }
         }
-    );
-    export default page;
+    )
+    export default page
 </script>
 <style rel="stylesheet/scss" lang="scss" scoped>
     .el-tag {

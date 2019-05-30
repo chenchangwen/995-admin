@@ -16,11 +16,11 @@ function queryData(options) {
         queryDataKey = 'params'
     }
     if (options.requestKey === 'queryCount') {
-        query[queryDataKey] = {
-            search :options.pageData.query.search
-        }
-    }
-    else {
+        let cloneQuery = _.cloneDeep(options.pageData.query)
+        delete cloneQuery.page
+        delete cloneQuery.size
+        query[queryDataKey] = cloneQuery
+    } else {
         query[queryDataKey] = options.pageData.query
     }
     return request(query)
