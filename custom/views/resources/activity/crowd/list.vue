@@ -74,12 +74,12 @@
 
             <el-table-column align="center" :label="'退款操作'" width="220">
                 <template slot-scope="scope">
-                    <div v-if="scope.row.status!=='REFUND_APPLICATION' && scope.row.status!=='REFUND'">
+                    <div v-if="scope.row.activityMember.status!=='REFUND_APPLICATION' && scope.row.activityMember.status!=='REFUND'">
                         <el-button type="primary" @click="handleConfirm(scope.row,commonItem, commonItem.applyOptions)"
                                    size="mini">申请退款
                         </el-button>
                     </div>
-                    <div v-if="scope.row.status==='REFUND_APPLICATION'">
+                    <div v-if="scope.row.activityMember.status==='REFUND_APPLICATION'">
                         <el-button type="primary" @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)"
                                    size="mini">同意退款
                         </el-button>
@@ -171,17 +171,22 @@
                             operationUserId: parseInt(this.home.user.id)
                         }
                     }
+                    if (this.dialogStatus === 'apply') {
+                        this.postForm = {
+                            id: row.crowd.id,
+                        }
+                        this.request.queryConfirm.url = '/dashboard/distance/crowds/refund/apply'
+                    }
                     if (this.dialogStatus === 'agree') {
-                        this.request.queryConfirm.url = '/crowds/refund/confirm'
+                        this.request.queryConfirm.url = '/dashboard/distance/crowds/refund/confirm'
                     }
                     if (this.dialogStatus === 'refuse') {
-                        this.request.queryConfirm.url = '/crowds/refund/refuse'
+                        this.request.queryConfirm.url = '/dashboard/distance/crowds/refund/refuse'
                     }
                 },
                 beforeRequestMounted() {
-                    let test = '691c2941-f922-4f8d-8c40-c79e8ede2ed7'
                     this.query = {
-                        activityId: test,
+                        activityId: this.$route.params.activityId,
                         userName: ''
                     }
                 },
