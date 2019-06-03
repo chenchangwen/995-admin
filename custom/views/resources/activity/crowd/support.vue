@@ -4,14 +4,6 @@
             <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户名称'"
                       v-model="query.userName">
             </el-input>
-            <el-select v-model="query.status" clearable placeholder="状态" style="width: 200px">
-                <el-option
-                    v-for="item in statusOptions"
-                    :key="item.value"
-                    :label="item.value"
-                    :value="item.value">
-                </el-option>
-            </el-select>
 
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
@@ -68,94 +60,31 @@
                 </template>
             </el-table-column>
 
-            <el-table-column align="center" :label="'操作'" width="220">
-                <template slot-scope="scope">
-                    <el-button type="primary" @click="handleUpdate(scope.row,commonItem, commonItem.agreeOptions)">同意
-                    </el-button>
-                    <el-button type="danger" @click="handleUpdate(scope.row,commonItem, commonItem.agreeOptions)">拒绝
-                    </el-button>
-                </template>
-            </el-table-column>
-
         </el-table>
         <page></page>
     </div>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex'
+
     let page = new pageInit(
         {
             data: {
-                isUseRSQL: false,
-                commonItem:{
-                    agreeOptions: {
-                        dialogStatus: 'agree',
-                        confirmOptions: {
-                            text: '确定同意?'
-                        }
-                    },
-                    refuseOptions: {
-                        dialogStatus: 'refuse',
-                        confirmOptions: {
-                            text: '确定拒绝?'
-                        }
-                    }
-                },
-                statusOptions: [
-                    {
-                        value: 'SUCCESS',
-                        label: 'SUCCESS'
-                    },
-                    {
-                        value: 'REFUND',
-                        label: 'REFUND'
-                    },
-                    {
-                        value: 'GOING',
-                        label: 'GOING'
-                    },
-                    {
-                        value: 'EXPIRE',
-                        label: 'EXPIRE'
-                    }
-                ],
                 request: {
                     queryPrefix: '/dashboard/distance/crowds/items'
                 }
             },
             computed: {
                 ...mapGetters([
-                    'home',
+                    'home'
                 ])
             },
             methods: {
                 beforeRequestMounted() {
                     this.query = {
-                        crowdId : this.$route.params.crowdId,
-                        userName:''
-                    }
-
-                    if (this.dialogStatus === 'agree') {
-                        this.postForm = {
-                            id: row.id,
-                            operationSummary: '',
-                            operationUserId: this.home.user.id
-                        };
-                        this.request.queryConfirm ={
-                            url: '/confirm'
-                        }
-                    }
-
-                    if (this.dialogStatus === 'refuse') {
-                        this.postForm = {
-                            id: row.id,
-                            operationSummary: '',
-                            operationUserId: this.home.user.id
-                        };
-                        this.request.queryConfirm ={
-                            url: '/refuse'
-                        }
+                        crowdId: this.$route.params.crowdId,
+                        userName: ''
                     }
                 },
                 afterRequestMounted() {
