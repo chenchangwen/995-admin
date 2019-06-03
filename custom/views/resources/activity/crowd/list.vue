@@ -14,7 +14,9 @@
             </el-select>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
-
+            <el-button class="filter-item" type="primary" v-waves
+                       @click="routerPush('/' +$route.matched[0].name + '/activity')">返回
+            </el-button>
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
                   style="width: 100%">
@@ -23,7 +25,7 @@
                     {{scope.row.activityMember.activity.id}}
                 </template>
             </el-table-column>
-            <el-table-column label='所属活动名称' width="min-200">
+            <el-table-column label='所属活动名称' min-width="200">
                 <template slot-scope="scope">
                     {{scope.row.activityMember.activity.name}}
                 </template>

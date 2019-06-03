@@ -55,10 +55,9 @@
                 <template slot-scope="scope">
                     <el-button type="primary" @click="routerPush($route.path + '/edit', scope.row.id)" size="mini">编辑</el-button>
                     <el-button type="primary" @click="routerPush($route.path + '/crowd', scope.row.id)" size="mini">众筹详情</el-button>
-                    <el-button type="primary" size="mini">查看联合发起人</el-button>
+                    <el-button type="primary" @click="routerPush($route.path + '/team', scope.row.id)" size="mini">查看联合发起人</el-button>
                 </template>
             </el-table-column>
-
         </el-table>
         <page></page>
     </div>

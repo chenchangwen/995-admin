@@ -222,6 +222,16 @@ export let resourcesRouter = {
                 children: []
             },
             {
+                name: 'activity-team',
+                path: 'activity/team/:activityId',
+                component: () => import('../views/resources/activity/team/list'),
+                meta: {
+                    title: '活动-查看联合发起人',
+                },
+                hidden: true,
+                children: []
+            },
+            {
                 name: 'activity-crowd/support',
                 path: 'activity/crowd/:crowdId/support',
                 component: () => import('../views/resources/activity/crowd/support'),
@@ -230,7 +240,8 @@ export let resourcesRouter = {
                 },
                 hidden: true,
                 children: []
-            }
+            },
+
         ]
     },
     '/identifications/**':{
