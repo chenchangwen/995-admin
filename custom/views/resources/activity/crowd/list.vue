@@ -66,7 +66,7 @@
 
             <el-table-column align="center" :label="'操作'" width="110">
                 <template slot-scope="scope">
-                    <el-button type="primary" @click="routerPush($route.path + '/support')"
+                    <el-button type="primary" @click="handleViewSupport(scope.row)"
                                size="mini">支持详情
                     </el-button>
                 </template>
@@ -163,6 +163,9 @@
                 ])
             },
             methods: {
+                handleViewSupport(row){
+                    this.routerPush(`/${this.$route.matched[0].name}/activity/crowd/${row.crowd.id}/support`)
+                },
                 beforeEditRequest(row) {
                     if (this.dialogStatus) {
                         this.postForm = {

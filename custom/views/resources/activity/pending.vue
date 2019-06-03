@@ -103,7 +103,12 @@
                     }
                 },
                 request: {
-                    queryPrefix: '/activities',
+                    queryList:{
+                        url: '/activities'
+                    },
+                    queryCount:{
+                        url: '/activities/count'
+                    }
                 }
             },
             computed: {
@@ -121,7 +126,7 @@
                             operationUserId: this.home.user.id
                         };
                         this.request.queryConfirm ={
-                            url: '/confirm'
+                            url: '/dashboard/distance/activities/confirm'
                         }
                     }
 
@@ -132,7 +137,7 @@
                             operationUserId: this.home.user.id
                         };
                         this.request.queryConfirm ={
-                            url: '/refuse'
+                            url: '/dashboard/distance/activities/refuse'
                         }
                     }
                 },

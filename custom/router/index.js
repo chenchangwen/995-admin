@@ -223,7 +223,7 @@ export let resourcesRouter = {
             },
             {
                 name: 'activity-crowd/support',
-                path: 'activity/crowd/:activityId/support',
+                path: 'activity/crowd/:crowdId/support',
                 component: () => import('../views/resources/activity/crowd/support'),
                 meta: {
                     title: '众筹详情-支持详情',
