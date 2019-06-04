@@ -222,6 +222,16 @@ export let resourcesRouter = {
                 children: []
             },
             {
+                name: 'activity-crowd/support',
+                path: 'activity/crowd/:activityId/support/:crowdId',
+                component: () => import('../views/resources/activity/crowd/support'),
+                meta: {
+                    title: '众筹详情-支持详情',
+                },
+                hidden: true,
+                children: []
+            },
+            {
                 name: 'activity-team',
                 path: 'activity/team/:activityId',
                 component: () => import('../views/resources/activity/team/list'),
@@ -232,16 +242,15 @@ export let resourcesRouter = {
                 children: []
             },
             {
-                name: 'activity-crowd/support',
-                path: 'activity/crowd/:crowdId/support',
-                component: () => import('../views/resources/activity/crowd/support'),
+                name: 'activity-team/member',
+                path: 'activity/team/:activityId/member/:teamId',
+                component: () => import('../views/resources/activity/team/member'),
                 meta: {
-                    title: '众筹详情-支持详情',
+                    title: '查看联合发起人-查看成员',
                 },
                 hidden: true,
                 children: []
             },
-
         ]
     },
     '/identifications/**':{

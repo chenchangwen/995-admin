@@ -166,7 +166,7 @@
             },
             methods: {
                 handleViewSupport(row){
-                    this.routerPush(`/${this.$route.matched[0].name}/activity/crowd/${row.crowd.id}/support`)
+                    this.routerPush(`/${this.$route.matched[0].name}/activity/crowd/${this.$route.params.activityId}/support/${row.crowd.id}`)
                 },
                 beforeEditRequest(row) {
                     if (this.dialogStatus) {

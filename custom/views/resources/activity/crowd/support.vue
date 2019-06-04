@@ -8,7 +8,7 @@
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索
             </el-button>
             <el-button class="filter-item" type="primary" v-waves
-                       @click="routerPush('/' +$route.matched[0].name + '/activity')">返回
+                       @click="routerPush('/' +$route.matched[0].name + '/activity/crowd/' + $route.params.activityId)">返回
             </el-button>
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
