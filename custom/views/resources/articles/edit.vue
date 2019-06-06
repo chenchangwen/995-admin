@@ -76,13 +76,14 @@
 
 <script>
     import Tinymce from '../../../components/Tinymce'
-    import fileUpload from '../../../components/file-upload';
-    import {mapGetters} from 'vuex';
-    import articlesAPI from '../../../api/articles';
-    import SelectClassifies from "../../../components/select-classifies";
+    import fileUpload from '../../../components/file-upload'
+    import { mapGetters } from 'vuex'
+    import articlesAPI from '../../../api/articles'
+    import SelectClassifies from '../../../components/select-classifies'
+    import * as uploadUtils from '../../../utils/upload'
 
     export default {
-        components: {SelectClassifies, Tinymce, fileUpload},
+        components: { SelectClassifies, Tinymce, fileUpload },
         data() {
             return {
                 cover: {
@@ -112,9 +113,9 @@
                     status: 'DRAFT'
                 },
                 rules: {
-                    author: [{required: true, message: '作者不能为空', trigger: 'blur'}],
-                    summary: [{required: true, message: '摘要不能为空', trigger: 'blur'}],
-                    title: [{required: true, message: '标题不能为空', trigger: 'blur'}]
+                    author: [{ required: true, message: '作者不能为空', trigger: 'blur' }],
+                    summary: [{ required: true, message: '摘要不能为空', trigger: 'blur' }],
+                    title: [{ required: true, message: '标题不能为空', trigger: 'blur' }]
                 },
                 classifiesOptions: '',
                 buttonDisabled: true,
@@ -123,46 +124,46 @@
         },
         methods: {
             backToList() {
-                this.$router.push(this.$route.matched[0].path + "/articles");
+                this.$router.push(this.$route.matched[0].path + '/articles')
             },
             httpRequest(options, onSuccess, onFail) {
                 let isFromEdit = event.target.parentElement.parentElement.attributes['is-from-edit']
-                let that = this;
-                let file = options.file;
-                let fileReader = new FileReader();
+                let that = this
+                let file = options.file
+                let fileReader = new FileReader()
                 if (file) {
                     fileReader.readAsDataURL(file)
                 }
                 fileReader.onload = () => {
+                    let requestAPI = isFromEdit ? articlesAPI.addContentImage : articlesAPI.addCoverImage
+                    uploadUtils.compress(fileReader.result).then(function(imageData) {
+                        let imageOptions = {
+                            articleId: that.form.id,
+                            userId: that.home.user.id,
+                            base64: imageData
+                        }
 
-                    let requestAPI = isFromEdit ? articlesAPI.addContentImage : articlesAPI.addCoverImage;
-                    let imageOptions = {
-                        articleId: that.form.id,
-                        userId: that.home.user.id,
-                        base64: fileReader.result,
-                    };
-
-                    requestAPI(imageOptions).then(function (response) {
-                        if (_.isFunction(onSuccess)) {
-                            onSuccess(response.data);
-                        }
-                        else {
-                            that.cover.fileList = [{
-                                url: oss + response.data.uri,
-                            }]
-                        }
-                    }).catch(function (response) {
-                        if (_.isFunction(onFail)) {
-                            onFail(response);
-                        }
+                        requestAPI(imageOptions).then(function(response) {
+                            if (_.isFunction(onSuccess)) {
+                                onSuccess(response.data)
+                            } else {
+                                that.cover.fileList = [{
+                                    url: oss + response.data.uri
+                                }]
+                            }
+                        }).catch(function(response) {
+                            if (_.isFunction(onFail)) {
+                                onFail(response)
+                            }
+                        })
                     })
                 }
             },
             handleUpdate() {
-                let that = this;
-                this.buttonLoading = true;
-                articlesAPI.edit(this.form).then(function (response) {
-                    that.buttonLoading = false;
+                let that = this
+                this.buttonLoading = true
+                articlesAPI.edit(this.form).then(function(response) {
+                    that.buttonLoading = false
                     that.$notify({
                         title: '成功',
                         message: '更新成功',
@@ -172,45 +173,44 @@
                 })
             },
             setForm(data) {
-                let that = this;
+                let that = this
                 Object.keys(that.form).forEach(item => {
                     if (item !== 'articleDetail') {
-                        that.form[item] = data[item];
-                        that.buttonDisabled = false;
+                        that.form[item] = data[item]
+                        that.buttonDisabled = false
                     }
-                });
+                })
                 if (data.articleDetail) {
-                    that.form.articleDetail.content = data.articleDetail.content;
+                    that.form.articleDetail.content = data.articleDetail.content
                 }
                 if (data.image) {
                     that.cover.fileList = [{
-                        url: oss + data.image,
+                        url: oss + data.image
                     }]
                 }
             },
             draft() {
-                let that = this;
-                articlesAPI.draft(this.home.user.id).then(function (response) {
-                    that.buttonDisabled = false;
-                    that.setForm(response.data);
+                let that = this
+                articlesAPI.draft(this.home.user.id).then(function(response) {
+                    that.buttonDisabled = false
+                    that.setForm(response.data)
                 })
             }
         },
         computed: {
             ...mapGetters([
-                'home',
+                'home'
             ])
         },
         mounted() {
-            let that = this;
-            let id = this.$route.params.id;
+            let that = this
+            let id = this.$route.params.id
             if (id) {
-                articlesAPI.articles(id).then(function (response) {
-                    that.setForm(response.data);
+                articlesAPI.articles(id).then(function(response) {
+                    that.setForm(response.data)
                 })
-            }
-            else {
-                this.draft();
+            } else {
+                this.draft()
             }
         }
     }

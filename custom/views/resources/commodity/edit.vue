@@ -12,7 +12,7 @@
                             <i class="el-icon-caret-bottom el-icon--right"></i>
                         </el-button>
                         <el-dropdown-menu slot="dropdown" class="no-padding no-border" style="width:500px">
-                            <el-form-item label-width="0px" style="margin-bottom: 0px" >
+                            <el-form-item label-width="0px" style="margin-bottom: 0px">
                                 <el-input v-model="form.sourceName" placeholder="来源名称">
                                     <template slot="prepend">
                                         来源名称
@@ -35,10 +35,10 @@
                             <el-dropdown-item>
                                 <el-radio-group v-model="form.top" style="padding: 10px;">
                                     <el-radio :label="true">
-                                       打开评论
+                                        打开评论
                                     </el-radio>
                                     <el-radio :label="false || null">
-                                       关闭评论
+                                        关闭评论
                                     </el-radio>
                                 </el-radio-group>
                             </el-dropdown-item>
@@ -109,6 +109,7 @@
     import commoditiesAPI from '../../../api/commodities'
     import SelectClassifies from '../../../components/select-classifies'
     import Sticky from '@/components/Sticky'
+    import * as uploadUtils from '../../../utils/upload'
 
     export default {
         components: { SelectClassifies, Tinymce, fileUpload, Sticky },
@@ -155,26 +156,27 @@
                     fileReader.readAsDataURL(file)
                 }
                 fileReader.onload = () => {
-
                     let requestAPI = isFromEdit ? commoditiesAPI.addContentImage : commoditiesAPI.addCoverImage
-                    let imageOptions = {
-                        commodityId: that.form.id,
-                        userId: that.home.user.id,
-                        base64: fileReader.result
-                    }
+                    uploadUtils.compress(fileReader.result).then(function(imageData) {
+                        let imageOptions = {
+                            commodityId: that.form.id,
+                            userId: that.home.user.id,
+                            base64: imageData
+                        }
 
-                    requestAPI(imageOptions).then(function(response) {
-                        if (_.isFunction(onSuccess)) {
-                            onSuccess(response.data)
-                        } else {
-                            that.cover.fileList = [{
-                                url: oss + response.data.uri
-                            }]
-                        }
-                    }).catch(function(response) {
-                        if (_.isFunction(onFail)) {
-                            onFail(response)
-                        }
+                        requestAPI(imageOptions).then(function(response) {
+                            if (_.isFunction(onSuccess)) {
+                                onSuccess(response.data)
+                            } else {
+                                that.cover.fileList = [{
+                                    url: oss + response.data.uri
+                                }]
+                            }
+                        }).catch(function(response) {
+                            if (_.isFunction(onFail)) {
+                                onFail(response)
+                            }
+                        })
                     })
                 }
             },

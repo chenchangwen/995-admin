@@ -31,6 +31,10 @@
                     </el-switch>
                 </el-form-item>
 
+                <el-form-item :label="'test'" style="margin-bottom: 30px;">
+                    <img :src="imgUrl"/>
+                </el-form-item>
+
                 <el-form-item :label="'文章详情'" style="margin-bottom: 30px;">
                     <Tinymce ref="editor" :height="400" v-model="form.teamDetail.content"
                              :http-request="httpRequest"
@@ -48,11 +52,13 @@
     import teamAPI from '../../../../api/teams'
     import Sticky from '@/components/Sticky'
     import { parseTime } from '@/utils/index.js'
+    import * as uploadUtils from '../../../../utils/upload'
 
     export default {
         components: { Tinymce, fileUpload, Sticky },
         data() {
             return {
+                imgUrl: '',
                 originForm: '',
                 cover: {
                     fileList: []
@@ -92,26 +98,28 @@
                 if (file) {
                     fileReader.readAsDataURL(file)
                 }
+
                 fileReader.onload = () => {
                     let requestAPI = isFromEdit ? teamAPI.addContentImage : teamAPI.addCoverImage
-                    let imageOptions = {
-                        id: that.form.id,
-                        userId: that.home.user.id,
-                        base64: fileReader.result
-                    }
-
-                    requestAPI(imageOptions).then(function(response) {
-                        if (_.isFunction(onSuccess)) {
-                            onSuccess(response.data)
-                        } else {
-                            that.cover.fileList = [{
-                                url: oss + response.data.uri
-                            }]
+                    uploadUtils.compress(fileReader.result).then(function(imageData) {
+                        let imageOptions = {
+                            id: that.form.id,
+                            userId: that.home.user.id,
+                            base64: imageData
                         }
-                    }).catch(function(response) {
-                        if (_.isFunction(onFail)) {
-                            onFail(response)
-                        }
+                        requestAPI(imageOptions).then(function(response) {
+                            if (_.isFunction(onSuccess)) {
+                                onSuccess(response.data)
+                            } else {
+                                that.cover.fileList = [{
+                                    url: oss + response.data.uri
+                                }]
+                            }
+                        }).catch(function(response) {
+                            if (_.isFunction(onFail)) {
+                                onFail(response)
+                            }
+                        })
                     })
                 }
             },

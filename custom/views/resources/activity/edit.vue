@@ -59,19 +59,22 @@
                 </el-form-item>
 
                 <el-form-item :label="'报名截止时间'" prop="enrollEndTime">
-                    <el-date-picker v-model="form.enrollEndTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss" placeholder="报名截止时间"
+                    <el-date-picker v-model="form.enrollEndTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
+                                    placeholder="报名截止时间"
                                     :picker-options="enrollEndTimeOptions">
                     </el-date-picker>
                 </el-form-item>
 
                 <el-form-item :label="'活动开始时间'" prop="beginTime">
-                    <el-date-picker v-model="form.beginTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss" placeholder="活动开始时间"
+                    <el-date-picker v-model="form.beginTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
+                                    placeholder="活动开始时间"
                                     :picker-options="beginTimeOptions">
                     </el-date-picker>
                 </el-form-item>
 
                 <el-form-item :label="'活动结束时间'" prop="endTime">
-                    <el-date-picker v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss" placeholder="活动结束时间"
+                    <el-date-picker v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
+                                    placeholder="活动结束时间"
                                     :picker-options="endTimeOptions">
                     </el-date-picker>
                 </el-form-item>
@@ -110,6 +113,8 @@
     import activitiesAPI from '../../../api/activities'
     import Sticky from '@/components/Sticky'
     import { parseTime } from '@/utils/index.js'
+    import * as uploadUtils from '../../../utils/upload'
+
     export default {
         components: { Tinymce, fileUpload, Sticky },
         data() {
@@ -201,43 +206,44 @@
                     fileReader.readAsDataURL(file)
                 }
                 fileReader.onload = () => {
-
                     let requestAPI = isFromEdit ? activitiesAPI.addContentImage : activitiesAPI.addCoverImage
-                    if (targetName === 'contact') {
-                        requestAPI = activitiesAPI.addContactImage
-                    }
-                    let imageOptions = {
-                        activityId: that.form.id,
-                        userId: that.home.user.id,
-                        base64: fileReader.result
-                    }
+                    uploadUtils.compress(fileReader.result).then(function(imageData) {
+                        if (targetName === 'contact') {
+                            requestAPI = activitiesAPI.addContactImage
+                        }
+                        let imageOptions = {
+                            activityId: that.form.id,
+                            userId: that.home.user.id,
+                            base64: imageData
+                        }
 
-                    requestAPI(imageOptions).then(function(response) {
-                        if (_.isFunction(onSuccess)) {
-                            onSuccess(response.data)
-                        } else {
-                            that.cover.fileList = [{
-                                url: oss + response.data.uri
-                            }]
-                        }
-                    }).catch(function(response) {
-                        if (_.isFunction(onFail)) {
-                            onFail(response)
-                        }
+                        requestAPI(imageOptions).then(function(response) {
+                            if (_.isFunction(onSuccess)) {
+                                onSuccess(response.data)
+                            } else {
+                                that.cover.fileList = [{
+                                    url: oss + response.data.uri
+                                }]
+                            }
+                        }).catch(function(response) {
+                            if (_.isFunction(onFail)) {
+                                onFail(response)
+                            }
+                        })
                     })
                 }
             },
             handleUpdate() {
                 let that = this
                 this.buttonLoading = true
-                let form = _.cloneDeep(this.form);
+                let form = _.cloneDeep(this.form)
                 delete form.activityContact.activityId
                 delete form.activityContact.third
                 delete form.activityContact.image
                 delete form.activityContact.id
-                form.enrollEndTime = parseTime(form.enrollEndTime , '{y}-{m}-{d} {h}:{i}:{s}')
-                form.beginTime = parseTime(form.beginTime , '{y}-{m}-{d} {h}:{i}:{s}')
-                form.endTime = parseTime(form.endTime , '{y}-{m}-{d} {h}:{i}:{s}')
+                form.enrollEndTime = parseTime(form.enrollEndTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                form.beginTime = parseTime(form.beginTime, '{y}-{m}-{d} {h}:{i}:{s}')
+                form.endTime = parseTime(form.endTime, '{y}-{m}-{d} {h}:{i}:{s}')
                 activitiesAPI.edit(form).then(function(response) {
                     that.buttonLoading = false
                     that.$notify({
