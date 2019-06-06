@@ -100,7 +100,7 @@
                 }
             },
             created(){
-                // this.queryItem.subjectId.value = this.$route.params.activityId
+                this.queryItem.subjectId.value = this.$route.params.activityId
             },
             methods: {
                 handleViewMember(row){

@@ -1,42 +1,42 @@
 export let resourcesRouter = {
     '/menus/**': {
         path: 'menu',
-        component: () => import('../views/resources/menu/index'),
+        component: () => import('../views/resources/menu/index')
     },
     '/resources/**': {
         path: 'resource',
-        component: () => import('../views/resources/resource/index'),
+        component: () => import('../views/resources/resource/index')
     },
     '/wechats/**': {
         path: 'wechat',
-        component: () => import('../views/resources/wechats/index'),
+        component: () => import('../views/resources/wechats/index')
     },
     '/users/**': {
         path: 'user',
-        component: () => import('../views/resources/user/list/index'),
+        component: () => import('../views/resources/user/list/index')
     },
     '/authorities/roles/**': {
         path: 'role',
-        component: () => import('../views/resources/user/role/index'),
+        component: () => import('../views/resources/user/role/index')
     },
     '/users/accounts/**': {
         path: 'account',
-        component: () => import('../views/resources/user/account/index'),
+        component: () => import('../views/resources/user/account/index')
     },
     //微信文本消息
     '/wechats/users/messages/texts/**': {
         path: 'wechat-text',
-        component: () => import('../views/resources/message/wechat-text/index'),
+        component: () => import('../views/resources/message/wechat-text/index')
     },
     //微信消息模版
     '/wechats/users/messages/templates/formats/**': {
         path: 'wechat-format',
-        component: () => import('../views/resources/message/wechat-format/index'),
+        component: () => import('../views/resources/message/wechat-format/index')
     },
     //微信消息
     '/wechats/users/messages/templates/**': {
         path: 'wechat-template',
-        component: () => import('../views/resources/message/wechat-template/index'),
+        component: () => import('../views/resources/message/wechat-template/index')
     },
     //文章
     '/articles/**': {
@@ -48,7 +48,7 @@ export let resourcesRouter = {
                 path: 'articles/edit/:id?',
                 component: () => import('../views/resources/articles/edit'),
                 meta: {
-                    title: '文章',
+                    title: '文章'
                 },
                 hidden: true,
                 children: []
@@ -65,7 +65,7 @@ export let resourcesRouter = {
                 path: 'classifies/edit/:id',
                 component: () => import('../views/resources/classifies/edit'),
                 meta: {
-                    title: '编辑分类',
+                    title: '编辑分类'
                 },
                 hidden: true,
                 children: []
@@ -75,70 +75,70 @@ export let resourcesRouter = {
     //用户消息
     '/users/messages/**': {
         path: 'user',
-        component: () => import('../views/resources/message/user/index'),
+        component: () => import('../views/resources/message/user/index')
     },
     //用户消息模版
     '/users/messages/formats/**': {
         path: 'user-format',
-        component: () => import('../views/resources/message/user-format/index'),
+        component: () => import('../views/resources/message/user-format/index')
     },
     //短信
     '/sms/**': {
         path: 'sms',
-        component: () => import('../views/resources/message/sms/index'),
+        component: () => import('../views/resources/message/sms/index')
     },
     //短信模版
     '/sms/templates/**': {
         path: 'sms-template',
-        component: () => import('../views/resources/message/sms-template/index'),
+        component: () => import('../views/resources/message/sms-template/index')
     },
     //订单
     '/orders/**': {
         path: 'order',
-        component: () => import('../views/resources/order/list/index'),
+        component: () => import('../views/resources/order/list/index')
     },
     //订单退款
-    '/orders/refunds/**':{
+    '/orders/refunds/**': {
         path: 'order-refund',
-        component: () => import('../views/resources/order/refund/index'),
+        component: () => import('../views/resources/order/refund/index')
     },
     //积分
-    '/cents/**':{
+    '/cents/**': {
         path: 'cent',
-        component: () => import('../views/resources/cent/list/index'),
+        component: () => import('../views/resources/cent/list/index')
     },
     //积分提现
-    '/cents/cashes/**':{
+    '/cents/cashes/**': {
         path: 'cent-cash',
-        component: () => import('../views/resources/cent/cash/index'),
+        component: () => import('../views/resources/cent/cash/index')
     },
     //积分变更
-    '/cents/changes/**':{
+    '/cents/changes/**': {
         path: 'cent-change',
-        component: () => import('../views/resources/cent/change/index'),
+        component: () => import('../views/resources/cent/change/index')
     },
     //积分转账
-    '/cents/transfers/**':{
+    '/cents/transfers/**': {
         path: 'cent-transfer',
-        component: () => import('../views/resources/cent/transfer/index'),
+        component: () => import('../views/resources/cent/transfer/index')
     },
     //关系返点定义
-    '/relations/kickbacks/**':{
+    '/relations/kickbacks/**': {
         path: 'relations-kickbacks',
-        component: () => import('../views/resources/relations/kickback/index'),
+        component: () => import('../views/resources/relations/kickback/index')
     },
     //返点日志
-    '/relations/kickbacks/logs/**':{
+    '/relations/kickbacks/logs/**': {
         path: 'relations-logs',
-        component: () => import('../views/resources/relations/log/index'),
+        component: () => import('../views/resources/relations/log/index')
     },
     //关系用户
-    '/relations/users/**':{
+    '/relations/users/**': {
         path: 'relations-users',
-        component: () => import('../views/resources/relations/user/index'),
+        component: () => import('../views/resources/relations/user/index')
     },
     //网站
-    '/sites/**':{
+    '/sites/**': {
         path: 'site',
         component: () => import('../views/resources/site/list/index'),
         children: [
@@ -147,7 +147,7 @@ export let resourcesRouter = {
                 path: 'site/edit/:id?',
                 component: () => import('../views/resources/site/list/edit'),
                 meta: {
-                    title: '网站',
+                    title: '网站'
                 },
                 hidden: true,
                 children: []
@@ -155,22 +155,22 @@ export let resourcesRouter = {
         ]
     },
     //网站模版
-    '/sites/themes/**':{
+    '/sites/themes/**': {
         path: 'sites-themes',
-        component: () => import('../views/resources/site/theme/index'),
+        component: () => import('../views/resources/site/theme/index')
     },
     //评论
-    '/comments/**':{
+    '/comments/**': {
         path: 'comment',
-        component: () => import('../views/resources/comment/list/index'),
+        component: () => import('../views/resources/comment/list/index')
     },
     //评论
-    '/faqs/**':{
+    '/faqs/**': {
         path: 'faq',
-        component: () => import('../views/resources/faq/index'),
+        component: () => import('../views/resources/faq/index')
     },
     //评论
-    '/commodities/**':{
+    '/commodities/**': {
         path: 'commodity',
         component: () => import('../views/resources/commodity/index'),
         children: [
@@ -179,7 +179,7 @@ export let resourcesRouter = {
                 path: 'commodity/edit/:id?',
                 component: () => import('../views/resources/commodity/edit'),
                 meta: {
-                    title: '产品',
+                    title: '产品'
                 },
                 hidden: true,
                 children: []
@@ -187,7 +187,7 @@ export let resourcesRouter = {
         ]
     },
     //活动
-    '/activities/**':{
+    '/activities/**': {
         path: 'activity',
         component: () => import('../views/resources/activity/index'),
         children: [
@@ -196,7 +196,7 @@ export let resourcesRouter = {
                 path: 'activity/edit/:id',
                 component: () => import('../views/resources/activity/edit'),
                 meta: {
-                    title: '活动',
+                    title: '活动'
                 },
                 hidden: true,
                 children: []
@@ -206,7 +206,7 @@ export let resourcesRouter = {
                 path: 'activity/pending',
                 component: () => import('../views/resources/activity/pending'),
                 meta: {
-                    title: '待审核活动',
+                    title: '待审核活动'
                 },
                 hidden: true,
                 children: []
@@ -216,7 +216,7 @@ export let resourcesRouter = {
                 path: 'activity/crowd/:activityId',
                 component: () => import('../views/resources/activity/crowd/list'),
                 meta: {
-                    title: '活动-众筹详情',
+                    title: '活动-众筹详情'
                 },
                 hidden: true,
                 children: []
@@ -226,7 +226,7 @@ export let resourcesRouter = {
                 path: 'activity/crowd/:activityId/support/:crowdId',
                 component: () => import('../views/resources/activity/crowd/support'),
                 meta: {
-                    title: '众筹详情-支持详情',
+                    title: '众筹详情-支持详情'
                 },
                 hidden: true,
                 children: []
@@ -236,7 +236,7 @@ export let resourcesRouter = {
                 path: 'activity/team/:activityId',
                 component: () => import('../views/resources/activity/team/list'),
                 meta: {
-                    title: '活动-查看联合发起人',
+                    title: '活动-查看联合发起人'
                 },
                 hidden: true,
                 children: []
@@ -246,16 +246,26 @@ export let resourcesRouter = {
                 path: 'activity/team/:activityId/member/:teamId',
                 component: () => import('../views/resources/activity/team/member'),
                 meta: {
-                    title: '查看联合发起人-查看成员',
+                    title: '查看联合发起人-查看成员'
                 },
                 hidden: true,
                 children: []
             },
+            {
+                name: 'activity-team/:activityId/edit',
+                path: 'activity/team/:activityId/edit/:id',
+                component: () => import('../views/resources/activity/team/edit'),
+                meta: {
+                    title: '查看联合发起人-详情'
+                },
+                hidden: true,
+                children: []
+            }
         ]
     },
-    '/identifications/**':{
+    '/identifications/**': {
         path: 'identifications',
         component: () => import('../views/resources/identification/index'),
         children: []
-    },
-};
+    }
+}

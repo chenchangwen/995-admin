@@ -234,6 +234,7 @@
                 delete form.activityContact.activityId
                 delete form.activityContact.third
                 delete form.activityContact.image
+                delete form.activityContact.id
                 form.enrollEndTime = parseTime(form.enrollEndTime , '{y}-{m}-{d} {h}:{i}:{s}')
                 form.beginTime = parseTime(form.beginTime , '{y}-{m}-{d} {h}:{i}:{s}')
                 form.endTime = parseTime(form.endTime , '{y}-{m}-{d} {h}:{i}:{s}')
