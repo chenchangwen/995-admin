@@ -61,13 +61,16 @@
                     id: '',
                     name: '',
                     disable: '',
+                    max: '',
                     teamDetail: {
-                        content: ''
+                        content: '',
+                        contentType: ''
                     },
                     summary: '',
                     subject: '',
                     subjectId: '',
-                    subjectField: ''
+                    userId: '',
+                    userName: ''
                 },
                 rules: {
                     name: [{ required: true, message: '标题不能为空', trigger: 'blur' }]
