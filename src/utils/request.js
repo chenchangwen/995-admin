@@ -6,7 +6,7 @@ const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
     withCredentials: true, // 跨域请求时发送 cookies
     timeout: 5000, // request timeout
-    headers: { 'accept': 'application/json;charset=utf-8 ' }
+    headers: { 'accept': 'application/json;charset=utf-8' }
 })
 
 // request interceptor
