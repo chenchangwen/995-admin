@@ -44,3 +44,5 @@ npm run build:prod  # 构建项目
 ```
 
 
+## 制作docker 镜像
+docker build -t 995:v0.1 .
