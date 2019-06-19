@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 
 const name = pkg.name || '995-admin' // page title
-const port = 9527 // dev port
+const port = 9280 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -41,7 +41,7 @@ module.exports = {
       //   }
       // }
       '/api': {
-        target: `http://beta.buchuju.net:8080`,
+        target: `http://localhost:8080`,
         pathRewrite: {
           '^/api': '/'
         }

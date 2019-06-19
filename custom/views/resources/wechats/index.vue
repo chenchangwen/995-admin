@@ -136,7 +136,8 @@
                         originalId: '',
                         encodingAesKey: '',
                         role:'',
-                        masterAccessTokenUrl: '',
+                        masterAccessTokenUrl: ''
+                        ,
                         wechatMenu: {
                             params: ''
                         }
@@ -184,9 +185,15 @@
                     if (this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         this.postForm.userId = this.home.user.id;
-                        this.postForm.wechatMenu = {
-                            params : JSON.stringify(this.commonItem.form.wechatMenu)
-                        };
+                        // this.postForm.wechatMenu = {
+                        //     params : JSON.stringify(this.commonItem.form.wechatMenu.params)
+                        // };
+                        this.postForm.wechatMenu =this.commonItem.form.wechatMenu;
+
+                        delete this.postForm.wechatMenu.id;
+                        delete this.postForm.wechatMenu.wechatId;
+                        delete this.postForm.wechatMenu.updateTime;
+                        delete this.postForm.wechatMenu.createTime;
                     }
                 },
                 afterCloseDialog(row) {
