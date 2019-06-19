@@ -15,9 +15,10 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
                   style="width: 100%">
-            <el-table-column label='标题' min-width="200">
+            <el-table-column label='标题' min-width="200"  >
                 <template slot-scope="scope">
-                    {{scope.row.name}}
+                    <a :href="'http://mp.huzhubb.com/activities/' + scope.row.id">
+                    {{scope.row.name}}</a>
                 </template>
             </el-table-column>
             <el-table-column label='简介' width="200">
