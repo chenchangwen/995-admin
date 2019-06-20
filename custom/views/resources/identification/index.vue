@@ -43,13 +43,13 @@
 
             <el-table-column label='手持证件正面照' width="200">
                 <template slot-scope="scope">
-                    <img class="card-img" :src="scope.row.imageFront" v-if="scope.row.imageFront" preview/>
+                    <img class="card-img" :src="oss + scope.row.imageFront" v-if="scope.row.imageFront" preview/>
                 </template>
             </el-table-column>
 
             <el-table-column label='证件背面照' width="200">
                 <template slot-scope="scope">
-                    <img class="card-img" :src="scope.row.imageBack" v-if="scope.row.imageBack" preview/>
+                    <img class="card-img" :src="oss + scope.row.imageBack" v-if="scope.row.imageBack" preview/>
                 </template>
             </el-table-column>
 
@@ -87,6 +87,7 @@
     let page = new pageInit(
         {
             data: {
+                oss : oss,
                 statusOptions: [
                     {
                         value: 'NEW',
