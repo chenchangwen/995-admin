@@ -131,6 +131,10 @@
                     {
                         value: 'DISABLE',
                         label: 'DISABLE'
+                    },
+                    {
+                        value: 'SUCCESS',
+                        label: 'SUCCESS'
                     }
                 ],
                 originForm: '',
@@ -167,6 +171,7 @@
                     price: 1,
                     summary: '',
                     max: 1,
+                    userId: '',
                     activityDetail: {
                         content: ''
                     },

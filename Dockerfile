@@ -12,7 +12,7 @@ RUN cnpm install
 EXPOSE 9280
 # 运行程序命令(manage是ADD添加的文件夹名称, server.js是自己的程序启动入口文件)
 CMD ["npm","run","dev"]
-# docker build -t 995:v0.2 .
+# docker build -t 995:v0.3 .
 # 切换到中国镜像
 # vi /etc/docker/daemon.json
 #{
@@ -20,13 +20,13 @@ CMD ["npm","run","dev"]
 #}
 #systemctl restart docker.service
 
-# docker run -d -p 9280:9280 995:v0.2
+# docker run -d -p 9280:9280 995:v0.3
 
 ## 手工导出倒入镜像到服务器
-# docker save -o 995v0.2.tar 995:v0.2
+# docker save -o 995v0.3.tar 995:v0.3
 
 # yum install docker.x86_64
 # service docker start
-# docker load -i 995v0.2.tar
+# docker load -i 995v0.3.tar
 # systemctl start docker
-# docker run 995v0.2
+ # docker run -d -p 9280:9280 995:v0.3
