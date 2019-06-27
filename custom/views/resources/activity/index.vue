@@ -53,20 +53,43 @@
             </el-table-column>
             <el-table-column align="center" :label="'操作'" width="320">
                 <template slot-scope="scope">
+                    <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
                     <el-button type="primary" @click="routerPush($route.path + '/edit', scope.row.id)" size="mini">编辑</el-button>
                     <el-button type="primary" @click="routerPush($route.path + '/crowd', scope.row.id)" size="mini">众筹详情</el-button>
                     <el-button type="primary" @click="routerPush($route.path + '/team', scope.row.id)" size="mini">查看联合发起人</el-button>
                 </template>
             </el-table-column>
         </el-table>
+
+
+        <el-dialog
+            title="使用微信扫码浏览"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+
+
+<!--            <span id="qrcode" class="qrcode"></span>-->
+            <div class="qrcode_box">
+                <canvas class="qrcode" ></canvas>
+            </div>
+
+            <span slot="footer" class="dialog-footer">
+             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+                </el-dialog>
         <page></page>
     </div>
 </template>
 
 <script>
+
+    import QRCode from 'qrcode'
+
     let page = new pageInit(
         {
             data: {
+                dialogVisible: false,
                 pendingCount: 0,
                 statusOptions: [
                     {
@@ -130,7 +153,19 @@
                     request(options).then(function (response) {
                         that.pendingCount = response.data;
                     })
-                }
+                },
+                qrcode (text) {
+
+
+                    this.dialogVisible = true;
+                    this.$nextTick(() => {
+                        var canvas = document.querySelector('canvas')
+                        QRCode.toCanvas(canvas, text,
+                            {width: 300, height:300,render:"table"})
+                    })
+
+
+                      }
             }
         }
     )

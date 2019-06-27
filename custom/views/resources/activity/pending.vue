@@ -59,21 +59,46 @@
 
             <el-table-column align="center" :label="'操作'" width="220">
                 <template slot-scope="scope">
+                    <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
+
                     <el-button type="primary" @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)" size="mini">审核通过</el-button>
                     <el-button type="danger"  @click="handleConfirm(scope.row,commonItem, commonItem.refuseOptions)" size="mini">审核不通过</el-button>
                 </template>
             </el-table-column>
 
         </el-table>
+
+
+        <el-dialog
+            title="使用微信扫码浏览"
+            :visible.sync="dialogVisible"
+            width="30%"
+            :before-close="handleClose">
+
+
+            <!--            <span id="qrcode" class="qrcode"></span>-->
+            <div class="qrcode_box">
+                <canvas class="qrcode" ></canvas>
+            </div>
+
+            <span slot="footer" class="dialog-footer">
+             <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+          </span>
+        </el-dialog>
         <page></page>
     </div>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
+    import QRCode from 'qrcode'
+
+
     let page = new pageInit(
         {
             data: {
+                dialogVisible: false,
+
                 pendingCount: 0,
                 commonItem:{
                     agreeOptions: {
@@ -153,6 +178,16 @@
                     let that = this
                     request(options).then(function(response) {
                         that.pendingCount = response.data
+                    })
+                },
+                qrcode (text) {
+
+
+                    this.dialogVisible = true;
+                    this.$nextTick(() => {
+                        var canvas = document.querySelector('canvas')
+                        QRCode.toCanvas(canvas, text,
+                            {width: 300, height:300,render:"table"})
                     })
                 }
             }
