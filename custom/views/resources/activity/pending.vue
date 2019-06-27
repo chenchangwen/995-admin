@@ -17,8 +17,7 @@
                   style="width: 100%">
             <el-table-column label='标题' min-width="200"  >
                 <template slot-scope="scope">
-                    <a :href="'http://mp.huzhubb.com/activities/' + scope.row.id">
-                    {{scope.row.name}}</a>
+                    {{scope.row.name}}
                 </template>
             </el-table-column>
             <el-table-column label='简介' width="200">
