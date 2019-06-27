@@ -267,5 +267,10 @@ export let resourcesRouter = {
         path: 'identifications',
         component: () => import('../views/resources/identification/index'),
         children: []
+    },
+    '/categories/**': {
+        path: 'categories',
+        component: () => import('../views/resources/categories/index'),
+        children: []
     }
 }
