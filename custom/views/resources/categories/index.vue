@@ -13,6 +13,12 @@
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
 
+            <el-table-column  label='主题' width="200">
+                <template slot-scope="scope">
+                    {{scope.row.subject}}
+                </template>
+            </el-table-column>
+
 
             <el-table-column  label='名称' width="200">
                 <template slot-scope="scope">
@@ -34,10 +40,6 @@
             </el-table-column>
 
 
-
-
-
-
             <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
@@ -50,6 +52,19 @@
             <el-form :rules="commonItem.rules" ref="commonItem" :model="commonItem.form" label-position="left"
                      label-width="80px"
                      style='width: 400px; margin-left:50px;'>
+
+
+                <el-form-item :label="'主题'"  prop="subject">
+                    <el-select v-model="form.subject" placeholder="主题" style="width: 200px">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
                 <el-form-item :label="'名称'" prop="name">
                     <el-input v-model="commonItem.form.name" placeholder="名称"></el-input>
                 </el-form-item>
@@ -88,14 +103,21 @@
     let page = new pageInit(
         {
             data: {
+                options: [
+                    {
+                        value: 'activity',
+                        label: '活动'
+                    }
+                ],
                 commonItem: {
                     form: {
                         name: '',
                         index: 0,
-
+                        subject: '',
                         enable: true
                     },
                     rules: {
+                        subject: [{required: true, message: '主题不能为空', trigger: 'blur'}],
                         name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
                         index: [{required: true, message: '排序不能为空', trigger: 'blur'}]
                     },

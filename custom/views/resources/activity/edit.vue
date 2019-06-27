@@ -19,12 +19,25 @@
                     <el-select v-model="form.status" placeholder="状态" style="width: 200px">
                         <el-option
                             v-for="item in statusOptions"
-                            :key="item.value"
+                            :key="item"
                             :label="item.value"
                             :value="item.value">
                         </el-option>
                     </el-select>
                 </el-form-item>
+
+                <el-form-item :label="'分类'">
+                    <el-select v-model="form.categories[0].id" placeholder="分类" style="width: 200px">
+                        <el-option
+                            v-for="item in categories"
+                            :key="item"
+                            :label="item.name"
+                            :value="item.id">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+
 
                 <el-form-item :label="'活动标题'" prop="name">
                     <el-input v-model="form.name" placeholder="活动标题"></el-input>
@@ -119,6 +132,7 @@
         components: { Tinymce, fileUpload, Sticky },
         data() {
             return {
+                categories: [],
                 statusOptions: [
                     {
                         value: 'NEW',
@@ -180,6 +194,7 @@
                         image: '',
                         phones: ''
                     },
+                    categories: [],
                     enrollEndTime: '',
                     beginTime: '',
                     endTime: '',
@@ -249,6 +264,10 @@
                 form.enrollEndTime = parseTime(form.enrollEndTime, '{y}-{m}-{d} {h}:{i}:{s}')
                 form.beginTime = parseTime(form.beginTime, '{y}-{m}-{d} {h}:{i}:{s}')
                 form.endTime = parseTime(form.endTime, '{y}-{m}-{d} {h}:{i}:{s}')
+
+                // var arr = new Array()
+                // arr.push(form.categories);
+                // form.categories = arr
                 activitiesAPI.edit(form).then(function(response) {
                     that.buttonLoading = false
                     that.$notify({
@@ -293,6 +312,8 @@
             ])
         },
         mounted() {
+
+            // loadActivities();
             let that = this
             let id = this.$route.params.id
             if (id) {
@@ -301,6 +322,28 @@
                     that.setForm(response.data)
                 })
             }
+        },
+        created(){
+            let that = this;
+            let option = {
+                method: 'get',
+                url: `/categories?search=subject==activity`,
+                params: {
+                    page: 0,
+                    size: 1000
+                }
+            };
+
+            request(option).then(function (response) {
+
+                console.log(response)
+                for(var i=0;i<response.data.length;i++){
+                    that.categories.push(response.data[i]);
+                }
+                // for(var i=0;i<result.length;i++){
+                //     that.categories.push({});
+                // }
+            });
         }
     }
 </script>
