@@ -13,9 +13,15 @@
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
 
-            <el-table-column  label='主题' width="200">
+            <el-table-column  label='id' width="200">
                 <template slot-scope="scope">
-                    {{scope.row.subject}}
+                    {{scope.row.id}}
+                </template>
+            </el-table-column>
+
+            <el-table-column  label='图片' width="200">
+                <template slot-scope="scope">
+                    {{scope.row.image}}
                 </template>
             </el-table-column>
 
@@ -39,6 +45,13 @@
                 </template>
             </el-table-column>
 
+            <el-table-column  label='过期时间'  >
+                <template slot-scope="scope">
+                    {{scope.row.expireTime}}
+                </template>
+            </el-table-column>
+
+
 
             <el-table-column align="center" :label="'操作'" width="230">
                 <template slot-scope="scope">
@@ -54,19 +67,30 @@
                      style='width: 400px; margin-left:50px;'>
 
 
-                <el-form-item :label="'主题'"  prop="subject">
-                    <el-select v-model="form.subject" placeholder="主题" style="width: 200px">
-                        <el-option
-                            v-for="item in options"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
-                        </el-option>
-                    </el-select>
+
+                <el-form-item :label="'图片'" prop="image">
+                    <el-upload
+                        action=""
+                         :before-upload="imageToBase64"
+                        list-type="picture-card"
+                        :on-preview="handlePictureCardPreview"
+                        :show-file-list="false"
+
+                         >
+                        <img height="145px" v-if="image" :src="image" >
+                        <i v-else class="el-icon-plus"></i>
+
+                    </el-upload>
+
                 </el-form-item>
 
-                <el-form-item :label="'名称'" prop="name">
-                    <el-input v-model="commonItem.form.name" placeholder="名称"></el-input>
+                <el-form-item :label="'链接'" prop="url">
+                    <el-input
+                        type="textarea"
+                        :rows="2"
+                        placeholder="链接"
+                        v-model="commonItem.form.url">
+                    </el-input>
                 </el-form-item>
 
                 <el-form-item :label="'排序'" prop="index">
@@ -77,6 +101,10 @@
                     </el-input>
                 </el-form-item>
 
+                <el-form-item :label="'名称'" prop="name">
+                    <el-input v-model="commonItem.form.name" placeholder="名称"></el-input>
+                </el-form-item>
+
                 <el-form-item :label="'启用'">
                     <el-switch
                         v-model="commonItem.form.enable"
@@ -84,6 +112,15 @@
                         inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
+
+                <el-form-item :label="'截止时间'" prop="expireTime">
+                    <el-date-picker v-model="form.expireTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
+                                    placeholder="截止时间"
+                                    :picker-options="expireTime">
+                    </el-date-picker>
+                </el-form-item>
+
+
             </el-form>
 
             <div slot="footer" class="dialog-footer">
@@ -95,30 +132,40 @@
             </div>
         </el-dialog>
     </div>
+
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
+    import * as uploadUtils from '../../../utils/upload'
+
+
 
     let page = new pageInit(
         {
             data: {
-                options: [
-                    {
-                        value: 'activity',
-                        label: '活动'
-                    }
-                ],
+
+                oss : window.oss,
+
+                base64: '',
+                image : '',
+                cover: {
+                    fileList: []
+                },
                 commonItem: {
                     form: {
                         name: '',
                         index: 0,
-                        subject: '',
-                        enable: true
+                        url: '',
+                        enable: true,
+                        userId: 0,
+                        expireTime: '',
+                        sliderImageBase64ReplaceRequest: {
+                            imageBase64: ''
+                        }
                     },
                     rules: {
-                        subject: [{required: true, message: '主题不能为空', trigger: 'blur'}],
-                        name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+                        url: [{required: true, message: '链接不能为空', trigger: 'blur'}],
                         index: [{required: true, message: '排序不能为空', trigger: 'blur'}]
                     },
                     formName: 'commonItem'
@@ -143,6 +190,19 @@
                 ])
             },
             methods: {
+                imageToBase64(file) {
+                    let that = this;
+                    let fileReader = new FileReader()
+                    if (file) {
+                        fileReader.readAsDataURL(file)
+                    }
+                    fileReader.onload = () => {
+                         uploadUtils.compress(fileReader.result).then(function (imageData) {
+                             that.image = imageData;
+                             that.base64 = imageData;
+                        });
+                    }
+                },
                 beforeOpenDialog(row) {
                     if (row) {
                         let options = {
@@ -150,26 +210,22 @@
                             method: 'get'
                         }
                         let that = this;
-                        // request(options).then(function (response) {
-                        //     that.commonItem.form.faqDetail = {
-                        //         content: response.data.faqDetail.content,
-                        //         contentType: 'textarea'
-                        //     };
-                        // })
+
                     }
                 },
                 beforeEditRequest(row) {
-                    // if(this.dialogStatus === 'update') {
-                    //     this.postForm = _.cloneDeep(this.commonItem.form);
-                    // }
-
                     if(this.dialogStatus === 'create' || this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         this.postForm.index = parseInt(this.commonItem.form.index )
-                    }
+                        this.postForm.userId =this.home.user.id;
+
+                        delete this.postForm.image
+                     }
                 },
             }
         }
     );
     export default page;
 </script>
+
+
