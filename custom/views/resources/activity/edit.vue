@@ -27,12 +27,12 @@
                 </el-form-item>
 
                 <el-form-item :label="'分类'">
-                    <el-select v-model="form.categories[0].id" placeholder="分类" style="width: 200px">
+                    <el-select v-model="form.categories" value-key="id" multiple placeholder="分类" style="width: 200px">
                         <el-option
                             v-for="item in categories"
-                            :key="item"
+                            :key="item.id "
                             :label="item.name"
-                            :value="item.id">
+                            :value="item">
                         </el-option>
                     </el-select>
                 </el-form-item>

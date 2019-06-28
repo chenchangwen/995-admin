@@ -272,5 +272,10 @@ export let resourcesRouter = {
         path: 'categories',
         component: () => import('../views/resources/categories/index'),
         children: []
+    },
+    '/sliders/**': {
+        path: 'categories',
+        component: () => import('../views/resources/sliders/index'),
+        children: []
     }
 }
