@@ -212,12 +212,22 @@
                         let that = this;
 
                     }
+
+                    this.image = '';
+                    this.base64 = '';
+
                 },
                 beforeEditRequest(row) {
                     if(this.dialogStatus === 'create' || this.dialogStatus === 'update') {
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         this.postForm.index = parseInt(this.commonItem.form.index )
                         this.postForm.userId =this.home.user.id;
+
+                        if(this.base64 != ''){
+
+                            this.postForm.sliderImageBase64ReplaceRequest.imageBase64 = this.base64;
+
+                        }
 
                         delete this.postForm.image
                      }
