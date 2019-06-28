@@ -9,6 +9,7 @@
             <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate(commonItem)" type="primary"
                        icon="el-icon-edit">新增
             </el-button>
+
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
@@ -21,19 +22,21 @@
 
             <el-table-column  label='图片' width="200">
                 <template slot-scope="scope">
-                    {{scope.row.image}}
+                    <img width="180px" class="card-img" :src="oss + scope.row.image" v-if="scope.row.image" preview/>
+
                 </template>
             </el-table-column>
 
 
-            <el-table-column  label='名称' width="200">
+            <el-table-column  label='名称 & 链接'  >
                 <template slot-scope="scope">
-                    {{scope.row.name}}
+                    <p>名称:{{scope.row.name}} </p>
+                    <p>链接:{{scope.row.url}}</p>
                 </template>
             </el-table-column>
 
 
-            <el-table-column  label='排序(大的靠前)'  >
+            <el-table-column  label='排序(大的靠前)' width="130" >
                 <template slot-scope="scope">
                     {{scope.row.index}}
                 </template>
@@ -73,14 +76,14 @@
                         action=""
                          :before-upload="imageToBase64"
                         list-type="picture-card"
-                        :on-preview="handlePictureCardPreview"
                         :show-file-list="false"
-
+                        v-model="commonItem.form.image"
                          >
-                        <img height="145px" v-if="image" :src="image" >
+                        <img height="145px" v-if="commonItem.form.image" :src="commonItem.form.image" >
                         <i v-else class="el-icon-plus"></i>
 
                     </el-upload>
+
 
                 </el-form-item>
 
@@ -114,9 +117,9 @@
                 </el-form-item>
 
                 <el-form-item :label="'截止时间'" prop="expireTime">
-                    <el-date-picker v-model="form.expireTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
+                    <el-date-picker v-model="commonItem.form.expireTime" type="datetime" value-format="yyyy-MM-dd hh:mm:ss"
                                     placeholder="截止时间"
-                                    :picker-options="expireTime">
+                                    >
                     </el-date-picker>
                 </el-form-item>
 
@@ -145,10 +148,8 @@
         {
             data: {
 
-                oss : window.oss,
+                oss : oss,
 
-                base64: '',
-                image : '',
                 cover: {
                     fileList: []
                 },
@@ -159,10 +160,8 @@
                         url: '',
                         enable: true,
                         userId: 0,
-                        expireTime: '',
-                        sliderImageBase64ReplaceRequest: {
-                            imageBase64: ''
-                        }
+                        image: '',
+                        expireTime: ''
                     },
                     rules: {
                         url: [{required: true, message: '链接不能为空', trigger: 'blur'}],
@@ -170,6 +169,12 @@
                     },
                     formName: 'commonItem'
                 },
+                // expireTime: {
+                //
+                //     disabledDate: (time) => {
+                //         return time.getTime() > this.commonItem.form.expireTime
+                //     }
+                // },
                 //查询对象
                 queryItem: {
                     name: {
@@ -198,9 +203,8 @@
                     }
                     fileReader.onload = () => {
                          uploadUtils.compress(fileReader.result).then(function (imageData) {
-                             that.image = imageData;
-                             that.base64 = imageData;
-                        });
+                             that.commonItem.form.image = imageData;
+                         });
                     }
                 },
                 beforeOpenDialog(row) {
@@ -213,8 +217,12 @@
 
                     }
 
-                    this.image = '';
-                    this.base64 = '';
+                    if( this.dialogStatus === 'update'){
+                        this.commonItem.form.image = oss + row.image;
+                    }else  if( this.dialogStatus === 'create'){
+                        this.commonItem.form.image  = ''
+                    }
+
 
                 },
                 beforeEditRequest(row) {
@@ -222,14 +230,6 @@
                         this.postForm = _.cloneDeep(this.commonItem.form);
                         this.postForm.index = parseInt(this.commonItem.form.index )
                         this.postForm.userId =this.home.user.id;
-
-                        if(this.base64 != ''){
-
-                            this.postForm.sliderImageBase64ReplaceRequest.imageBase64 = this.base64;
-
-                        }
-
-                        delete this.postForm.image
                      }
                 },
             }
