@@ -56,15 +56,13 @@
 
             <el-table-column label="创建时间" width="155">
                 <template slot-scope="scope">
-                    {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
+                    {{scope.row.createTime }}
                 </template>
             </el-table-column>
 
             <el-table-column align="center" :label="'操作'" width="330">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" style="width: 110px"
-                               @click="handleUpdate(scope.row,editItem)">登录用户后台
-                    </el-button>
+
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,editItem)">编辑</el-button>
                     <el-button type="primary" size="mini" style="width: 80px"
                                @click="handleUpdate(scope.row,changePasswordItem, changePasswordItem.options)">
@@ -317,8 +315,9 @@
                     if (this.dialogStatus === 'change') {
                         this.postForm = _.cloneDeep(this.changePasswordItem.form)
                         delete this.postForm.name
+                        this.postForm.userId = this.postForm.id
                         delete this.postForm.id
-                        this.postForm.userId = this.home.user.id
+
                     }
                 }
             },
