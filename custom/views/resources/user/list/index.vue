@@ -150,7 +150,11 @@
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="saveData(editItem)" v-if="dialogStatus!=='create'"
+                <el-button type="primary" @click="saveData(editItem)" v-if="dialogStatus==='update'"
+                           :loading="dialogButtonLoading"
+                           :disabled="dialogButtonDisabled">确认
+                </el-button>
+                <el-button type="primary" @click="saveData(changePasswordItem)" v-if="dialogStatus!=='change'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
