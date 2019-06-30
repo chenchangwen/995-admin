@@ -23,7 +23,7 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit
                   highlight-current-row>
-            <el-table-column  label='用户ID' width="95">
+            <el-table-column label='用户ID' width="95">
                 <template slot-scope="scope">
                     {{scope.row.id}}
                 </template>
@@ -34,7 +34,7 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="角色" width="200" >
+            <el-table-column label="角色" width="200">
                 <template slot-scope="scope">
                     <div v-for="item of scope.row.authorities">
                         <p>{{item.name}}</p>
@@ -42,19 +42,19 @@
                 </template>
             </el-table-column>
 
-            <el-table-column label="手机号" width="150" >
+            <el-table-column label="手机号" width="150">
                 <template slot-scope="scope">
                     {{scope.row.mobile}}
                 </template>
             </el-table-column>
 
-            <el-table-column label="是否有效" width="110" >
+            <el-table-column label="是否有效" width="110">
                 <template slot-scope="scope">
                     <i :class="scope.row.userDetail.enabled ? 'el-icon-success' : 'el-icon-error'"></i>
                 </template>
             </el-table-column>
 
-            <el-table-column label="创建时间" width="155" >
+            <el-table-column label="创建时间" width="155">
                 <template slot-scope="scope">
                     {{scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}')}}
                 </template>
@@ -154,7 +154,7 @@
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
-                <el-button type="primary" @click="saveData(changePasswordItem)" v-if="dialogStatus!=='change'"
+                <el-button type="primary" @click="saveData(changePasswordItem)" v-if="dialogStatus==='change'"
                            :loading="dialogButtonLoading"
                            :disabled="dialogButtonDisabled">确认
                 </el-button>
@@ -165,18 +165,18 @@
 
 <script>
     import selectRole from '../../../../components/select-role'
-    import {mapGetters} from 'vuex';
+    import { mapGetters } from 'vuex'
 
     let validatePass2 = (rule, value, callback) => {
         if (value === '') {
-            callback(new Error('请再次输入密码'));
+            callback(new Error('请再次输入密码'))
         } else if (value !== pageVue.createItem.form.password) {
-            callback(new Error('两次输入密码不一致!'));
+            callback(new Error('两次输入密码不一致!'))
         } else {
-            callback();
+            callback()
         }
-    };
-    let pageVue = '';
+    }
+    let pageVue = ''
     let page = new pageInit(
         {
             data: {
@@ -202,12 +202,12 @@
                         mobile: ''
                     },
                     rules: {
-                        username: [{required: true, message: '用户名称不能为空', trigger: 'blur'}],
-                        authorities: [{required: true, message: '请选择角色', trigger: 'blur'}],
-                        password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+                        username: [{ required: true, message: '用户名称不能为空', trigger: 'blur' }],
+                        authorities: [{ required: true, message: '请选择角色', trigger: 'blur' }],
+                        password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
                         rawPassword: [
-                            {required: true, message: '确认密码不能为空', trigger: 'blur'},
-                            {validator: validatePass2, trigger: 'blur'}
+                            { required: true, message: '确认密码不能为空', trigger: 'blur' },
+                            { validator: validatePass2, trigger: 'blur' }
                         ]
                     },
                     formName: 'createForm'
@@ -229,9 +229,9 @@
                         mobile: ''
                     },
                     rules: {
-                        name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                        sex: [{required: true, message: '请选择性别', trigger: 'blur'}],
-                        authorities: [{required: true, message: '请选择角色', trigger: 'blur'}],
+                        name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+                        sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
+                        authorities: [{ required: true, message: '请选择角色', trigger: 'blur' }]
                     },
                     formName: 'editItem',
                     pageData: {
@@ -248,15 +248,17 @@
                         newRawPassword: ''
                     },
                     rules: {
-                        newRawPassword: [{required: true, message: '新密码不能为空', trigger: 'blur'}],
+                        newRawPassword: [{ required: true, message: '新密码不能为空', trigger: 'blur' }]
                     },
                     formName: 'changePasswordForm',
                     options: {
                         dialogStatus: 'change'
                     },
                     pageData: {
-                        queryEdit: {
-                            url: '/password/reset'
+                        request: {
+                            queryEdit: {
+                                url: 'users/password/reset'
+                            }
                         }
                     }
                 },
@@ -267,52 +269,56 @@
                             key: 'id',
                             operation: '==',
                             value: '',
-                            predicate: ","
+                            predicate: ','
                         },
                         {
                             key: 'name',
                             operation: '==',
                             value: '',
-                            predicate: ","
+                            predicate: ','
                         },
                         {
                             key: 'mobile',
                             operation: '==',
                             value: '',
-                            predicate: ""
+                            predicate: ''
                         }
                     ]
                 },
                 request: {
-                    queryPrefix: '/users',
                     queryAdd: {
                         url: '/name/add'
+                    },
+                    queryList: {
+                        url: '/users'
+                    },
+                    queryCount: {
+                        url: '/users/count'
                     }
                 }
             },
             methods: {
                 beforeOpenDialog(row) {
                     if (this.dialogStatus === 'update') {
-                        delete this.form.userDetail.id;
-                        delete this.form.userDetail.userId;
+                        delete this.form.userDetail.id
+                        delete this.form.userDetail.userId
                     }
                     if (this.dialogStatus === 'change') {
-                        this.textMap.change = '修改密码';
-                        this.changePasswordItem.form.newRawPassword = '';
+                        this.textMap.change = '修改密码'
+                        this.changePasswordItem.form.newRawPassword = ''
                     }
-
 
                 },
                 beforeEditRequest(row) {
                     if (this.dialogStatus === 'create') {
-                        this.postForm = _.cloneDeep(this.createItem.form);
-                        delete this.postForm.password;
+                        this.postForm = _.cloneDeep(this.createItem.form)
+                        delete this.postForm.password
                     }
                     if (this.dialogStatus === 'change') {
-                        this.postForm = _.cloneDeep(this.changePasswordItem.form);
-                        delete this.postForm.name;
-                        delete this.postForm.id;
-                        this.postForm.userId = this.home.user.id;
+                        this.postForm = _.cloneDeep(this.changePasswordItem.form)
+                        delete this.postForm.name
+                        delete this.postForm.id
+                        this.postForm.userId = this.home.user.id
                     }
                 }
             },
@@ -321,13 +327,13 @@
             },
             computed: {
                 ...mapGetters([
-                    'home',
+                    'home'
                 ])
             },
             created() {
-                pageVue = this;
+                pageVue = this
             }
         }
-    );
-    export default page;
+    )
+    export default page
 </script>
