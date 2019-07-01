@@ -33,7 +33,7 @@
                     ids.push(this.value.id)
                 }
 
-                let options = this.searchValue ? {search: 'name==' + this.searchValue} : '';
+                let options = this.searchValue ? {search: 'name==*' + this.searchValue+'*'} : '';
                 resourceAPI.resources(options).then(function (response) {
                     that.items = response.data;
                     that.items.map(function (item) {

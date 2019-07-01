@@ -76,8 +76,8 @@
                     formName: 'commonItem'
                 },
                 rules: {
-                    name: [{required: true, message: '名称不能为空', trigger: 'blur'}],
-                    link: [{required: true, message: '前端链接不能为空', trigger: 'blur'}],
+                    title: [{required: true, message: '名称不能为空', trigger: 'blur'}],
+
                     resource: [
                         {validator: validateResources, trigger: 'blur'}
                     ],
@@ -126,6 +126,7 @@
                     };
                     this.dialogButtonLoading = true;
                     this.dialogButtonDisabled = true;
+
                     request(options).then(() => {
                         this.$notify({
                             title: '成功',
@@ -188,29 +189,23 @@
                     this.selectedNode = node;
                 },
                 clearNodes(node) {
+                    //fixed by daji 2019070 华而不实的代码，还有bug
                     let that = this;
                     node.map(function (itemNode) {
+                        itemNode.name = itemNode.title;
+
+                        //先拷贝，镜像数据
+                        for (let item in itemNode.data) {
+                            itemNode[item] = itemNode.data[item];
+                        }
+
+                        //清除不需要提交数据
                         for (let item in itemNode) {
                             if (that.nodeFilterField.indexOf(item) === -1) {
                                 delete itemNode[item];
                             }
                         }
-                        delete itemNode['isLeaf'];
-                        itemNode.name = itemNode.title;
-                        delete itemNode['title'];
-                        //data有值
-                        if (itemNode.data && _.isEmpty(itemNode.data.resource)) {
-                            delete itemNode.data;
-                        } else {
-                            for (let item in itemNode.data) {
-                                itemNode[item] = itemNode.data[item];
-                            }
-                        }
-
-                        if (_.isEmpty(itemNode.resource)) {
-                            delete itemNode.link;
-                            delete itemNode.resource;
-                        }
+                        //递归！
                         if (!_.isEmpty(itemNode.children)) {
                             that.clearNodes(itemNode['children']);
                         }

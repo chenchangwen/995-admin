@@ -274,8 +274,13 @@ export let resourcesRouter = {
         children: []
     },
     '/sliders/**': {
-        path: 'categories',
+        path: 'sliders',
         component: () => import('../views/resources/sliders/index'),
+        children: []
+    },
+    '/dictionaries/**': {
+        path: 'dictionaries',
+        component: () => import('../views/resources/dictionaries/index'),
         children: []
     }
 }
