@@ -189,7 +189,7 @@
                     this.selectedNode = node;
                 },
                 clearNodes(node) {
-                    //fixed by daji 2019070 华而不实的代码，还有bug
+                    //fixed by daji 2019070 华而不实的代码，还有bug，修复添加保存resource丢失问题
                     let that = this;
                     node.map(function (itemNode) {
                         itemNode.name = itemNode.title;
