@@ -109,6 +109,13 @@
                     </el-switch>
                 </el-form-item>
 
+                <el-form-item :label="'推荐人分拥'">
+                    <el-input-number style="width:210px" v-model="form.kickback" :precision="4" :step="0.1"
+                                     :max="9999999999.9999"></el-input-number>
+                </el-form-item>
+
+
+
                 <el-form-item :label="'文章详情'" style="margin-bottom: 30px;">
                     <Tinymce ref="editor" :height="400" v-model="form.activityDetail.content"
                              :http-request="httpRequest"
@@ -181,6 +188,7 @@
                     id: '',
                     name: '',
                     crowdAble: '',
+                    kickback: 0.0,
                     originalPrice: 1,
                     price: 1,
                     summary: '',

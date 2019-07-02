@@ -192,7 +192,7 @@
                     //fixed by daji 2019070 华而不实的代码，还有bug，修复添加保存resource丢失问题
                     let that = this;
                     node.map(function (itemNode) {
-                        itemNode.name = itemNode.title;
+
 
                         //先拷贝，镜像数据
                         for (let item in itemNode.data) {
@@ -205,10 +205,14 @@
                                 delete itemNode[item];
                             }
                         }
+
                         //递归！
                         if (!_.isEmpty(itemNode.children)) {
                             that.clearNodes(itemNode['children']);
                         }
+                        itemNode.name = itemNode.title;
+                        delete itemNode.title
+
                     })
                 },
                 clearNodesOnLoad(node) {
