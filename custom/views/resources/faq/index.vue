@@ -36,6 +36,12 @@
                 </template>
             </el-table-column>
 
+            <el-table-column  label='排序' width="100">
+                <template slot-scope="scope">
+                    {{scope.row.index}}
+                </template>
+            </el-table-column>
+
 
             <el-table-column  label='创建时间' width="155">
                 <template slot-scope="scope">
@@ -84,6 +90,14 @@
                     </el-switch>
                 </el-form-item>
 
+                <el-form-item :label="'排序'" prop="index">
+                    <el-input
+                        type="number"
+                        placeholder="排序"
+                        v-model="commonItem.form.index">
+                    </el-input>
+                </el-form-item>
+
                 <el-form-item :label="'答案'" prop="faqDetail.content">
                     <el-input
                         type="textarea"
@@ -121,11 +135,14 @@
                             contentType: ''
                         },
                         top: false,
+                        index: 0,
                         disable: false
                     },
                     rules: {
                         name: [{required: true, message: '问题不能为空', trigger: 'blur'}],
                         summary: [{required: true, message: '答案概要不能为空', trigger: 'blur'}],
+                        index: [{required: true, message: '排序不能为空', trigger: 'blur'}],
+
                         'faqDetail.content': [{required: true, message: '答案不能为空', trigger: 'blur'}],
                     },
                     formName: 'commonItem'

@@ -109,6 +109,8 @@
                             placeholder="微信菜单"
                             v-model="form.wechatMenu.params">
                     </el-input>
+                    请用这个进行编辑:<a href="https://wei.jiept.com" target="_blank">https://wei.jiept.com</a>
+
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
