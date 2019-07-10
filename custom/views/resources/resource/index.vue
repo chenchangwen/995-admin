@@ -41,9 +41,10 @@
                     {{scope.row.description}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" :label="'操作'" width="120">
+            <el-table-column align="center" :label="'操作'"  >
                 <template slot-scope="scope">
                     <el-button type="primary" size="mini" @click="handleUpdate(scope.row,commonItem)">编辑</el-button>
+                    <el-button size="mini" type="danger" @click="handleConfirm(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -129,10 +130,11 @@
                         key: 'name',
                         operation: '==',
                         value: '',
+                        like: true,
                         predicate:";"
                     }
                 },
-                idKey: 'userId',
+                idKey: 'id',
                 request: {
                     queryPrefix: '/resources'
                 }

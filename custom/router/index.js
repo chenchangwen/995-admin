@@ -15,7 +15,7 @@ export let resourcesRouter = {
         path: 'user',
         component: () => import('../views/resources/user/list/index')
     },
-    '/authorities/roles/**': {
+    '/authorities/**': {
         path: 'role',
         component: () => import('../views/resources/user/role/index')
     },
