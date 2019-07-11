@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'返点类别'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'返点类别'"
                       v-model="queryItem.summary.value">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索

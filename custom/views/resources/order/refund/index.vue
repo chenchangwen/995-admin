@@ -1,10 +1,10 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户ID'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户ID'"
                       v-model="queryItem.userId.value">
             </el-input>
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'订单号'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'订单号'"
                       v-model="queryItem.id.value">
             </el-input>
 
@@ -63,10 +63,10 @@
 
             <el-table-column  label='退款详情' width="155">
                 <template slot-scope="scope">
-                    <p>退款状态:{{scope.row.x}}</p>
+                    <p>退款状态:{{scope.row.status}}</p>
                     <p>退款账号:{{scope.row.refundSubjectId}}</p>
                     <p>退款账号类型:{{scope.row.refundSubjectClass}}</p>
-                    <p>操作人:{{scope.row.operatorUserId}}</p>
+                    <p>操作人:{{scope.row.operationUserId}}</p>
                 </template>
             </el-table-column>
 
@@ -97,7 +97,7 @@
                     {{form.total || 0}}
                 </el-form-item>
                 <el-form-item :label="'拒绝原因'" prop="operatorSummary">
-                    <el-input v-model="form.operatorSummary"></el-input>
+                    <el-input v-model="form.operationSummary"></el-input>
                 </el-form-item>
             </el-form>
 
@@ -137,8 +137,8 @@
                 commonItem: {
                     form: {
                         total: '',
-                        operatorSummary: '',
-                        operatorUserId: '',
+                        operationSummary: '',
+                        operationUserId: '',
                     },
                     rules: {
                         operatorSummary: [{required: true, message: '拒绝原因不能为空', trigger: 'blur'}]

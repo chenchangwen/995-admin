@@ -1,10 +1,10 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'模版ID'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'模版ID'"
                       v-model="queryItem.smsTemplateId.value">
             </el-input>
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'手机号'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'手机号'"
                       v-model="queryItem.phoneNumbers.value">
             </el-input>
             <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索

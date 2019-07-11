@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'活动名称'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'活动名称'"
                       v-model="queryItem.name.value">
             </el-input>
             <el-select v-model="queryItem.status.value" clearable placeholder="状态" style="width: 200px">
@@ -19,45 +19,54 @@
         </div>
         <el-table :data="items" v-loading="itemsLoading" element-loading-text="Loading" border fit highlight-current-row
                   style="width: 100%">
-            <el-table-column label='标题' min-width="200">
+            <el-table-column label='标题'  >
                 <template slot-scope="scope">
                     {{scope.row.name}}
                 </template>
             </el-table-column>
-            <el-table-column label='简介' width="200">
+            <el-table-column label='简介'  >
                 <template slot-scope="scope">
                     {{scope.row.summary}}
                 </template>
             </el-table-column>
-            <el-table-column label='人数上限' width="100">
+            <el-table-column label='人数上限'  >
                 <template slot-scope="scope">
                     {{scope.row.max}}
                 </template>
             </el-table-column>
-            <el-table-column label='当前报名' width="100">
+            <el-table-column label='当前报名'  >
                 <template slot-scope="scope">
                     {{scope.row.activityStatistic.people}}
                 </template>
             </el-table-column>
-            <el-table-column label='活动时限' width="220">
+            <el-table-column label='活动时限'  >
                 <template slot-scope="scope">
                     <p>报名截止:{{scope.row.enrollEndTime}}</p>
                     <p>活动开始:{{scope.row.beginTime}}</p>
                     <p>活动结束:{{scope.row.endTime}}</p>
                 </template>
             </el-table-column>
-            <el-table-column label='状态' width="100">
+            <el-table-column label='状态'  >
                 <template slot-scope="scope">
                     {{scope.row.status}}
                 </template>
             </el-table-column>
-            <el-table-column align="center" :label="'操作'" width="320">
+            <el-table-column align="center" :label="'操作'" >
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
-                    <el-button type="primary" @click="routerPush($route.path + '/edit', scope.row.id)" size="mini">编辑</el-button>
-                    <el-button type="primary" @click="routerPush($route.path + '/crowd', scope.row.id)" size="mini">众筹详情</el-button>
-                    <el-button type="primary" @click="routerPush($route.path + '/team', scope.row.id)" size="mini">查看联合发起人</el-button>
-                </template>
+                    <p>
+                        <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
+                        <el-button type="primary" @click="routerPush($route.path + '/edit', scope.row.id)" size="mini">编辑</el-button>
+
+                    </p>
+                    <p>
+                        <el-button type="primary" @click="routerPush($route.path + '/crowd', scope.row.id)" size="mini">众筹详情</el-button>
+
+                    </p>
+                    <p>
+                        <el-button type="primary" @click="routerPush($route.path + '/team', scope.row.id)" size="mini">查看联合发起人</el-button>
+
+                    </p>
+                    </template>
             </el-table-column>
         </el-table>
 

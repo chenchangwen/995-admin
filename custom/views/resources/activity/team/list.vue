@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'名称'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'名称'"
                       v-model="queryItem.name.value">
             </el-input>
             <el-select v-model="queryItem.status.value" clearable placeholder="状态" style="width: 200px">

@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <div class="filter-container">
-            <el-input @keyup.enter="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户ID/姓名/手机'"
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" :placeholder="'用户ID/姓名/手机'"
                       v-model="queryItem.name.value" clearable>
             </el-input>
 
@@ -44,7 +44,7 @@
 
             <el-table-column label="手机号" width="150">
                 <template slot-scope="scope">
-                    {{scope.row.mobile}}
+                    {{scope.row.userContact.phones}}
                 </template>
             </el-table-column>
 
@@ -276,7 +276,7 @@
                             predicate: ','
                         },
                         {
-                            key: 'mobile',
+                            key: 'userContact.phones',
                             operation: '==',
                             value: '',
                             predicate: ''
@@ -284,6 +284,7 @@
                     ]
                 },
                 request: {
+                    // queryPrefix: '/users',
                     queryAdd: {
                         url: '/name/add'
                     },
