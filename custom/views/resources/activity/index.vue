@@ -54,7 +54,7 @@
             <el-table-column align="center" :label="'操作'" >
                 <template slot-scope="scope">
                     <p>
-                        <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
+                        <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activitie/'+scope.row.id)" >查看活动详情</el-button>
                         <el-button type="primary" @click="routerPush($route.path + '/edit', scope.row.id)" size="mini">编辑</el-button>
 
                     </p>
@@ -108,7 +108,11 @@
                     {
                         value: 'DRAFT',
                         label: 'DRAFT'
+                    },{
+                        value: 'LAUNCH',
+                        label: 'LAUNCH'
                     },
+
                     {
                         value: 'SUCCESS',
                         label: 'SUCCESS'

@@ -471,19 +471,29 @@ window.pageInit = function pageInit(options) {
             for (let item in queryItem) {
                 let searchStr = ''
                 let thisItem = queryItem[item]
+                let value = thisItem.value;
+
+                // alert(thisItem.like)
+                //兼容like add by daji 20190710
+                if(thisItem.like){
+                    value = '*' + thisItem.value + '*'
+                }
+
                 if (_.isArrayLike(thisItem)) {
                     if (thisItem.value) {
                         for (let qItem in thisItem) {
                             let q = thisItem[qItem]
+
+
                             if (q.key) {
-                                searchStr = q.key + q.operation + thisItem.value + q.predicate
+                                searchStr = q.key + q.operation + value + q.predicate
                                 searchList.push(searchStr)
                             }
                         }
                     }
                 } else {
                     if (thisItem.value) {
-                        searchStr = thisItem.key + thisItem.operation + thisItem.value + thisItem.predicate
+                        searchStr = thisItem.key + thisItem.operation + value + thisItem.predicate
                         searchList.push(searchStr)
                     }
                 }

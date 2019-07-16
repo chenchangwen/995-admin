@@ -9,7 +9,7 @@ axios.defaults.headers.common['Accept'] = 'application/json;charset=utf-8'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // api 的 base_url
   withCredentials: true, // 跨域请求时发送 cookies
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
   // headers: { 'accept': 'application/json;charset=utf-8' }
 })
 
@@ -34,10 +34,16 @@ service.interceptors.response.use(
           router.replace({
             path: `/login`
           })
+        case 403:
+            Vue.prototype.$message({
+                message: "权限不足",
+                type: 'error'
+            })
         case 404:
-          router.replace({
-            path: `/login`
-          })
+          Vue.prototype.$message({
+            message: "对象不存在",
+                  type: 'error'
+              })
         case 500:
           Vue.prototype.$message({
             message: error.response.data.message,

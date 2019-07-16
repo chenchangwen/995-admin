@@ -58,7 +58,7 @@
 
             <el-table-column align="center" :label="'操作'" width="220">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activities/'+scope.row.id)" >查看活动详情</el-button>
+                    <el-button type="primary" size="mini" @click="qrcode('http://mp.huzhubb.com/activitie/'+scope.row.id)" >查看活动详情</el-button>
 
                     <el-button type="primary" @click="handleConfirm(scope.row,commonItem, commonItem.agreeOptions)" size="mini">审核通过</el-button>
                     <el-button type="danger"  @click="handleConfirm(scope.row,commonItem, commonItem.refuseOptions)" size="mini">审核不通过</el-button>
